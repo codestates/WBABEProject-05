@@ -11,8 +11,8 @@ var (
 )
 
 func init() {
-	path := util.GetConfPath()
-	Config = config.NewConfig(path)
+	util.FlagsLoad()
+	Config = config.NewConfig(util.ConfPath)
 }
 
 func main() {

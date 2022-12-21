@@ -7,9 +7,9 @@ import (
 
 var ConfPath string
 
-func GetConfPath() string {
-	ConfPath := flag.String("confPath", "./config/config.toml", "toml file to use for configuration")
+func FlagsLoad() {
+	conP := flag.String("confPath", "./config/config.toml", "toml file to use for configuration")
 	flag.Parse()
+	ConfPath = *conP
 	log.Println("toml file load ::", ConfPath)
-	return *ConfPath
 }
