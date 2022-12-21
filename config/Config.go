@@ -17,20 +17,27 @@ type Config struct {
 		User     string
 		Pwd      string
 	}
+
+	Log struct {
+		Level   string
+		Fpath   string
+		Msize   int
+		Mage    int
+		Mbackup int
+	}
 }
 
 func NewConfig(fPath string) *Config {
-	log.Println("path is ", fPath)
 	conf := new(Config)
 	if file, err := os.Open(fPath); err != nil {
+		log.Println("does not exists file in ", fPath)
 		panic(err)
 	} else {
 		defer file.Close()
-		log.Println("File is ", file)
 		if err := toml.NewDecoder(file).Decode(conf); err != nil {
+			log.Println("toml decode, fail")
 			panic(err)
 		}
-		log.Println("Loading database uri is :: ", conf)
 		return conf
 	}
 

@@ -1,9 +1,16 @@
 [server]
-mode = "dev"
-port = ":8080"
+mode = "dev" # profile
+port = ":8080" # server port
 
 [db]
-mongoUri = "mongodb://127.0.0.1:27017/?directConnection=true"
-user = ""
-pwd = ""
+mongoUri = "mongodb://127.0.0.1:27017/?directConnection=true" # mongo uri
+user = "" # mongo user name
+pwd = "" # mongo password
+
+[log]
+level = "debug" # debug / info / warn / error
+fpath = "./logs/go-loger" # log file path
+msize = 2000    # 2g : megabytes
+mage = 7        # 7days : save days
+mbackup = 5    # max number of log files
 
