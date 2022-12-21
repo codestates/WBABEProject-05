@@ -99,3 +99,11 @@
 - util 패키지는 flag 및 범용적으로 사용하게될 사항들을 넣어주자.
 - logger 관련사항은 logger 패키지에 넣어주자.
 - router 와 관련된 사항은 router 패키지에서 다룰 것이다.
+
+### git-branch 전략
+* main ------------------------------------------------------ main 
+    + ㄴ dev &nbsp;                   dev --------- dev                 | (merge)
+        - ㄴ feature --------| (merge)   ㄴ release ---|
+
+- 최종 main 브랜치에 merge 후 dev 브랜치는 main 브랜치와 싱크를 맞추기 위해 main 브랜치를 merge 한다.
+- 위의 싸이클을 반복하며 개발한다.
