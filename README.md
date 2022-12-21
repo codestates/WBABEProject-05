@@ -21,7 +21,6 @@
 - toml을 이용해 설정 파일을 구성합니다.
 
 
-
 ### 메뉴 신규 등록  - 피주문자
 
 - **API |** 신규 메뉴 등록
@@ -86,3 +85,17 @@
     - 각 단계별 사업장에서 상태 업데이트
         - **접수중 → 접수** or **접수취소 → 조리중** or **추가주문 → 배달중**
         - 성공여부 리턴
+
+
+---
+
+### 프로젝트 구성
+
+![프로젝트 구성](./readme_images/project-init.png)
+
+- toml 파일 및 프로젝트 config 관련 사항은 config 폴더를 이용할 것이다.
+- mvc 패턴을 활용하기에 controller 와 model 패키지를 만들었다.
+- protocol 은 request 또는 response 로 내려줄 data struct 들을 넣을 것이다.
+- util 패키지는 flag 및 범용적으로 사용하게될 사항들을 넣어주자.
+- logger 관련사항은 logger 패키지에 넣어주자.
+- router 와 관련된 사항은 router 패키지에서 다룰 것이다.
