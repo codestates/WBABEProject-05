@@ -1,6 +1,7 @@
 package protocol
 
 import (
+	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -36,11 +37,11 @@ func SuccessCustom[T any](c int, d T, msg string) *ApiResponse[any] {
 	}
 }
 
-func Fail(e Error) *ApiResponse[interface{}] {
+func Fail(e error2.Error) *ApiResponse[interface{}] {
 	return FailCustomMessage(e, e.Err.Error())
 }
 
-func FailCustomMessage(e Error, msg string) *ApiResponse[interface{}] {
+func FailCustomMessage(e error2.Error, msg string) *ApiResponse[interface{}] {
 	return &ApiResponse[interface{}]{
 		Code:      e.Code,
 		Data:      nil,

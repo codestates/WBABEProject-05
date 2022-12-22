@@ -1,4 +1,4 @@
-package util
+package error
 
 import "errors"
 
@@ -34,6 +34,7 @@ var (
 
 /* 9000 ~ 9999 서버 에러 */
 var (
-	SystemError  = NewErrorAndName(errors.New("요청을 정상적으로 처리하지 못했습니다."), 9998, System)
-	UnKnownError = NewErrorAndName(errors.New("알 수 없는 오류입니다."), 9999, UnKnown)
+	InternalLoginError = NewErrorAndName(errors.New("서버 로직을 수행하지 못했습니다."), 9997, InternalLogin)
+	SystemError        = NewErrorAndName(errors.New("요청을 정상적으로 처리하지 못했습니다."), 9998, System)
+	UnKnownError       = NewErrorAndName(errors.New("알 수 없는 오류입니다."), 9999, UnKnown)
 )

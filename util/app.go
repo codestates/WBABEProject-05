@@ -1,9 +1,17 @@
 package util
 
 import (
+	"context"
+	"fmt"
 	"github.com/codestates/WBABEProject-05/config"
-	"github.com/codestates/WBABEProject-05/contorller"
+	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/router"
+	"golang.org/x/sync/errgroup"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 const (
@@ -20,7 +28,7 @@ type App struct {
 	Author      string
 	Config      *config.Config
 	Router      router.Router
-	Controller  contorller.Controller
+	Server      *http.Server
 }
 
 func LoadApp() *App {
@@ -32,14 +40,65 @@ func LoadApp() *App {
 	return instance
 }
 
-func (a *App) SetConfig(config *config.Config) {
-	a.Config = config
+func GetApp() *App {
+	if instance != nil {
+		return instance
+	}
+	return LoadApp()
 }
 
-func (a *App) SetRouter(router router.Router) {
-	a.Router = router
+func (a *App) SetConfig(cfg *config.Config) {
+	a.Config = cfg
 }
 
-func (a *App) SetController(controller contorller.Controller) {
-	a.Controller = controller
+func (a *App) SetRouter(rt router.Router) {
+	a.Router = rt
+}
+
+func (a *App) Run() {
+	var g errgroup.Group
+	a.Server = &http.Server{
+		Addr:           a.Config.Server.Port,
+		Handler:        a.Router.Handle(),
+		ReadTimeout:    5 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+
+	g.Go(func() error {
+		return a.startServer()
+	})
+
+	a.graceExit()
+
+	g.Wait()
+}
+
+func (a *App) startServer() error {
+	pt := a.Config.Server.Port
+	md := a.Config.Server.Mode
+	stl := fmt.Sprintf("Start Server ... mode is %s and port is %s", md, pt)
+	logger.Info(stl)
+	return a.Server.ListenAndServe()
+}
+
+func (a *App) graceExit() {
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	logger.Warn("Shutdown Server ...")
+
+	rt := 3 * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), rt)
+	defer cancel()
+
+	if err := a.Server.Shutdown(ctx); err != nil {
+		logger.Error("Server Shutdown:", err)
+	}
+	select {
+	case <-ctx.Done():
+		tl := fmt.Sprintf("timeout of %s seconds.", rt.String())
+		logger.Info(tl)
+	}
+	logger.Info("Server exiting")
 }

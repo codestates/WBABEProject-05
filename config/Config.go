@@ -6,8 +6,6 @@ import (
 	"os"
 )
 
-var instance *Config
-
 type Config struct {
 	Server struct {
 		Mode string
@@ -30,17 +28,16 @@ type Config struct {
 }
 
 func LoadConfig(fPath string) *Config {
-	conf := new(Config)
+	cfg := new(Config)
 	if file, err := os.Open(fPath); err != nil {
-		log.Println("does not exists file in ", fPath)
+		log.Println("start app... does not exists config file in ", fPath)
 		panic(err)
 	} else {
 		defer file.Close()
-		if err := toml.NewDecoder(file).Decode(conf); err != nil {
-			log.Println("toml decode, fail")
+		if err := toml.NewDecoder(file).Decode(cfg); err != nil {
+			log.Println("start app... toml decode, fail")
 			panic(err)
 		}
-		instance = conf
+		return cfg
 	}
-	return instance
 }

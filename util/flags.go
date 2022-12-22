@@ -5,13 +5,16 @@ import (
 )
 
 const (
-	DefaultConfPath  = "./config/config.toml"
-	Usage            = "toml file to use for configuration"
-	ConfPathFlagName = "confP"
+	DefaultConfigPath = "./config/config.toml"
+	Usage             = "toml file to use for configuration"
+	ConfPathFlagName  = "confP"
 )
 
-func LoadConfPath() string {
-	conP := flag.String(ConfPathFlagName, DefaultConfPath, Usage)
+var ConfigPath string
+
+func LoadConfigFilePath() string {
+	cfgP := flag.String(ConfPathFlagName, DefaultConfigPath, Usage)
 	flag.Parse()
-	return *conP
+	ConfigPath = *cfgP
+	return ConfigPath
 }
