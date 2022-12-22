@@ -101,9 +101,34 @@
 - router 와 관련된 사항은 router 패키지에서 다룰 것이다.
 
 ### git-branch 전략
-* main ------------------------------------------------------ main 
-    + ㄴ dev &nbsp;                   dev --------- dev                 | (merge)
-        - ㄴ feature --------| (merge)   ㄴ release ---|
+
+![브랜치 전략](./readme_images/branch-strategy.png)
 
 - 최종 main 브랜치에 merge 후 dev 브랜치는 main 브랜치와 싱크를 맞추기 위해 main 브랜치를 merge 한다.
 - 위의 싸이클을 반복하며 개발한다.
+- release 는 지금처럼 배포전 1차 개발단계에서는 생략하기도한다. 그러나 이 프로젝트에서는 생략하지 않기로 한다.
+
+
+### naming 전략
+
+- `.go` 파일은 두단어 이상일 때 케밥케이스를 사용한다.
+  - `ex) person_router.go`
+- 코드는 카멜케이스를 원칙으로 한다.
+- go의 `private`, `public` 네이밍을 기본으로 한다.
+- 상수가 아닌이상 첫 글자는 소문자로 한다.
+- 지역변수는 가능한한 약어로 하고, 리시버는 단어의 앞글자만을 사용한다.
+- 메서드 이름은 최대한 의도가 드러나게 작성하자
+  - ex)
+  - ```go
+    func (r *router) NewRouter(ctl Controller){
+        n := ctl.Name
+        ...
+    }
+    func (pr *PersonRouter) validatePerson(){
+        pr.validate()
+        ...
+    }
+    ```
+
+
+    
