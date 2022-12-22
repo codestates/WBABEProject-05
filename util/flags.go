@@ -1,20 +1,21 @@
 package util
 
-import (
-	"flag"
+import "flag"
+
+type FlagCategory struct {
+	Name    string
+	Default string
+	Usage   string
+}
+
+var (
+	ConfigFlag = &FlagCategory{
+		Name:    "config",
+		Default: "./config/config.toml",
+		Usage:   "toml file to use for configuration",
+	}
 )
 
-const (
-	DefaultConfigPath = "./config/config.toml"
-	Usage             = "toml file to use for configuration"
-	ConfPathFlagName  = "confP"
-)
-
-var ConfigPath string
-
-func LoadConfigFilePath() string {
-	cfgP := flag.String(ConfPathFlagName, DefaultConfigPath, Usage)
-	flag.Parse()
-	ConfigPath = *cfgP
-	return ConfigPath
+func (f *FlagCategory) Load() *string {
+	return flag.String(f.Name, f.Default, f.Usage)
 }

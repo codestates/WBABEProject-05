@@ -18,13 +18,13 @@ func (r *GinRoute) Handle() http.Handler {
 	return r.engin
 }
 
-func LoadGin(mode string, ctl map[string]contorller.Controller) *GinRoute {
+func GetGin(mode string, ctl map[string]contorller.Controller) *GinRoute {
 	if instance != nil {
 		return instance
 	}
 	setMode(mode)
 	instance = &GinRoute{
-		engin:      loadEngine(),
+		engin:      NewEngine(),
 		controller: ctl,
 	}
 	return instance
@@ -43,7 +43,7 @@ func setMode(mode string) {
 	}
 }
 
-func loadEngine() *gin.Engine {
+func NewEngine() *gin.Engine {
 	grt := gin.Default()
 	grt.Use(logger.GinLogger())
 	grt.Use(logger.GinRecovery(true))

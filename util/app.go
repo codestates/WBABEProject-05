@@ -2,6 +2,7 @@ package util
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"github.com/codestates/WBABEProject-05/config"
 	"github.com/codestates/WBABEProject-05/logger"
@@ -26,12 +27,13 @@ type App struct {
 	Name        string
 	Description string
 	Author      string
+	Flags       map[string]*string
 	Config      *config.Config
 	Router      router.Router
 	Server      *http.Server
 }
 
-func LoadApp() *App {
+func NewApp() *App {
 	instance = &App{
 		Name:        Name,
 		Description: Description,
@@ -40,15 +42,17 @@ func LoadApp() *App {
 	return instance
 }
 
-func GetApp() *App {
-	if instance != nil {
-		return instance
+func (a *App) LoadFlags(fs []*FlagCategory) {
+	a.Flags = make(map[string]*string)
+	for _, ca := range fs {
+		a.Flags[ca.Name] = ca.Load()
 	}
-	return LoadApp()
+	flag.Parse()
 }
 
-func (a *App) SetConfig(cfg *config.Config) {
-	a.Config = cfg
+func (a *App) LoadConfig() {
+	path := a.Flags[ConfigFlag.Name]
+	a.Config = config.NewConfig(*path)
 }
 
 func (a *App) SetRouter(rt router.Router) {

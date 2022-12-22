@@ -27,7 +27,7 @@ type Config struct {
 	}
 }
 
-func LoadConfig(fPath string) *Config {
+func NewConfig(fPath string) *Config {
 	cfg := new(Config)
 	if file, err := os.Open(fPath); err != nil {
 		log.Println("start app... does not exists config file in ", fPath)

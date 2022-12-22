@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/codestates/WBABEProject-05/config"
 	"github.com/codestates/WBABEProject-05/contorller"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/router"
@@ -9,17 +8,20 @@ import (
 )
 
 var (
-	app         = util.LoadApp()
+	app   = util.NewApp()
+	flags = []*util.FlagCategory{
+		util.ConfigFlag,
+	}
+
 	controllers = map[string]contorller.Controller{}
 )
 
 func init() {
-	path := util.LoadConfigFilePath()
-	cfg := config.LoadConfig(path)
-	logger.InitLogger(cfg)
-	app.SetConfig(cfg)
-	rt := router.LoadGin("", nil)
-	app.SetRouter(rt)
+	app.LoadFlags(flags)
+	app.LoadConfig()
+	logger.InitLogger(app.Config)
+	gin := router.GetGin(app.Config.Server.Mode, controllers)
+	app.SetRouter(gin)
 }
 
 func main() {
