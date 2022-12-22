@@ -5,23 +5,20 @@ import (
 	"github.com/codestates/WBABEProject-05/config"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/util"
-	"log"
 )
 
-var (
-	Conf *config.Config
-)
+var app = util.LoadApp()
 
 func init() {
-	util.FlagsLoad()
-	Conf = config.NewConfig(util.ConfPath)
-	err := logger.InitLogger(Conf)
-	if err != nil {
-		log.Println("logger load, fail")
-		panic(err)
-	}
+	path := util.LoadConfPath()
+	config := config.LoadConfig(path)
+	logger.InitLogger(config)
+
+	app.SetConfig(config)
+
 }
 
 func main() {
+	defer fmt.Println("실행되나")
 	fmt.Println("Hello World")
 }

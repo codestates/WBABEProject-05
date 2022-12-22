@@ -4,10 +4,14 @@ import (
 	"flag"
 )
 
-var ConfPath string
+const (
+	DefaultConfPath  = "./config/config.toml"
+	Usage            = "toml file to use for configuration"
+	ConfPathFlagName = "confP"
+)
 
-func FlagsLoad() {
-	conP := flag.String("confP", "./config/config.toml", "toml file to use for configuration")
+func LoadConfPath() string {
+	conP := flag.String(ConfPathFlagName, DefaultConfPath, Usage)
 	flag.Parse()
-	ConfPath = *conP
+	return *conP
 }

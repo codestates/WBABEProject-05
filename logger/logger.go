@@ -32,13 +32,13 @@ func InitLogger(cfg *config.Config) (err error) {
 	var l = new(zapcore.Level)
 	err = l.UnmarshalText([]byte(cf.Level))
 	if err != nil {
-		return
+		panic("logger load, fail")
 	}
 	core := zapcore.NewCore(encoder, writeSyncer, l)
 	// lg 생성
 	lg = zap.New(core, zap.AddCaller())
 	zap.ReplaceGlobals(lg)
-	return
+	return nil
 }
 
 func Debug(ctx ...interface{}) {

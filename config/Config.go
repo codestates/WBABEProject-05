@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+var instance *Config
+
 type Config struct {
 	Server struct {
 		Mode string
@@ -27,7 +29,7 @@ type Config struct {
 	}
 }
 
-func NewConfig(fPath string) *Config {
+func LoadConfig(fPath string) *Config {
 	conf := new(Config)
 	if file, err := os.Open(fPath); err != nil {
 		log.Println("does not exists file in ", fPath)
@@ -38,7 +40,7 @@ func NewConfig(fPath string) *Config {
 			log.Println("toml decode, fail")
 			panic(err)
 		}
-		return conf
+		instance = conf
 	}
-
+	return instance
 }
