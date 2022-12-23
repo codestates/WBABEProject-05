@@ -14,6 +14,12 @@ var (
 		Default: "./config/config.toml",
 		Usage:   "toml file to use for configuration",
 	}
+
+	LogConfigFlag = &FlagCategory{
+		Name:    "log",
+		Default: "./config/log/config.toml",
+		Usage:   "toml file to use for log configuration",
+	}
 )
 
 func (f *FlagCategory) Load() *string {

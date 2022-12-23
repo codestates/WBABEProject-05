@@ -8,22 +8,30 @@ import (
 )
 
 var (
-	app   = util.NewApp()
+	App   = util.NewApp()
 	flags = []*util.FlagCategory{
 		util.ConfigFlag,
+		util.LogConfigFlag,
 	}
 
 	controllers = map[string]contorller.Controller{}
 )
 
 func init() {
-	app.LoadFlags(flags)
-	app.LoadConfig()
-	logger.InitLogger(app.Config)
-	gin := router.GetGin(app.Config.Server.Mode, controllers)
-	app.SetRouter(gin)
+	// read flags
+	App.ReadFlags(flags)
+	App.LoadConfig()
+
+	// setting logger
+	lcfg := App.GetLogConfig()
+	zapLogger := logger.InitLogger(lcfg)
+	App.SetLogger(zapLogger)
+
+	// setting http
+	gin := router.GetGin(App.Config.Server.Mode, controllers)
+	App.SetRouter(gin)
 }
 
 func main() {
-	app.Run()
+	App.Run()
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/codestates/WBABEProject-05/contorller"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"net/http"
 )
 
@@ -32,13 +33,17 @@ func GetGin(mode string, ctl map[string]contorller.Controller) *GinRoute {
 
 func setMode(mode string) {
 	switch mode {
-	case gin.DebugMode:
+	case "dev":
+		zap.L().Info("start gin server set mod dev")
 		gin.SetMode(gin.DebugMode)
-	case gin.ReleaseMode:
+	case "prod":
+		zap.L().Info("start gin server set mod prod")
 		gin.SetMode(gin.ReleaseMode)
-	case gin.TestMode:
+	case "test":
+		zap.L().Info("start gin server set mod test")
 		gin.SetMode(gin.TestMode)
 	default:
+		zap.L().Info("start gin server set mod dev")
 		gin.SetMode(gin.DebugMode)
 	}
 }

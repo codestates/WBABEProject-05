@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/codestates/WBABEProject-05/config"
+	"github.com/codestates/WBABEProject-05/config/log"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/router"
 	"golang.org/x/sync/errgroup"
@@ -29,6 +30,7 @@ type App struct {
 	Author      string
 	Flags       map[string]*string
 	Config      *config.Config
+	Logger      logger.Logger
 	Router      router.Router
 	Server      *http.Server
 }
@@ -42,7 +44,7 @@ func NewApp() *App {
 	return instance
 }
 
-func (a *App) LoadFlags(fs []*FlagCategory) {
+func (a *App) ReadFlags(fs []*FlagCategory) {
 	a.Flags = make(map[string]*string)
 	for _, ca := range fs {
 		a.Flags[ca.Name] = ca.Load()
@@ -53,6 +55,10 @@ func (a *App) LoadFlags(fs []*FlagCategory) {
 func (a *App) LoadConfig() {
 	path := a.Flags[ConfigFlag.Name]
 	a.Config = config.NewConfig(*path)
+}
+
+func (a *App) SetLogger(logger logger.Logger) {
+	a.Logger = logger
 }
 
 func (a *App) SetRouter(rt router.Router) {
@@ -82,7 +88,7 @@ func (a *App) startServer() error {
 	pt := a.Config.Server.Port
 	md := a.Config.Server.Mode
 	stl := fmt.Sprintf("Start Server ... mode is %s and port is %s", md, pt)
-	logger.Info(stl)
+	a.Logger.Info(stl)
 	return a.Server.ListenAndServe()
 }
 
@@ -90,19 +96,24 @@ func (a *App) graceExit() {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
-	logger.Warn("Shutdown Server ...")
+	a.Logger.Warn("Shutdown Server ...")
 
 	rt := 3 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), rt)
 	defer cancel()
 
 	if err := a.Server.Shutdown(ctx); err != nil {
-		logger.Error("Server Shutdown:", err)
+		a.Logger.Error("Server Shutdown:", err)
 	}
 	select {
 	case <-ctx.Done():
 		tl := fmt.Sprintf("timeout of %s seconds.", rt.String())
-		logger.Info(tl)
+		a.Logger.Info(tl)
 	}
-	logger.Info("Server exiting")
+	a.Logger.Info("Server exiting")
+}
+
+func (a *App) GetLogConfig() *log.Log {
+	path := a.Flags[LogConfigFlag.Name]
+	return log.NewLogConfig(*path)
 }
