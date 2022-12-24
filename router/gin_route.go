@@ -15,10 +15,27 @@ type GinRoute struct {
 }
 
 func (r *GinRoute) Handle() http.Handler {
-	r.engin.GET("/", func(g *gin.Context) {
-		g.JSON(200, "ok")
+	gr := r.engin
+	gr.GET("/", func(c *gin.Context) {
+		c.JSON(200, "ok")
 	})
-	r.engin.GET("/info", r.controller.GetInfoControl().GetInformation)
+	infCtl, _ := r.controller.InfoControl()
+	//TODO error
+	gr.GET("/info", infCtl.GetInformation)
+
+	user := gr.Group("/users")
+	{
+		usrCtl, _ := r.controller.UserControl()
+		user.POST("/join", usrCtl.PostUser)
+	}
+
+	store := gr.Group("/stores")
+	{
+		strCtl, _ := r.controller.StoreControl()
+		store.POST("", strCtl.PostStore)
+		store.POST("/menu", strCtl.PostMenu)
+	}
+
 	return r.engin
 }
 
@@ -47,10 +64,25 @@ func setMode(mode string) {
 	}
 }
 
+// NewEngine global middleware setting
 func NewEngine() *gin.Engine {
 	grt := gin.Default()
 	grt.Use(logger.GinLogger())
 	grt.Use(logger.GinRecovery(true))
-	//g.Use(CORS())
+	grt.Use(CORS())
 	return grt
+}
+
+func CORS() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, X-Forwarded-For, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+		c.Next()
+	}
 }

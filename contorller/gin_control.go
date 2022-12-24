@@ -1,29 +1,55 @@
 package contorller
 
 import (
+	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/contorller/info"
+	"github.com/codestates/WBABEProject-05/contorller/store"
+	"github.com/codestates/WBABEProject-05/contorller/user"
 )
 
 var instance *ginControl
 
 type ginControl struct {
-	health info.InfoController
+	infoControl  info.InfoController
+	userControl  user.UserController
+	storeControl store.StoreContoller
 }
 
-func GetInstance() *ginControl {
+func GetInstance(
+	inf info.InfoController,
+	usr user.UserController,
+	str store.StoreContoller,
+) *ginControl {
 	if instance != nil {
 		return instance
 	}
 	instance = &ginControl{
-		health: info.GetInstance(),
+		infoControl:  inf,
+		userControl:  usr,
+		storeControl: str,
 	}
 	return instance
 }
 
-func (g *ginControl) GetInfoControl() info.InfoController {
-	if g.health != nil {
-		return g.health
+func (g *ginControl) InfoControl() (info.InfoController, error) {
+	if g.infoControl != nil {
+		return g.infoControl, nil
 	}
-	g.health = info.GetInstance()
-	return g.health
+	// TODO logger
+	return nil, error2.NonInjectedError.Err
+}
+
+func (g *ginControl) UserControl() (user.UserController, error) {
+	if g.userControl != nil {
+		return g.userControl, nil
+	}
+	// TODO logger
+	return nil, error2.NonInjectedError.Err
+}
+func (g *ginControl) StoreControl() (store.StoreContoller, error) {
+	if g.storeControl != nil {
+		return g.storeControl, nil
+	}
+	// TODO logger
+	return nil, error2.NonInjectedError.Err
 }

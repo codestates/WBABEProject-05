@@ -1,9 +1,3 @@
 [server]
 mode = "dev" # profile local / dev / test /prod
 port = ":8080" # server port
-
-[db]
-mongoUri = "mongodb://127.0.0.1:27017/?directConnection=true" # mongo uri
-user = "" # mongo user name
-pwd = "" # mongo password
-

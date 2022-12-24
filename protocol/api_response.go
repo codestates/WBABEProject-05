@@ -1,7 +1,7 @@
 package protocol
 
 import (
-	error2 "github.com/codestates/WBABEProject-05/protocol/error"
+	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

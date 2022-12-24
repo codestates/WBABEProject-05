@@ -9,4 +9,6 @@ const (
 	InternalLogin  = "서버 로직 오류"
 	System         = "시스템 오류"
 	UnKnown        = "알 수 없는 오류"
+
+	NonInjected = "의존성 주입 오류"
 )

@@ -1,8 +1,9 @@
-package util
+package main
 
 import (
 	"context"
 	"fmt"
+	"github.com/codestates/WBABEProject-05/common/flag"
 	"github.com/codestates/WBABEProject-05/config"
 	"github.com/codestates/WBABEProject-05/config/log"
 	"github.com/codestates/WBABEProject-05/logger"
@@ -31,12 +32,12 @@ func NewApp() *App {
 }
 
 func (a *App) LoadConfig() {
-	path := Flags[ConfigFlag.Name]
+	path := flag.Flags[flag.ConfigFlag.Name]
 	a.Config = config.NewConfig(*path)
 }
 
 func (a *App) LoadLogger() {
-	path := Flags[LogConfigFlag.Name]
+	path := flag.Flags[flag.LogConfigFlag.Name]
 	lcfg := log.NewLogConfig(*path)
 	Logger := logger.InitLogger(lcfg)
 	a.Logger = Logger

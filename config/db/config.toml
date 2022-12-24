@@ -1,0 +1,4 @@
+mongoUri = "mongodb://127.0.0.1:27017/?directConnection=true" # mongo uri
+dbName = "wbe"
+user = "" # mongo user name
+pwd = "" # mongo password

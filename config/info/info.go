@@ -8,10 +8,12 @@ import (
 )
 
 type Info struct {
-	Version     string
-	Name        string
-	Description string
-	Author      string
+	Version     string `json:"version"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Author      string `json:"author"`
+	//Spec        []string `json:"spec"`
+	//Blog        string   `json:"blog"`
 }
 
 func NewInfo(fPath string) *Info {
