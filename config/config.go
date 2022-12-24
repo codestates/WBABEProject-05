@@ -17,28 +17,19 @@ type Config struct {
 		User     string
 		Pwd      string
 	}
-
-	Log struct {
-		Level   string
-		Fpath   string
-		Msize   int
-		Mage    int
-		Mbackup int
-	}
 }
 
 func NewConfig(fPath string) *Config {
-	conf := new(Config)
+	cfg := new(Config)
 	if file, err := os.Open(fPath); err != nil {
-		log.Println("does not exists file in ", fPath)
+		log.Println("start app... does not exists config file in ", fPath)
 		panic(err)
 	} else {
 		defer file.Close()
-		if err := toml.NewDecoder(file).Decode(conf); err != nil {
-			log.Println("toml decode, fail")
+		if err := toml.NewDecoder(file).Decode(cfg); err != nil {
+			log.Println("start app... toml decode, fail")
 			panic(err)
 		}
-		return conf
+		return cfg
 	}
-
 }

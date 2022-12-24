@@ -1,13 +1,13 @@
 package util
 
-import (
-	"flag"
-)
+import "flag"
 
-var ConfPath string
+var Flags map[string]*string
 
-func FlagsLoad() {
-	conP := flag.String("confP", "./config/config.toml", "toml file to use for configuration")
+func FlagsLoad(fs []*FlagCategory) {
+	Flags = make(map[string]*string)
+	for _, ca := range fs {
+		Flags[ca.Name] = ca.Load()
+	}
 	flag.Parse()
-	ConfPath = *conP
 }

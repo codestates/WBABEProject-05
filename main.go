@@ -1,27 +1,35 @@
 package main
 
 import (
-	"fmt"
-	"github.com/codestates/WBABEProject-05/config"
-	"github.com/codestates/WBABEProject-05/logger"
+	gin2 "github.com/codestates/WBABEProject-05/contorller"
+	"github.com/codestates/WBABEProject-05/router"
 	"github.com/codestates/WBABEProject-05/util"
-	"log"
 )
 
 var (
-	Conf *config.Config
+	App   = util.NewApp()
+	flags = []*util.FlagCategory{
+		util.ConfigFlag,
+		util.LogConfigFlag,
+		util.InformationFlag,
+	}
 )
 
 func init() {
-	util.FlagsLoad()
-	Conf = config.NewConfig(util.ConfPath)
-	err := logger.InitLogger(Conf)
-	if err != nil {
-		log.Println("logger load, fail")
-		panic(err)
-	}
+	// read flags
+	util.FlagsLoad(flags)
+	App.LoadConfig()
+
+	// setting logger
+	App.LoadLogger()
+
+	//setting http
+	gin := router.GetGin(App.Config.Server.Mode, gin2.GetInstance())
+	App.SetRouter(gin)
 }
 
+// TODO 확인할 사항 생성, 싱글톤 등 struct 의 생성에도 방식이있는데 New 또는 Get 등 각각의 경우를 확실히 정하도록하자
 func main() {
-	fmt.Println("Hello World")
+	//fmt.Println(util.GetAppInfo())
+	App.Run()
 }
