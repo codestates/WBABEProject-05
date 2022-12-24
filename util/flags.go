@@ -2,26 +2,12 @@ package util
 
 import "flag"
 
-type FlagCategory struct {
-	Name    string
-	Default string
-	Usage   string
-}
+var Flags map[string]*string
 
-var (
-	ConfigFlag = &FlagCategory{
-		Name:    "config",
-		Default: "./config/config.toml",
-		Usage:   "toml file to use for configuration",
+func FlagsLoad(fs []*FlagCategory) {
+	Flags = make(map[string]*string)
+	for _, ca := range fs {
+		Flags[ca.Name] = ca.Load()
 	}
-
-	LogConfigFlag = &FlagCategory{
-		Name:    "log",
-		Default: "./config/log/config.toml",
-		Usage:   "toml file to use for log configuration",
-	}
-)
-
-func (f *FlagCategory) Load() *string {
-	return flag.String(f.Name, f.Default, f.Usage)
+	flag.Parse()
 }

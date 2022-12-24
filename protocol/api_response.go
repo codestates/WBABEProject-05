@@ -10,12 +10,13 @@ type ApiResponse[T any] struct {
 	Code      int    `json:"code"`
 	Data      T      `json:"data"`
 	Message   string `json:"message"`
-	ErrorName string `json:"error_name"`
+	ErrorName string `json:"error"`
 }
 
 func (a *ApiResponse[T]) Response(c *gin.Context) {
-	//c.Header("Content-Type", "application/json")
+	c.Header("Content-Type", "application/json")
 	c.JSON(a.Code, a)
+	return
 }
 func Success() *ApiResponse[any] {
 	return SuccessAndCustomMessage("success", "ok")

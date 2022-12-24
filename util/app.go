@@ -2,7 +2,6 @@ package util
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"github.com/codestates/WBABEProject-05/config"
 	"github.com/codestates/WBABEProject-05/config/log"
@@ -16,49 +15,31 @@ import (
 	"time"
 )
 
-const (
-	Name        = "WBA-띵동주문이요"
-	Description = "온라인 주문 시스템"
-	Author      = "Hooneats"
-)
-
 var instance *App
 
+// TODO App 의 구조를 및 설정을 한번에 파악할 수 있는 App struct 로 주석 추가해 주도록하자
 type App struct {
-	Name        string
-	Description string
-	Author      string
-	Flags       map[string]*string
-	Config      *config.Config
-	Logger      logger.Logger
-	Router      router.Router
-	Server      *http.Server
+	Config *config.Config `json:"_"`
+	Logger logger.Logger
+	Router router.Router
+	Server *http.Server
 }
 
 func NewApp() *App {
-	instance = &App{
-		Name:        Name,
-		Description: Description,
-		Author:      Author,
-	}
+	instance = &App{}
 	return instance
 }
 
-func (a *App) ReadFlags(fs []*FlagCategory) {
-	a.Flags = make(map[string]*string)
-	for _, ca := range fs {
-		a.Flags[ca.Name] = ca.Load()
-	}
-	flag.Parse()
-}
-
 func (a *App) LoadConfig() {
-	path := a.Flags[ConfigFlag.Name]
+	path := Flags[ConfigFlag.Name]
 	a.Config = config.NewConfig(*path)
 }
 
-func (a *App) SetLogger(logger logger.Logger) {
-	a.Logger = logger
+func (a *App) LoadLogger() {
+	path := Flags[LogConfigFlag.Name]
+	lcfg := log.NewLogConfig(*path)
+	Logger := logger.InitLogger(lcfg)
+	a.Logger = Logger
 }
 
 func (a *App) SetRouter(rt router.Router) {
@@ -76,7 +57,11 @@ func (a *App) Run() {
 	}
 
 	g.Go(func() error {
-		return a.startServer()
+		if err := a.startServer(); err != nil {
+			a.Logger.Error("Start Server fail,", err.Error())
+			return err
+		}
+		return nil
 	})
 
 	a.graceExit()
@@ -111,9 +96,4 @@ func (a *App) graceExit() {
 		a.Logger.Info(tl)
 	}
 	a.Logger.Info("Server exiting")
-}
-
-func (a *App) GetLogConfig() *log.Log {
-	path := a.Flags[LogConfigFlag.Name]
-	return log.NewLogConfig(*path)
 }
