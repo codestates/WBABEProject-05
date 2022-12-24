@@ -1,7 +1,6 @@
 package protocol
 
 import (
-	"github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -16,10 +15,10 @@ type RequestPostMenu struct {
 	Description string `json:"description,omitempty"`
 }
 
-func (r *RequestPostMenu) ToStore() (*entity.Store, *error.Error) {
+func (r *RequestPostMenu) ToStore() (*entity.Store, error) {
 	id, err := primitive.ObjectIDFromHex(r.StoreId)
 	if err != nil {
-		return nil, &error.BadRequestError
+		return nil, err
 	}
 	return &entity.Store{
 		Id: id,

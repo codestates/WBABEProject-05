@@ -32,8 +32,10 @@ func GetStoreModel(col *mongo.Collection) *storeModel {
 func (s *storeModel) InsertMenu(store *entity.Store) (int, error) {
 	ctx, cancel := common.GetContext(common.ModelTimeOut)
 	defer cancel()
-	filter := bson.D{{"id", store.Id}}
-	update := bson.D{{"$set", bson.D{{"menu", store.Menu}}}}
+
+	menu := store.Menu
+	filter := bson.D{{"_id", store.Id}}
+	update := bson.D{{"$set", bson.D{{"menu", menu}}}}
 	result, err := s.collection.UpdateOne(ctx, filter, update)
 	if err != nil {
 		return 0, err

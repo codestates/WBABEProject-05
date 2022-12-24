@@ -36,7 +36,14 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 	//	protocol.Fail(*terr).Response(c)
 	//	return
 	//}
-	s.storeMenuService.RegisterMenu(reqM)
+	modiCount, err := s.storeMenuService.RegisterMenu(reqM)
+	if err != nil {
+		//TODO ERR
+		return
+	}
+	protocol.SuccessData(gin.H{
+		"posted_count": modiCount,
+	}).Response(c)
 }
 
 func (s *storeControl) DeleteMenu(c *gin.Context) {
