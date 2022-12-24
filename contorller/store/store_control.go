@@ -47,7 +47,20 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 }
 
 func (s *storeControl) DeleteMenu(c *gin.Context) {
-	s.storeMenuService.DeleteMenuAndBackup()
+	storeId := c.Query("store-id")
+	menuId := c.Query("menu-id")
+	if menuId == "" || storeId == "" {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+	count, err := s.storeMenuService.DeleteMenuAndBackup(storeId, menuId)
+	if err != nil {
+		//TODO ERR
+		return
+	}
+	protocol.SuccessData(gin.H{
+		"deleted_count": count,
+	}).Response(c)
 }
 
 func (s *storeControl) PutSoreAndRecommendMenu(c *gin.Context) {

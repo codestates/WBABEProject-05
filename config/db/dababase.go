@@ -1,16 +1,21 @@
 package db
 
 import (
+	"bufio"
+	"encoding/json"
+	"fmt"
 	"github.com/naoina/toml"
 	"log"
 	"os"
+	"time"
 )
 
 type Database struct {
-	MongoUri string
-	DbName   string
-	User     string
-	Pwd      string
+	MongoUri   string
+	DbName     string
+	User       string
+	Pwd        string
+	BackupPath string
 }
 
 func NewDbConfig(fPath string) *Database {
@@ -25,5 +30,31 @@ func NewDbConfig(fPath string) *Database {
 			panic(err)
 		}
 		return dbcfg
+	}
+}
+
+func WriteBackup(fPath string, T any) error {
+
+	if data, err := json.MarshalIndent(T, "", "    "); err != nil {
+		return err
+	} else {
+		fileP := fmt.Sprintf(fPath + time.Now().Format("2006-01-02") + ".txt")
+		f, err := os.OpenFile(
+			fileP,
+			os.O_CREATE|os.O_RDWR|os.O_APPEND,
+			os.FileMode(0644))
+		defer f.Close()
+		w := bufio.NewWriter(f)
+
+		_, err = fmt.Fprint(w, string(data)+"\n")
+		if err != nil {
+			return err
+		}
+
+		err = w.Flush()
+		if err != nil {
+			return err
+		}
+		return nil
 	}
 }

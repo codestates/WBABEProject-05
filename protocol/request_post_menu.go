@@ -3,6 +3,7 @@ package protocol
 import (
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 
 type RequestPostMenu struct {
@@ -15,22 +16,23 @@ type RequestPostMenu struct {
 	Description string `json:"description,omitempty"`
 }
 
-func (r *RequestPostMenu) ToStore() (*entity.Store, error) {
+func (r *RequestPostMenu) ToStoreIdAndMenu() (primitive.ObjectID, *entity.Menu, error) {
 	id, err := primitive.ObjectIDFromHex(r.StoreId)
 	if err != nil {
-		return nil, err
+		return primitive.ObjectID{}, nil, err
 	}
-	return &entity.Store{
-		Id: id,
-		Menu: []*entity.Menu{
-			{
-				Name:        r.Name,
-				Price:       r.Price,
-				Origin:      r.Origin,
-				Possible:    r.Possible,
-				LimitCount:  r.LimitCount,
-				Description: r.Description,
-			},
+	menu := &entity.Menu{
+		Id:          primitive.NewObjectID(),
+		Name:        r.Name,
+		Price:       r.Price,
+		Origin:      r.Origin,
+		Possible:    r.Possible,
+		LimitCount:  r.LimitCount,
+		Description: r.Description,
+		BaseTime: entity.BaseTime{
+			Created_at: time.Now(),
+			Updated_at: time.Now(),
 		},
-	}, nil
+	}
+	return id, menu, nil
 }

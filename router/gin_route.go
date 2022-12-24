@@ -34,6 +34,7 @@ func (r *GinRoute) Handle() http.Handler {
 		strCtl, _ := r.controller.StoreControl()
 		store.POST("", strCtl.PostStore)
 		store.POST("/menu", strCtl.PostMenu)
+		store.DELETE("/menu", strCtl.DeleteMenu)
 	}
 
 	return r.engin

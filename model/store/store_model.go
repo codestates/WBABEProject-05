@@ -29,13 +29,12 @@ func GetStoreModel(col *mongo.Collection) *storeModel {
 	return instance
 }
 
-func (s *storeModel) InsertMenu(store *entity.Store) (int, error) {
+func (s *storeModel) InsertMenu(storeId primitive.ObjectID, menu *entity.Menu) (int, error) {
 	ctx, cancel := common.GetContext(common.ModelTimeOut)
 	defer cancel()
 
-	menu := store.Menu
-	filter := bson.D{{"_id", store.Id}}
-	update := bson.D{{"$set", bson.D{{"menu", menu}}}}
+	filter := bson.D{{"_id", storeId}}
+	update := bson.D{{"$push", bson.M{"menu": menu}}}
 	result, err := s.collection.UpdateOne(ctx, filter, update)
 	if err != nil {
 		return 0, err
@@ -55,11 +54,12 @@ func (s *storeModel) SelectMenu() {
 
 }
 
-func (s *storeModel) SelectMenusByIds(menuIds []primitive.ObjectID) ([]*entity.Menu, error) {
+// TODO 테스트필요
+func (s *storeModel) SelectMenusByIds(storeId primitive.ObjectID, menuIds []primitive.ObjectID) ([]*entity.Menu, error) {
 	ctx, cancel := common.GetContext(common.ModelTimeOut)
 	defer cancel()
 
-	filter := bson.M{"menu": bson.M{"$elemMatch": bson.M{"_id": menuIds}}}
+	filter := bson.M{"_id": storeId, "menu": bson.M{"$elemMatch": bson.M{"_id": menuIds}}}
 	opt := bson.M{"menu": true}
 	menuCursor, err := s.collection.Find(ctx, filter, options.Find().SetProjection(opt).SetLimit(5))
 	if err != nil {
@@ -82,4 +82,18 @@ func (s *storeModel) InsertStore(store *entity.Store) (string, error) {
 		return "", err
 	}
 	return store.Id.Hex(), nil
+}
+
+func (s *storeModel) SelectMenuByIdAndDelete(storeId, menuId primitive.ObjectID) (*entity.Store, error) {
+	ctx, cancel := common.GetContext(common.ModelTimeOut)
+	defer cancel()
+
+	var store *entity.Store
+	filter := bson.M{"_id": storeId, "menu": bson.M{"$elemMatch": bson.M{"_id": menuId}}}
+	opt := bson.M{"$pop": bson.M{"menu": -1}}
+	err := s.collection.FindOneAndUpdate(ctx, filter, opt).Decode(&store)
+	if err != nil {
+		return nil, err
+	}
+	return store, nil
 }
