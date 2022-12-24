@@ -5,10 +5,11 @@ import (
 )
 
 type Store struct {
-	Id            primitive.ObjectID
-	User          *User
-	Address       *Address
-	Menu          []*Menu
-	RecommendMenu []*Menu
-	BaseTime      *BaseTime
+	Id             primitive.ObjectID
+	UserId         primitive.ObjectID
+	Address        *Address
+	StorePhone     string
+	Menu           []*Menu
+	RecommendMenus []*Menu
+	BaseTime       *BaseTime
 }

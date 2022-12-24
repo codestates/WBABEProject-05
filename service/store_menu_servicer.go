@@ -17,4 +17,5 @@ type StoreMenuServicer interface {
 	FindRecommendMenusSortedTimeDesc()
 	// SelectMenus 메뉴 리스트 조회 : 메뉴 리스트 조회 및 정렬(추천/평점/주문수/최신) / 각 카테고리별  sort 리스트 출력(ex. order by 추천, 평점, 재주문수, 최신), 결과 5~10여개 임의 생성 출력, sorting 여부 확인
 	FindMenusSortedPage()
+	RegisterStore(store *protocol.RequestPostStore) (string, error)
 }

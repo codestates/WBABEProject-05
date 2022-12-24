@@ -39,22 +39,39 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 	s.storeMenuService.RegisterMenu(reqM)
 }
 
-func (s *storeControl) DeleteMenu(g *gin.Context) {
+func (s *storeControl) DeleteMenu(c *gin.Context) {
 	s.storeMenuService.DeleteMenuAndBackup()
 }
 
-func (s *storeControl) PutSoreAndRecommendMenu(g *gin.Context) {
+func (s *storeControl) PutSoreAndRecommendMenu(c *gin.Context) {
 	s.storeMenuService.ModifyStoreAndRecommendMenus()
 }
 
-func (s *storeControl) PutMenu(g *gin.Context) {
+func (s *storeControl) PutMenu(c *gin.Context) {
 	s.storeMenuService.ModifyMenu()
 }
 
-func (s *storeControl) GetRecommendMenusSortedTimeDesc(g *gin.Context) {
+func (s *storeControl) GetRecommendMenusSortedTimeDesc(c *gin.Context) {
 	s.storeMenuService.FindRecommendMenusSortedTimeDesc()
 }
 
-func (s *storeControl) GetMenuSortedPages(g *gin.Context) {
+func (s *storeControl) GetMenuSortedPages(c *gin.Context) {
 	s.storeMenuService.FindMenusSortedPage()
+}
+
+func (s *storeControl) PostStore(c *gin.Context) {
+	reqS := &protocol.RequestPostStore{}
+	err := c.ShouldBindJSON(reqS)
+	if err != nil {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+	savedId, err := s.storeMenuService.RegisterStore(reqS)
+	if err != nil {
+		//TODO ERR
+		return
+	}
+	protocol.SuccessData(gin.H{
+		"saved_id": savedId,
+	}).Response(c)
 }

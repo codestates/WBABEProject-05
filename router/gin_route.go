@@ -23,15 +23,16 @@ func (r *GinRoute) Handle() http.Handler {
 	//TODO error
 	gr.GET("/info", infCtl.GetInformation)
 
-	join := gr.Group("/join")
+	user := gr.Group("/users")
 	{
 		usrCtl, _ := r.controller.UserControl()
-		join.POST("/user", usrCtl.PostUser)
+		user.POST("/join", usrCtl.PostUser)
 	}
 
 	store := gr.Group("/stores")
 	{
 		strCtl, _ := r.controller.StoreControl()
+		store.POST("", strCtl.PostStore)
 		store.POST("/menu", strCtl.PostMenu)
 	}
 
