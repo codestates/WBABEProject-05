@@ -2,7 +2,6 @@ package entity
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"time"
 )
 
 type Store struct {
@@ -12,9 +11,4 @@ type Store struct {
 	Menu          []Menu
 	RecommendMenu []Menu
 	BaseTime      BaseTime
-}
-
-type BaseTime struct {
-	Created_at time.Time
-	Updated_at time.Time
 }

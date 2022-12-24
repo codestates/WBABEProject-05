@@ -15,10 +15,18 @@ type GinRoute struct {
 }
 
 func (r *GinRoute) Handle() http.Handler {
-	r.engin.GET("/", func(g *gin.Context) {
+	gr := r.engin
+	gr.GET("/", func(g *gin.Context) {
 		g.JSON(200, "ok")
 	})
-	r.engin.GET("/info", r.controller.GetInfoControl().GetInformation)
+	infCtl, _ := r.controller.InfoControl()
+	//TODO error
+	gr.GET("/info", infCtl.GetInformation)
+	store := gr.Group("/stores")
+	{
+		strCtl, _ := r.controller.StoreControl()
+		store.POST("/menu", strCtl.PostMenu)
+	}
 	return r.engin
 }
 
@@ -47,6 +55,7 @@ func setMode(mode string) {
 	}
 }
 
+// NewEngine global middleware setting
 func NewEngine() *gin.Engine {
 	grt := gin.Default()
 	grt.Use(logger.GinLogger())

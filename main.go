@@ -2,29 +2,42 @@ package main
 
 import (
 	gin2 "github.com/codestates/WBABEProject-05/contorller"
+	"github.com/codestates/WBABEProject-05/contorller/info"
+	"github.com/codestates/WBABEProject-05/contorller/store"
+	"github.com/codestates/WBABEProject-05/contorller/user"
 	"github.com/codestates/WBABEProject-05/router"
+	"github.com/codestates/WBABEProject-05/service"
 	"github.com/codestates/WBABEProject-05/util"
+	"github.com/codestates/WBABEProject-05/util/flag"
 )
 
 var (
 	App   = util.NewApp()
-	flags = []*util.FlagCategory{
-		util.ConfigFlag,
-		util.LogConfigFlag,
-		util.InformationFlag,
+	flags = []*flag.FlagCategory{
+		flag.ConfigFlag,
+		flag.LogConfigFlag,
+		flag.InformationFlag,
 	}
 )
 
 func init() {
 	// read flags
-	util.FlagsLoad(flags)
+	flag.FlagsLoad(flags)
 	App.LoadConfig()
 
 	// setting logger
 	App.LoadLogger()
 
 	//setting http
-	gin := router.GetGin(App.Config.Server.Mode, gin2.GetInstance())
+
+	ginControl := gin2.GetInstance(
+		info.GetInfoControl(),
+		user.GetUserControl(),
+		store.GetStoreControl(
+			service.GetStoreMenuService(),
+		),
+	)
+	gin := router.GetGin(App.Config.Server.Mode, ginControl)
 	App.SetRouter(gin)
 }
 

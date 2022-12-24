@@ -7,6 +7,7 @@ import (
 	"github.com/codestates/WBABEProject-05/config/log"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/router"
+	"github.com/codestates/WBABEProject-05/util/flag"
 	"golang.org/x/sync/errgroup"
 	"net/http"
 	"os"
@@ -31,12 +32,12 @@ func NewApp() *App {
 }
 
 func (a *App) LoadConfig() {
-	path := Flags[ConfigFlag.Name]
+	path := flag.Flags[flag.ConfigFlag.Name]
 	a.Config = config.NewConfig(*path)
 }
 
 func (a *App) LoadLogger() {
-	path := Flags[LogConfigFlag.Name]
+	path := flag.Flags[flag.LogConfigFlag.Name]
 	lcfg := log.NewLogConfig(*path)
 	Logger := logger.InitLogger(lcfg)
 	a.Logger = Logger
