@@ -1,6 +1,8 @@
 package store
 
 import (
+	utilErr "github.com/codestates/WBABEProject-05/common/error"
+	"github.com/codestates/WBABEProject-05/protocol"
 	"github.com/codestates/WBABEProject-05/service"
 	"github.com/gin-gonic/gin"
 )
@@ -21,8 +23,20 @@ func GetStoreControl(svc service.StoreMenuServicer) *storeControl {
 	return instance
 }
 
-func (s *storeControl) PostMenu(g *gin.Context) {
-	s.storeMenuService.RegisterMenu()
+func (s *storeControl) PostMenu(c *gin.Context) {
+	reqM := &protocol.RequestPostMenu{}
+	err := c.ShouldBindJSON(reqM)
+	if err != nil {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	//store, terr := reqM.ToStore()
+	//if terr != nil {
+	//	protocol.Fail(*terr).Response(c)
+	//	return
+	//}
+	s.storeMenuService.RegisterMenu(reqM)
 }
 
 func (s *storeControl) DeleteMenu(g *gin.Context) {

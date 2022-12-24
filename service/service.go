@@ -1,7 +1,7 @@
 package service
 
 import (
-	error2 "github.com/codestates/WBABEProject-05/protocol/error"
+	error2 "github.com/codestates/WBABEProject-05/common/error"
 )
 
 var instance *service

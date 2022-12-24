@@ -1,10 +1,10 @@
 package contorller
 
 import (
+	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/contorller/info"
 	"github.com/codestates/WBABEProject-05/contorller/store"
 	"github.com/codestates/WBABEProject-05/contorller/user"
-	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 )
 
 var instance *ginControl

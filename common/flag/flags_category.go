@@ -26,6 +26,12 @@ var (
 		Default: "./config/info/config.toml",
 		Usage:   "toml file to use for information configuration",
 	}
+
+	DatabaseFlag = &FlagCategory{
+		Name:    "db",
+		Default: "./config/db/config.toml",
+		Usage:   "toml file to use for database configuration",
+	}
 )
 
 func (f *FlagCategory) Load() *string {

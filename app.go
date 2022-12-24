@@ -1,13 +1,13 @@
-package util
+package main
 
 import (
 	"context"
 	"fmt"
+	"github.com/codestates/WBABEProject-05/common/flag"
 	"github.com/codestates/WBABEProject-05/config"
 	"github.com/codestates/WBABEProject-05/config/log"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/router"
-	"github.com/codestates/WBABEProject-05/util/flag"
 	"golang.org/x/sync/errgroup"
 	"net/http"
 	"os"

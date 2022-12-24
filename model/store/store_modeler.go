@@ -1,9 +1,13 @@
 package store
 
+import (
+	"github.com/codestates/WBABEProject-05/model/entity"
+)
+
 // TODO 디테일한 점이 많아 서비스 만들어야할듯하다
 type StoreModeler interface {
 	// InsertMenu 신규 메뉴 등록 : 관련 정보를 등록(이름,주문가능여부,한정수량,가격,맵기정도 등) , / 성공 여부 리턴
-	InsertMenu()
+	InsertMenu(store *entity.Store) (int, error)
 	// DeleteMenu 메뉴 삭제 : 메뉴 삭제시 실제 데이터 백업이나 뷰플레그로 안보임 처리 , / 성공 여부 리턴
 	DeleteMenu()
 	// UpdateMenu 메뉴 수정 : 사업장에서 기존의 메뉴 정보 변경기능(ex. 가격변경, 원산지 변경, soldout) 금일 추천 메뉴 설정 변경, 리스트 출력, / 성공 여부 리턴

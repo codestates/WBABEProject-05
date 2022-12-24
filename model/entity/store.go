@@ -6,9 +6,9 @@ import (
 
 type Store struct {
 	Id            primitive.ObjectID
-	User          User
-	Address       Address
-	Menu          []Menu
-	RecommendMenu []Menu
-	BaseTime      BaseTime
+	User          *User
+	Address       *Address
+	Menu          []*Menu
+	RecommendMenu []*Menu
+	BaseTime      *BaseTime
 }

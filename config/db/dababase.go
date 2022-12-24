@@ -1,4 +1,4 @@
-package config
+package db
 
 import (
 	"github.com/naoina/toml"
@@ -6,24 +6,24 @@ import (
 	"os"
 )
 
-type Config struct {
-	Server struct {
-		Mode string
-		Port string
-	}
+type Database struct {
+	MongoUri string
+	DbName   string
+	User     string
+	Pwd      string
 }
 
-func NewConfig(fPath string) *Config {
-	cfg := new(Config)
+func NewDbConfig(fPath string) *Database {
+	dbcfg := new(Database)
 	if file, err := os.Open(fPath); err != nil {
 		log.Println("start app... does not exists config file in ", fPath)
 		panic(err)
 	} else {
 		defer file.Close()
-		if err := toml.NewDecoder(file).Decode(cfg); err != nil {
+		if err := toml.NewDecoder(file).Decode(dbcfg); err != nil {
 			log.Println("start app... toml decode, fail")
 			panic(err)
 		}
-		return cfg
+		return dbcfg
 	}
 }

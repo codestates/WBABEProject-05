@@ -1,9 +1,9 @@
 package info
 
 import (
+	"github.com/codestates/WBABEProject-05/common/flag"
 	info3 "github.com/codestates/WBABEProject-05/config/info"
 	"github.com/codestates/WBABEProject-05/protocol"
-	"github.com/codestates/WBABEProject-05/util/flag"
 	"github.com/gin-gonic/gin"
 )
 
