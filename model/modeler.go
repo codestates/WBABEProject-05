@@ -11,5 +11,5 @@ type Modeler interface {
 	StoreModel() store.StoreModeler
 	ReviewModel() review.ReviewModeler
 	ReceiptModel() receipt.ReceiptModeler
-	CustomerModel() user.CustomerModeler
+	UserModel() user.UserModeler
 }

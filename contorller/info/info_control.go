@@ -20,8 +20,8 @@ func GetInfoControl() *infoControl {
 	return instance
 }
 
-func (h *infoControl) GetInformation(g *gin.Context) {
+func (h *infoControl) GetInformation(c *gin.Context) {
 	path := flag.Flags[flag.InformationFlag.Name]
 	info := info3.NewInfo(*path)
-	protocol.SuccessData(info).Response(g)
+	protocol.SuccessData(info).Response(c)
 }

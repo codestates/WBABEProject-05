@@ -8,6 +8,7 @@ import (
 	"github.com/codestates/WBABEProject-05/contorller/user"
 	"github.com/codestates/WBABEProject-05/model"
 	store2 "github.com/codestates/WBABEProject-05/model/store"
+	user2 "github.com/codestates/WBABEProject-05/model/user"
 	"github.com/codestates/WBABEProject-05/router"
 	"github.com/codestates/WBABEProject-05/service"
 )
@@ -34,12 +35,20 @@ func init() {
 	//setting http
 	config := model.GetDbConfig()
 	mod, _ := model.GetModel(config)
+
 	storCol := mod.GetCollection("store", config.DbName)
 	storeModel := store2.GetStoreModel(storCol)
 	menuService := service.GetStoreMenuService(storeModel)
+
+	usrCol := mod.GetCollection("user", config.DbName)
+	usrModel := user2.GetUserModel(usrCol)
+	userService := service.GetUserService(usrModel)
+
 	ginControl := gin2.GetInstance(
 		info.GetInfoControl(),
-		user.GetUserControl(),
+		user.GetUserControl(
+			userService,
+		),
 		store.GetStoreControl(
 			menuService,
 		),
