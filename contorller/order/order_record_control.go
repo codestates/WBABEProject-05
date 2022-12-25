@@ -3,27 +3,27 @@ package order
 import (
 	utilErr "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/protocol"
-	"github.com/codestates/WBABEProject-05/service"
+	"github.com/codestates/WBABEProject-05/service/order"
 	"github.com/gin-gonic/gin"
 )
 
-var instance *orderControl
+var instance *orderRecordControl
 
-type orderControl struct {
-	orderService service.OrderReceiptServicer
+type orderRecordControl struct {
+	orderService order.OrderRecordServicer
 }
 
-func GetOrderControl(svc service.OrderReceiptServicer) *orderControl {
+func NewOrderRecordControl(svc order.OrderRecordServicer) *orderRecordControl {
 	if instance != nil {
 		return instance
 	}
-	instance = &orderControl{
+	instance = &orderRecordControl{
 		orderService: svc,
 	}
 	return instance
 }
 
-func (o *orderControl) RegisterOrderRecord(c *gin.Context) {
+func (o *orderRecordControl) RegisterOrderRecord(c *gin.Context) {
 	reqO := &protocol.RequestOrder{}
 	err := c.ShouldBindJSON(reqO)
 	if err != nil {
@@ -40,12 +40,12 @@ func (o *orderControl) RegisterOrderRecord(c *gin.Context) {
 		"posted_id": recordedId,
 	}).Response(c)
 }
-func (o *orderControl) ModifyOrderRecord(c *gin.Context) {
+func (o *orderRecordControl) ModifyOrderRecord(c *gin.Context) {
 
 }
-func (o *orderControl) FindOrderRecordsSortedPage(c *gin.Context) {
+func (o *orderRecordControl) FindOrderRecordsSortedPage(c *gin.Context) {
 
 }
-func (o *orderControl) SelectReceipts(c *gin.Context) {
+func (o *orderRecordControl) SelectReceipts(c *gin.Context) {
 
 }

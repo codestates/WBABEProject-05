@@ -1,53 +1,21 @@
 package service
 
 import (
-	error2 "github.com/codestates/WBABEProject-05/common/error"
+	"github.com/codestates/WBABEProject-05/logger"
+	"github.com/go-playground/validator"
 )
 
-var instance *service
+var validate = validator.New()
 
+// service validate 등등
 type service struct {
-	orderReceiptService OrderReceiptServicer
-	menuReviewService   MenuReviewServicer
-	storeMenuService    StoreMenuServicer
 }
 
-func GetService(
-	oSvc OrderReceiptServicer,
-	rSvc MenuReviewServicer,
-	sSvc StoreMenuServicer,
-) *service {
-	if instance != nil {
-		return instance
+func (svc *service) ValidateStruct(s interface{}) error {
+	err := validate.Struct(s)
+	if err != nil {
+		logger.AppLog.Error(err)
+		return err
 	}
-	instance := &service{
-		orderReceiptService: oSvc,
-		menuReviewService:   rSvc,
-		storeMenuService:    sSvc,
-	}
-	return instance
-}
-
-func (s *service) OrderReceiptServicer() (OrderReceiptServicer, error) {
-	if s.orderReceiptService != nil {
-		return s.orderReceiptService, nil
-	}
-	// TODO logger
-	return nil, error2.NonInjectedError.Err
-}
-
-func (s *service) MenuReviewServicer() (MenuReviewServicer, error) {
-	if s.menuReviewService != nil {
-		return s.menuReviewService, nil
-	}
-	// TODO logger
-	return nil, error2.NonInjectedError.Err
-}
-
-func (s *service) StoreMenuServicer() (StoreMenuServicer, error) {
-	if s.storeMenuService != nil {
-		return s.storeMenuService, nil
-	}
-	// TODO logger
-	return nil, error2.NonInjectedError.Err
+	return nil
 }

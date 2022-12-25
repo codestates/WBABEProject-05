@@ -1,4 +1,4 @@
-package service
+package customer
 
 type MenuReviewServicer interface {
 	// FindReviewsSortedPage 메뉴 조회 : 개별 메뉴별 평점 및 리뷰 보기, / 해당 메뉴 선택시 메뉴에 따른 평점 및 리뷰 데이터 리턴

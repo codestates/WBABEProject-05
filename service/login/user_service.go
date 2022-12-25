@@ -1,4 +1,4 @@
-package service
+package login
 
 import (
 	"github.com/codestates/WBABEProject-05/model/entity"
@@ -10,20 +10,20 @@ import (
 	"time"
 )
 
-var userServiceInstance *userService
-
 type userService struct {
 	userModel user.UserModeler
 }
 
-func GetUserService(modeler user.UserModeler) *userService {
-	if userServiceInstance != nil {
-		return userServiceInstance
+var instance *userService
+
+func NewUserService(modeler user.UserModeler) *userService {
+	if instance != nil {
+		return instance
 	}
-	userServiceInstance = &userService{
+	instance = &userService{
 		userModel: modeler,
 	}
-	return userServiceInstance
+	return instance
 }
 
 func (u *userService) RegisterUser(usr *protocol.RequestPostUser) (string, error) {

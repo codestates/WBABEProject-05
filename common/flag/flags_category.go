@@ -9,10 +9,10 @@ type FlagCategory struct {
 }
 
 var (
-	ConfigFlag = &FlagCategory{
-		Name:    "config",
-		Default: "./config/config.toml",
-		Usage:   "toml file to use for configuration",
+	ServerConfigFlag = &FlagCategory{
+		Name:    "server",
+		Default: "./config/server/config.toml",
+		Usage:   "toml file to use for server configuration",
 	}
 
 	LogConfigFlag = &FlagCategory{

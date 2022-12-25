@@ -16,23 +16,27 @@ import (
 	"time"
 )
 
-// 전역 로거
+// ZLog App 내 사용될 전역 로거
+var ZapLog Logger
+
+// lg 실제적인 zap 로거
 var lg *zap.Logger
 
 type LogConfigure interface {
 	GetSettingValues() (path, level string, size, backup, age int)
 }
-type ZapLogger struct {
-	Configer LogConfigure
+type zapLogger struct {
+}
+
+func LoadZapLogger(conf LogConfigure) Logger {
+	ZapLog = NewLogger(conf)
+	return ZapLog
 }
 
 // 로거 초기화 컨피그 파라메터
-func InitLogger(lcfg LogConfigure) (zapLogger *ZapLogger) {
-	zapLogger = &ZapLogger{
-		Configer: lcfg,
-	}
-
+func NewLogger(lcfg LogConfigure) (zapLogger *zapLogger) {
 	path, level, size, backup, age := lcfg.GetSettingValues()
+
 	now := time.Now()
 	lPath := fmt.Sprintf("%s_%s.log", path, now.Format("2006-01-02"))
 	// 설정 옵션
@@ -50,7 +54,7 @@ func InitLogger(lcfg LogConfigure) (zapLogger *ZapLogger) {
 	return nil
 }
 
-func (z *ZapLogger) Debug(ctx ...interface{}) {
+func (z *zapLogger) Debug(ctx ...interface{}) {
 	var b bytes.Buffer
 	for _, str := range ctx {
 		b.WriteString(str.(string))
@@ -61,7 +65,7 @@ func (z *ZapLogger) Debug(ctx ...interface{}) {
 }
 
 // Info is a convenient alias for Root().Info
-func (z *ZapLogger) Info(ctx ...interface{}) {
+func (z *zapLogger) Info(ctx ...interface{}) {
 	// ~
 	var b bytes.Buffer
 	for _, str := range ctx {
@@ -72,7 +76,7 @@ func (z *ZapLogger) Info(ctx ...interface{}) {
 }
 
 // Warn is a convenient alias for Root().Warn
-func (z *ZapLogger) Warn(ctx ...interface{}) {
+func (z *zapLogger) Warn(ctx ...interface{}) {
 	// ~
 	var b bytes.Buffer
 	for _, str := range ctx {
@@ -83,7 +87,7 @@ func (z *ZapLogger) Warn(ctx ...interface{}) {
 }
 
 // Error is a convenient alias for Root().Error
-func (z *ZapLogger) Error(ctx ...interface{}) {
+func (z *zapLogger) Error(ctx ...interface{}) {
 	// ~
 	var b bytes.Buffer
 	for _, str := range ctx {

@@ -2,6 +2,8 @@ package receipt
 
 import "github.com/codestates/WBABEProject-05/model/entity"
 
+var ReceiptModel ReceiptModeler
+
 type ReceiptModeler interface {
 	// InsertReceipt : 메뉴 리스트에서 해당 메뉴 선택, 주문 요청 및 초기상태 저장, 주문 내역 초기상태 저장, / - 금일 주문 받은 일련번호-주문번호 리턴
 	InsertReceipt(receipt *entity.Receipt) (string, error)

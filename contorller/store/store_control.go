@@ -3,17 +3,17 @@ package store
 import (
 	utilErr "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/protocol"
-	"github.com/codestates/WBABEProject-05/service"
+	"github.com/codestates/WBABEProject-05/service/store"
 	"github.com/gin-gonic/gin"
 )
 
 var instance *storeControl
 
 type storeControl struct {
-	storeMenuService service.StoreMenuServicer
+	storeMenuService store.StoreMenuServicer
 }
 
-func GetStoreControl(svc service.StoreMenuServicer) *storeControl {
+func NewStoreControl(svc store.StoreMenuServicer) *storeControl {
 	if instance != nil {
 		return instance
 	}

@@ -5,6 +5,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+var StoreModel StoreModeler
+
 // TODO 디테일한 점이 많아 서비스 만들어야할듯하다
 type StoreModeler interface {
 	// InsertMenu 신규 메뉴 등록 : 관련 정보를 등록(이름,주문가능여부,한정수량,가격,맵기정도 등) , / 성공 여부 리턴

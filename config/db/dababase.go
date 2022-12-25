@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type Database struct {
+type DBConfig struct {
 	MongoUri   string
 	DbName     string
 	User       string
@@ -18,8 +18,8 @@ type Database struct {
 	BackupPath string
 }
 
-func NewDbConfig(fPath string) *Database {
-	dbcfg := new(Database)
+func NewDbConfig(fPath string) *DBConfig {
+	dbcfg := new(DBConfig)
 	if file, err := os.Open(fPath); err != nil {
 		log.Println("start app... does not exists config file in ", fPath)
 		panic(err)
@@ -34,7 +34,6 @@ func NewDbConfig(fPath string) *Database {
 }
 
 func WriteBackup(fPath string, T any) error {
-
 	if data, err := json.MarshalIndent(T, "", "    "); err != nil {
 		return err
 	} else {

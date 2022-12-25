@@ -6,13 +6,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var instance *receiptModel
+var instance ReceiptModeler
 
 type receiptModel struct {
 	collection *mongo.Collection
 }
 
-func GetReceiptModel(col *mongo.Collection) *receiptModel {
+func NewReceiptModel(col *mongo.Collection) ReceiptModeler {
 	if instance != nil {
 		return instance
 	}
@@ -23,7 +23,7 @@ func GetReceiptModel(col *mongo.Collection) *receiptModel {
 }
 
 func (r *receiptModel) InsertReceipt(receipt *entity.Receipt) (string, error) {
-	ctx, cancel := common.GetContext(common.ModelTimeOut)
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
 	_, err := r.collection.InsertOne(ctx, receipt)

@@ -1,4 +1,4 @@
-package service
+package store
 
 import (
 	"encoding/json"
@@ -12,22 +12,22 @@ import (
 	"time"
 )
 
-var stmsvc *storeMenuService
-
 type storeMenuService struct {
 	storeModel store.StoreModeler
 }
 
-func GetStoreMenuService(
+var instance *storeMenuService
+
+func NewStoreMenuService(
 	sd store.StoreModeler,
 ) *storeMenuService {
-	if stmsvc != nil {
-		return stmsvc
+	if instance != nil {
+		return instance
 	}
-	stmsvc = &storeMenuService{
+	instance = &storeMenuService{
 		storeModel: sd,
 	}
-	return stmsvc
+	return instance
 }
 
 func (s *storeMenuService) RegisterMenu(menu *protocol.RequestPostMenu) (int, error) {

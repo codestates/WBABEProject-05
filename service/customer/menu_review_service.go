@@ -1,4 +1,4 @@
-package service
+package customer
 
 type MenuReviewService struct {
 }

@@ -1,0 +1,2 @@
+mode = "dev" # profile local / dev / test /prod
+port = ":8080" # server port

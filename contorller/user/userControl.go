@@ -3,17 +3,17 @@ package user
 import (
 	"fmt"
 	"github.com/codestates/WBABEProject-05/protocol"
-	"github.com/codestates/WBABEProject-05/service"
+	"github.com/codestates/WBABEProject-05/service/login"
 	"github.com/gin-gonic/gin"
 )
 
 var instance *userControl
 
 type userControl struct {
-	userService service.UserServicer
+	userService login.UserServicer
 }
 
-func GetUserControl(svc service.UserServicer) *userControl {
+func NewUserControl(svc login.UserServicer) *userControl {
 	if instance != nil {
 		return instance
 	}

@@ -7,80 +7,47 @@ import (
 	"net/http"
 )
 
-var instance *GinRoute
+var ginR *GinRoute
 
 type GinRoute struct {
-	engin      *gin.Engine
-	controller contorller.Controller
+	engin *gin.Engine
+}
+
+func NewGinRoute(mode string) *GinRoute {
+	if ginR != nil {
+		return ginR
+	}
+	setMode(mode)
+	ginR = &GinRoute{
+		engin: newEngine(),
+	}
+	return ginR
 }
 
 func (r *GinRoute) Handle() http.Handler {
 	gr := r.engin
-	gr.GET("/", func(c *gin.Context) {
-		c.JSON(200, "ok")
-	})
-	infCtl, _ := r.controller.InfoControl()
-	//TODO error
-	gr.GET("/info", infCtl.GetInformation)
+
+	home := gr.Group("")
+	{
+		contorller.HomeHandler(home)
+	}
 
 	user := gr.Group("/users")
 	{
-		usrCtl, _ := r.controller.UserControl()
-		user.POST("/join", usrCtl.PostUser)
+		contorller.UsersHandler(user)
 	}
 
 	store := gr.Group("/stores")
 	{
-		strCtl, _ := r.controller.StoreControl()
-		store.POST("", strCtl.PostStore)         // 가게 등록
-		store.POST("/menu", strCtl.PostMenu)     // 메뉴 등록
-		store.DELETE("/menu", strCtl.DeleteMenu) // 메뉴 삭제
-		store.PUT("/menu", strCtl.PutMenu)
+		contorller.StoresHandler(store)
 	}
 
 	order := gr.Group("/orders")
 	{
-		orCtl, _ := r.controller.OrderControl()
-		{
-			order.POST("", orCtl.RegisterOrderRecord)
-		}
+		contorller.OrdersHandler(order)
 	}
 
 	return r.engin
-}
-
-func GetGin(mode string, ctl contorller.Controller) *GinRoute {
-	if instance != nil {
-		return instance
-	}
-	setMode(mode)
-	instance = &GinRoute{
-		engin:      NewEngine(),
-		controller: ctl,
-	}
-	return instance
-}
-
-func setMode(mode string) {
-	switch mode {
-	case "dev":
-		gin.SetMode(gin.DebugMode)
-	case "prod":
-		gin.SetMode(gin.ReleaseMode)
-	case "test":
-		gin.SetMode(gin.TestMode)
-	default:
-		gin.SetMode(gin.DebugMode)
-	}
-}
-
-// NewEngine global middleware setting
-func NewEngine() *gin.Engine {
-	grt := gin.Default()
-	grt.Use(logger.GinLogger())
-	grt.Use(logger.GinRecovery(true))
-	grt.Use(CORS())
-	return grt
 }
 
 func CORS() gin.HandlerFunc {
@@ -94,5 +61,31 @@ func CORS() gin.HandlerFunc {
 			return
 		}
 		c.Next()
+	}
+}
+
+// newEngine generate gin engin and global middleware setting
+func newEngine() *gin.Engine {
+	grt := gin.Default()
+	grt.Use(logger.GinLogger())
+	grt.Use(logger.GinRecovery(true))
+	grt.Use(CORS())
+	return grt
+}
+
+func setMode(mode string) {
+	switch mode {
+	case "dev":
+		logger.AppLog.Info("Start gin mod", gin.DebugMode)
+		gin.SetMode(gin.DebugMode)
+	case "prod":
+		logger.AppLog.Info("Start gin mod", gin.ReleaseMode)
+		gin.SetMode(gin.ReleaseMode)
+	case "test":
+		logger.AppLog.Info("Start gin mod", gin.TestMode)
+		gin.SetMode(gin.TestMode)
+	default:
+		logger.AppLog.Info("Start gin mod", gin.DebugMode)
+		gin.SetMode(gin.DebugMode)
 	}
 }

@@ -2,5 +2,5 @@ version = "0.1.0"
 name = "WBA-띵동주문이요"
 description = "Golnag 으로 온라인 주문 시스템 만들기"
 author      = "Hooneats"
-#spack = ["go", "gin-gonic", "mongoDB"]
-#blog = "https://hooneats.tistory.com"
+spec = ["go", "gin-gonic", "mongoDB"]
+blog = "https://hooneats.tistory.com"

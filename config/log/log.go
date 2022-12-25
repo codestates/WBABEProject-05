@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+var LogConfig *Log
+
 type Log struct {
 	Level     string
 	FilePath  string

@@ -1,15 +1,12 @@
 package model
 
-import (
-	"github.com/codestates/WBABEProject-05/model/receipt"
-	"github.com/codestates/WBABEProject-05/model/review"
-	"github.com/codestates/WBABEProject-05/model/store"
-	"github.com/codestates/WBABEProject-05/model/user"
-)
+var AppModel Modeler
 
 type Modeler interface {
-	StoreModel() store.StoreModeler
-	ReviewModel() review.ReviewModeler
-	ReceiptModel() receipt.ReceiptModeler
-	UserModel() user.UserModeler
+	Connect(uri string) error
+	CreateIndex(colName string, indexName ...string)
+}
+
+func SetModeler(modeler Modeler) {
+	AppModel = modeler
 }

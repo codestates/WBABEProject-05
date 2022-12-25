@@ -16,13 +16,10 @@ type storeModel struct {
 	collection *mongo.Collection
 }
 
-const Store = "store"
-
-func GetStoreModel(col *mongo.Collection) *storeModel {
+func NewStoreModel(col *mongo.Collection) *storeModel {
 	if instance != nil {
 		return instance
 	}
-	//collection := mod.GetCollection(Store, "wbe")
 	instance = &storeModel{
 		collection: col,
 	}
@@ -30,7 +27,7 @@ func GetStoreModel(col *mongo.Collection) *storeModel {
 }
 
 func (s *storeModel) InsertMenu(storeId primitive.ObjectID, menu *entity.Menu) (int, error) {
-	ctx, cancel := common.GetContext(common.ModelTimeOut)
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
 	filter := bson.D{{"_id", storeId}}
@@ -45,7 +42,7 @@ func (s *storeModel) DeleteMenu() {
 
 }
 func (s *storeModel) UpdateMenu(storeId primitive.ObjectID, menu *entity.Menu) (int, error) {
-	ctx, cancel := common.GetContext(common.ModelTimeOut)
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
 	filter := bson.M{"_id": storeId, "menu": bson.M{"$elemMatch": bson.M{"_id": menu.Id}}}
@@ -66,7 +63,7 @@ func (s *storeModel) SelectMenu() {
 
 // TODO 테스트필요
 func (s *storeModel) SelectMenusByIds(storeId primitive.ObjectID, menuIds []primitive.ObjectID) ([]*entity.Menu, error) {
-	ctx, cancel := common.GetContext(common.ModelTimeOut)
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
 	filter := bson.M{"_id": storeId, "menu": bson.M{"$elemMatch": bson.M{"_id": menuIds}}}
@@ -84,7 +81,7 @@ func (s *storeModel) SelectMenusByIds(storeId primitive.ObjectID, menuIds []prim
 }
 
 func (s *storeModel) InsertStore(store *entity.Store) (string, error) {
-	ctx, cancel := common.GetContext(common.ModelTimeOut)
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
 	_, err := s.collection.InsertOne(ctx, store)
@@ -95,7 +92,7 @@ func (s *storeModel) InsertStore(store *entity.Store) (string, error) {
 }
 
 func (s *storeModel) SelectMenuByIdAndDelete(storeId, menuId primitive.ObjectID) (*entity.Store, error) {
-	ctx, cancel := common.GetContext(common.ModelTimeOut)
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
 	var store *entity.Store

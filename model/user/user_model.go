@@ -12,9 +12,7 @@ type userModel struct {
 	collection *mongo.Collection
 }
 
-const Store = "store"
-
-func GetUserModel(col *mongo.Collection) *userModel {
+func NewUserModel(col *mongo.Collection) *userModel {
 	if usrMdInstance != nil {
 		return usrMdInstance
 	}
@@ -26,7 +24,7 @@ func GetUserModel(col *mongo.Collection) *userModel {
 }
 
 func (u *userModel) PostUser(user *entity.User) (string, error) {
-	ctx, cancel := common.GetContext(common.ModelTimeOut)
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 	_, err := u.collection.InsertOne(ctx, user)
 	if err != nil {

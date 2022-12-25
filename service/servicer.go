@@ -1,7 +1,7 @@
 package service
 
+var Service Servicer
+
 type Servicer interface {
-	OrderReceiptServicer() (OrderReceiptServicer, error)
-	MenuReviewServicer() (MenuReviewServicer, error)
-	StoreMenuServicer() (StoreMenuServicer, error)
+	ValidateStruct(s interface{}) error
 }

@@ -17,8 +17,6 @@ type RequestPostMenu struct {
 }
 
 // TODO 생각해보니 수정은 기존에것을 가지고와서 해야할듯!!!!! 업데이트 시간만 바꿔줘야하기도하고 , 필드들만 따로 명시해 수정할거 아니면 통으로 수정되기에!!!!!!
-//
-//	이슈 #15만 치고나서 수정하도록하자. 기능 전부는 완성못해도 만든건 제대로 동작해야하니 리팩토링을 해야할듯,,,
 func (r *RequestPostMenu) ToStoreIdAndMenuNewId() (primitive.ObjectID, *entity.Menu, error) {
 	id, err := primitive.ObjectIDFromHex(r.StoreId)
 	if err != nil {
