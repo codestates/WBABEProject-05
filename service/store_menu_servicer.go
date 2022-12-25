@@ -10,7 +10,7 @@ type StoreMenuServicer interface {
 	// DeleteAndBackup 메뉴 삭제 : 메뉴 삭제시 실제 데이터 백업이나 뷰플레그로 안보임 처리 , / 성공 여부 리턴
 	DeleteMenuAndBackup(storeId, menuId string) (int, error)
 	// 기존의 메뉴 정보 수정
-	ModifyMenu()
+	ModifyMenu(menuId string, menu *protocol.RequestPostMenu) (int, error)
 	// Modify 메뉴 수정 : 사업장에서 기존의 메뉴 정보 변경기능(ex. 가격변경, 원산지 변경, soldout) / 성공 여부 리턴
 	ModifyStoreAndRecommendMenus()
 	// FindRecommendMenuSortedTimeDesc 금일 추천 메뉴 설정 변경, 리스트 출력,

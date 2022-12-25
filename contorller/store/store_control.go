@@ -68,7 +68,22 @@ func (s *storeControl) PutSoreAndRecommendMenu(c *gin.Context) {
 }
 
 func (s *storeControl) PutMenu(c *gin.Context) {
-	s.storeMenuService.ModifyMenu()
+	reqM := &protocol.RequestPostMenu{}
+	mid := c.Query("menu-id")
+	err := c.ShouldBindJSON(reqM)
+	if err != nil || mid == "" {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+	cnt, err := s.storeMenuService.ModifyMenu(mid, reqM)
+	if err != nil {
+		// TODO ERR
+		return
+	}
+
+	protocol.SuccessData(gin.H{
+		"updated_count": cnt,
+	}).Response(c)
 }
 
 func (s *storeControl) GetRecommendMenusSortedTimeDesc(c *gin.Context) {

@@ -5,8 +5,7 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 type Menu struct {
 	Id   primitive.ObjectID `bson:"_id"`
 	Name string             `bson:"name"`
-	// OrderCount 총 주문수
-	OrderCount int `bson:"order_count"`
+	// OrderCount 총 주문수 --> 주문내역으로 확인하자
 	// LimitCount 한정수량 ex) "non" , "1", "10"
 	LimitCount string `bson:"limit_count"`
 	Possible   bool   `bson:"possible"`

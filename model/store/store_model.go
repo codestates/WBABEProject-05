@@ -44,8 +44,18 @@ func (s *storeModel) InsertMenu(storeId primitive.ObjectID, menu *entity.Menu) (
 func (s *storeModel) DeleteMenu() {
 
 }
-func (s *storeModel) UpdateMenu() {
+func (s *storeModel) UpdateMenu(storeId primitive.ObjectID, menu *entity.Menu) (int, error) {
+	ctx, cancel := common.GetContext(common.ModelTimeOut)
+	defer cancel()
 
+	filter := bson.M{"_id": storeId, "menu": bson.M{"$elemMatch": bson.M{"_id": menu.Id}}}
+	opt := bson.M{"$set": bson.M{"menu.$": menu}}
+	result, err := s.collection.UpdateOne(ctx, filter, opt)
+	if err != nil {
+		return 0, err
+	}
+
+	return int(result.ModifiedCount), nil
 }
 func (s *storeModel) SelectMenus() {
 

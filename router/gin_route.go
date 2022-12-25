@@ -32,9 +32,10 @@ func (r *GinRoute) Handle() http.Handler {
 	store := gr.Group("/stores")
 	{
 		strCtl, _ := r.controller.StoreControl()
-		store.POST("", strCtl.PostStore)
-		store.POST("/menu", strCtl.PostMenu)
-		store.DELETE("/menu", strCtl.DeleteMenu)
+		store.POST("", strCtl.PostStore)         // 가게 등록
+		store.POST("/menu", strCtl.PostMenu)     // 메뉴 등록
+		store.DELETE("/menu", strCtl.DeleteMenu) // 메뉴 삭제
+		store.PUT("/menu", strCtl.PutMenu)
 	}
 
 	return r.engin

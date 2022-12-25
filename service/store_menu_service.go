@@ -31,7 +31,7 @@ func GetStoreMenuService(
 }
 
 func (s *storeMenuService) RegisterMenu(menu *protocol.RequestPostMenu) (int, error) {
-	sid, m, err := menu.ToStoreIdAndMenu()
+	sid, m, err := menu.ToStoreIdAndMenuNewId()
 	if err != nil {
 		return 0, err
 	}
@@ -69,8 +69,17 @@ func (s *storeMenuService) DeleteMenuAndBackup(storeId, menuId string) (int, err
 	}
 	return 1, nil
 }
-func (s *storeMenuService) ModifyMenu() {
+func (s *storeMenuService) ModifyMenu(menuId string, menu *protocol.RequestPostMenu) (int, error) {
+	sId, m, err := menu.ToStoreIdAndMenuMatchId(menuId)
+	if err != nil {
+		return 0, err
+	}
 
+	cnt, err := s.storeModel.UpdateMenu(sId, m)
+	if err != nil {
+		return 0, err
+	}
+	return cnt, nil
 }
 func (s *storeMenuService) ModifyStoreAndRecommendMenus() {
 
