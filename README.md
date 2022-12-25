@@ -132,6 +132,24 @@
         ...
     }
     ```
-
-
     
+### API 구현 중..
+- 현재 구현된 API
+
+
+    GET    /
+	GET    /info           
+    POST   /users/join     
+    POST   /stores         
+    POST   /stores/menu    
+    DELETE /stores/menu    
+    PUT    /stores/menu
+
+
+- 몽고DB로 원하는 데이터를 뽑고 가공하는게 쉽지않다... 생각보다 더 쉽지 않아서 큰일이다.
+- entity 설계만 끝나면 전체적인 도메인 구성과 쿼리는 어렵지 않을것이라 생각했는데.. mongo 쿼리가 처음 써보는거다보니 상당히 쉽지 않다.
+
+
+
+
+
