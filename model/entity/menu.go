@@ -11,7 +11,7 @@ type Menu struct {
 	Possible   bool   `bson:"possible"`
 	Price      int    `bson:"price"`
 	// Origin 원산지
-	Origin      string   `bson:"origin"`
-	Description string   `bson:"description"`
-	BaseTime    BaseTime `bson:"base_time"`
+	Origin      string    `bson:"origin"`
+	Description string    `bson:"description"`
+	BaseTime    *BaseTime `bson:"base_time"`
 }

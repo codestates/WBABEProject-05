@@ -4,9 +4,11 @@ import (
 	"github.com/codestates/WBABEProject-05/common/flag"
 	gin2 "github.com/codestates/WBABEProject-05/contorller"
 	"github.com/codestates/WBABEProject-05/contorller/info"
+	"github.com/codestates/WBABEProject-05/contorller/order"
 	"github.com/codestates/WBABEProject-05/contorller/store"
 	"github.com/codestates/WBABEProject-05/contorller/user"
 	"github.com/codestates/WBABEProject-05/model"
+	"github.com/codestates/WBABEProject-05/model/receipt"
 	store2 "github.com/codestates/WBABEProject-05/model/store"
 	user2 "github.com/codestates/WBABEProject-05/model/user"
 	"github.com/codestates/WBABEProject-05/router"
@@ -44,6 +46,10 @@ func init() {
 	usrModel := user2.GetUserModel(usrCol)
 	userService := service.GetUserService(usrModel)
 
+	rctCol := mod.GetCollection("receipt", config.DbName)
+	rctModel := receipt.GetReceiptModel(rctCol)
+	orderService := service.GetOrderService(rctModel)
+
 	ginControl := gin2.GetInstance(
 		info.GetInfoControl(),
 		user.GetUserControl(
@@ -51,6 +57,9 @@ func init() {
 		),
 		store.GetStoreControl(
 			menuService,
+		),
+		order.GetOrderControl(
+			orderService,
 		),
 	)
 	gin := router.GetGin(app.Config.Server.Mode, ginControl)

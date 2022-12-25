@@ -115,17 +115,11 @@ func (s *storeMenuService) RegisterStore(store *protocol.RequestPostStore) (stri
 	//	}
 	//}
 
-	addr := &entity.Address{
-		Street:  store.Address.Street,
-		Detail:  store.Address.Detail,
-		ZipCode: store.Address.ZipCode,
-	}
-
 	st := &entity.Store{
 		Id:         primitive.NewObjectID(),
 		UserId:     uid,
 		Name:       store.Name,
-		Address:    addr,
+		Address:    store.Address.ToAddress(),
 		StorePhone: store.StorePhone,
 		BaseTime: &entity.BaseTime{
 			Created_at: time.Now(),

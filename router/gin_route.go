@@ -38,6 +38,14 @@ func (r *GinRoute) Handle() http.Handler {
 		store.PUT("/menu", strCtl.PutMenu)
 	}
 
+	order := gr.Group("/orders")
+	{
+		orCtl, _ := r.controller.OrderControl()
+		{
+			order.POST("", orCtl.RegisterOrderRecord)
+		}
+	}
+
 	return r.engin
 }
 
