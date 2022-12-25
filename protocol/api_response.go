@@ -4,6 +4,7 @@ import (
 	"fmt"
 	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/logger"
+	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -14,6 +15,11 @@ type ApiResponse[T any] struct {
 	ErrorName string `json:"error"`
 }
 
+func (a *ApiResponse[T]) Response(c *gin.Context) {
+	c.Header("Content-Type", "application/json")
+	c.JSON(a.Code, a)
+	return
+}
 func Success() *ApiResponse[any] {
 	return SuccessAndCustomMessage("success", "ok")
 }

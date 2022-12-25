@@ -3,7 +3,6 @@ package info
 import (
 	"github.com/codestates/WBABEProject-05/common/flag"
 	info3 "github.com/codestates/WBABEProject-05/config/info"
-	"github.com/codestates/WBABEProject-05/contorller"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"github.com/gin-gonic/gin"
 )
@@ -25,7 +24,5 @@ func (h *infoControl) GetInformation(c *gin.Context) {
 	path := flag.Flags[flag.InformationFlag.Name]
 	info := info3.NewInfo(*path)
 
-	contorller.GinResponseToJson(
-		c, protocol.SuccessData(info),
-	)
+	protocol.SuccessData(info).Response(c)
 }

@@ -1,7 +1,6 @@
 package router
 
 import (
-	"github.com/codestates/WBABEProject-05/contorller"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -29,22 +28,22 @@ func (r *GinRoute) Handle() http.Handler {
 
 	home := gr.Group("")
 	{
-		contorller.HomeHandler(home)
+		HomeHandler(home)
 	}
 
 	user := gr.Group("/users")
 	{
-		contorller.UsersHandler(user)
+		UsersHandler(user)
 	}
 
 	store := gr.Group("/stores")
 	{
-		contorller.StoresHandler(store)
+		StoresHandler(store)
 	}
 
 	order := gr.Group("/orders")
 	{
-		contorller.OrdersHandler(order)
+		OrdersHandler(order)
 	}
 
 	return r.engin

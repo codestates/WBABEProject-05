@@ -1,4 +1,4 @@
-package contorller
+package router
 
 import (
 	"github.com/codestates/WBABEProject-05/contorller/info"
