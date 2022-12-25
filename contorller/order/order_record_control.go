@@ -33,7 +33,7 @@ func (o *orderRecordControl) RegisterOrderRecord(c *gin.Context) {
 
 	recordedId, err := o.orderService.RegisterOrderRecord(reqO)
 	if err != nil {
-		// TODO ERR
+		protocol.Fail(utilErr.NewError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{

@@ -1,7 +1,6 @@
 package info
 
 import (
-	"fmt"
 	"github.com/naoina/toml"
 	"log"
 	"os"
@@ -19,7 +18,6 @@ type Info struct {
 }
 
 func NewInfo(fPath string) *Info {
-	fmt.Println(fPath)
 	info := new(Info)
 	if file, err := os.Open(fPath); err != nil {
 		log.Println("start app... does not exists config file in ", fPath)

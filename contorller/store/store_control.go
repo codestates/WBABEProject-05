@@ -1,6 +1,7 @@
 package store
 
 import (
+	"github.com/codestates/WBABEProject-05/common"
 	utilErr "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"github.com/codestates/WBABEProject-05/service/store"
@@ -24,6 +25,9 @@ func NewStoreControl(svc store.StoreMenuServicer) *storeControl {
 }
 
 func (s *storeControl) PostMenu(c *gin.Context) {
+	_, cancel := common.NewContext(common.TotalRequestTimeOut)
+	defer cancel()
+
 	reqM := &protocol.RequestPostMenu{}
 	err := c.ShouldBindJSON(reqM)
 	if err != nil {
@@ -31,14 +35,9 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 		return
 	}
 
-	//store, terr := reqM.ToStore()
-	//if terr != nil {
-	//	protocol.Fail(*terr).Response(c)
-	//	return
-	//}
 	modiCount, err := s.storeMenuService.RegisterMenu(reqM)
 	if err != nil {
-		//TODO ERR
+		protocol.Fail(utilErr.NewError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -47,6 +46,9 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 }
 
 func (s *storeControl) DeleteMenu(c *gin.Context) {
+	_, cancel := common.NewContext(common.TotalRequestTimeOut)
+	defer cancel()
+
 	storeId := c.Query("store-id")
 	menuId := c.Query("menu-id")
 	if menuId == "" || storeId == "" {
@@ -55,7 +57,7 @@ func (s *storeControl) DeleteMenu(c *gin.Context) {
 	}
 	count, err := s.storeMenuService.DeleteMenuAndBackup(storeId, menuId)
 	if err != nil {
-		//TODO ERR
+		protocol.Fail(utilErr.NewError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -77,7 +79,7 @@ func (s *storeControl) PutMenu(c *gin.Context) {
 	}
 	cnt, err := s.storeMenuService.ModifyMenu(mid, reqM)
 	if err != nil {
-		// TODO ERR
+		protocol.Fail(utilErr.NewError(err)).Response(c)
 		return
 	}
 
@@ -103,7 +105,7 @@ func (s *storeControl) PostStore(c *gin.Context) {
 	}
 	savedId, err := s.storeMenuService.RegisterStore(reqS)
 	if err != nil {
-		//TODO ERR
+		protocol.Fail(utilErr.NewError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{

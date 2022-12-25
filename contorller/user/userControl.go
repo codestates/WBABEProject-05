@@ -1,7 +1,7 @@
 package user
 
 import (
-	"fmt"
+	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"github.com/codestates/WBABEProject-05/service/login"
 	"github.com/gin-gonic/gin"
@@ -34,17 +34,14 @@ func (u *userControl) DeleteUser(c *gin.Context) {
 }
 func (u *userControl) PostUser(c *gin.Context) {
 	reqU := &protocol.RequestPostUser{}
-	fmt.Println(reqU)
 	err := c.ShouldBindJSON(reqU)
 	if err != nil {
-		fmt.Println(err)
+		protocol.Fail(error2.BadRequestError).Response(c)
 		return
 	}
-	fmt.Println(reqU)
 	savedId, err := u.userService.RegisterUser(reqU)
 	if err != nil {
-		// TODO ERR
-		fmt.Println(err)
+		protocol.Fail(error2.NewError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
