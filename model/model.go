@@ -28,7 +28,7 @@ func LoadMongoModel(uri string) error {
 		logger.AppLog.Error(err)
 		return err
 	} else {
-		m.exPoseModel()
+		m.exposeModel()
 	}
 
 	return nil
@@ -89,7 +89,7 @@ func PutCollection(collection, dbName string) {
 	MongoCollection[collection] = col
 }
 
-func (m *model) exPoseModel() {
+func (m *model) exposeModel() {
 	MongoModel = mongoM
 }
 

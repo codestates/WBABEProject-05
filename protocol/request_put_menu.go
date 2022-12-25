@@ -22,29 +22,6 @@ func (r *RequestPutMenu) ToStoreIdAndMenu() ([12]byte, *entity.Menu, error) {
 	}
 
 	menuWithNewId.Id = mId
-	//mid, err := primitive.ObjectIDFromHex(r.menuId)
-	//if err != nil {
-	//	return primitive.ObjectID{}, nil, err
-	//}
-	//sid, err := primitive.ObjectIDFromHex(r.StoreId)
-	//if err != nil {
-	//	return primitive.ObjectID{}, nil, err
-	//}
-	//
-	//menu := &entity.Menu{
-	//	Id:          mid,
-	//	Name:        r.Name,
-	//	Price:       r.Price,
-	//	Origin:      r.Origin,
-	//	Possible:    r.Possible,
-	//	LimitCount:  r.LimitCount,
-	//	Description: r.Description,
-	//	BaseTime: entity.BaseTime{
-	//		Created_at: time.Now(),
-	//		Updated_at: time.Now(),
-	//	},
-	//}
 
-	//return sid, menu, nil
 	return storeId, menuWithNewId, nil
 }
