@@ -23,6 +23,15 @@ func NewOrderRecordControl(svc order.OrderRecordServicer) *orderRecordControl {
 	return instance
 }
 
+// RegisterOrderRecord godoc
+// @Summary call Post Order, return id by json.
+// @Description 메뉴 주문을 할 수 있다.
+// @name RegisterOrderRecord
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/orders [post]
+// @Param order body protocol.RequestOrder true "RequestOrder JSON"
+// @Success 200 {object} map[string]string
 func (o *orderRecordControl) RegisterOrderRecord(c *gin.Context) {
 	reqO := &protocol.RequestOrder{}
 	err := c.ShouldBindJSON(reqO)

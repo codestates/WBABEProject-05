@@ -16,7 +16,6 @@ import (
 
 var instance *App
 
-// TODO App 의 구조를 및 설정을 한번에 파악할 수 있는 App struct 로 주석 추가해 주도록하자
 type App struct {
 	Server *http.Server
 }

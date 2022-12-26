@@ -1,7 +1,6 @@
 package store
 
 import (
-	"github.com/codestates/WBABEProject-05/common"
 	utilErr "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"github.com/codestates/WBABEProject-05/service/store"
@@ -24,10 +23,16 @@ func NewStoreControl(svc store.StoreMenuServicer) *storeControl {
 	return instance
 }
 
+// PostMenu godoc
+// @Summary call Post menu in store, return saved id by json.
+// @Description 메뉴를 등록할 수 있다.
+// @name PostMenu
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/stores/menu [post]
+// @Param menu body protocol.RequestPostMenu true "RequestPostMenu JSON"
+// @Success 200 {object} map[string]string
 func (s *storeControl) PostMenu(c *gin.Context) {
-	_, cancel := common.NewContext(common.TotalRequestTimeOut)
-	defer cancel()
-
 	reqM := &protocol.RequestPostMenu{}
 	err := c.ShouldBindJSON(reqM)
 	if err != nil {
@@ -45,10 +50,17 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 	}).Response(c)
 }
 
+// DeleteMenu godoc
+// @Summary call Delete menu in store, return deleted count by json.
+// @Description 메뉴를 삭제할 수 있다.
+// @name DeleteMenu
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/stores/menu [delete]
+// @Param store-id query string true "store-id"
+// @Param menu-id query string true "menu-id"
+// @Success 200 {object} map[string]int
 func (s *storeControl) DeleteMenu(c *gin.Context) {
-	_, cancel := common.NewContext(common.TotalRequestTimeOut)
-	defer cancel()
-
 	storeId := c.Query("store-id")
 	menuId := c.Query("menu-id")
 	if menuId == "" || storeId == "" {
@@ -69,6 +81,16 @@ func (s *storeControl) PutSoreAndRecommendMenu(c *gin.Context) {
 	s.storeMenuService.ModifyStoreAndRecommendMenus()
 }
 
+// PutMenu godoc
+// @Summary call Post store, return updated count by json.
+// @Description 메뉴를 수정할 수 있다.
+// @name PutMenu
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/stores/menu [put]
+// @Param menu-id query string true "menu-id"
+// @Param menu body protocol.RequestPostMenu true "RequestPostMenu JSON"
+// @Success 200 {object} map[string]string
 func (s *storeControl) PutMenu(c *gin.Context) {
 	reqM := &protocol.RequestPostMenu{}
 	mid := c.Query("menu-id")
@@ -96,6 +118,15 @@ func (s *storeControl) GetMenuSortedPages(c *gin.Context) {
 	s.storeMenuService.FindMenusSortedPage()
 }
 
+// PostStore godoc
+// @Summary call Post store, return posted id by json.
+// @Description 가게정보를 등록 할 수 있다.
+// @name PostStore
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/stores [post]
+// @Param store body protocol.RequestPostStore true "RequestPostStore JSON"
+// @Success 200 {object} map[string]string
 func (s *storeControl) PostStore(c *gin.Context) {
 	reqS := &protocol.RequestPostStore{}
 	err := c.ShouldBindJSON(reqS)

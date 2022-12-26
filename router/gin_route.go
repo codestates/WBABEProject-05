@@ -1,8 +1,11 @@
 package router
 
 import (
+	"github.com/codestates/WBABEProject-05/docs"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/gin-gonic/gin"
+	swgFiles "github.com/swaggo/files"
+	ginSwg "github.com/swaggo/gin-swagger"
 	"net/http"
 )
 
@@ -26,24 +29,29 @@ func NewGinRoute(mode string) *GinRoute {
 func (r *GinRoute) Handle() http.Handler {
 	gr := r.engin
 
-	home := gr.Group("")
+	gr.GET("/swagger/:any", ginSwg.WrapHandler(swgFiles.Handler))
+	docs.SwaggerInfo.Host = "localhost:8080" //swagger 정보 등록
+	home := gr.Group("/home")
 	{
 		HomeHandler(home)
 	}
 
-	user := gr.Group("/users")
+	v1 := gr.Group("app/v1")
 	{
-		UsersHandler(user)
-	}
+		user := v1.Group("/users")
+		{
+			UsersHandler(user)
+		}
 
-	store := gr.Group("/stores")
-	{
-		StoresHandler(store)
-	}
+		store := v1.Group("/stores")
+		{
+			StoresHandler(store)
+		}
 
-	order := gr.Group("/orders")
-	{
-		OrdersHandler(order)
+		order := v1.Group("/orders")
+		{
+			OrdersHandler(order)
+		}
 	}
 
 	return r.engin

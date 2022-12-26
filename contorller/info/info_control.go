@@ -20,6 +20,14 @@ func NewInfoControl() *infoControl {
 	return instance
 }
 
+// GetInformation godoc
+// @Summary call App Information, return Info by json.
+// @Description App 에 대해 간략적인 정보를(소개) 제공해 준다.
+// @name GetInformation
+// @Accept  json
+// @Produce  json
+// @Router /home/info [get]
+// @Success 200 {object} Info
 func (h *infoControl) GetInformation(c *gin.Context) {
 	path := flag.Flags[flag.InformationFlag.Name]
 	info := info3.NewInfo(*path)
