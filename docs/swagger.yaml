@@ -1,0 +1,248 @@
+definitions:
+  info.Info:
+    properties:
+      author:
+        type: string
+      blog:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      spec:
+        items:
+          type: string
+        type: array
+      version:
+        type: string
+    type: object
+  protocol.RequestAddress:
+    properties:
+      detail:
+        type: string
+      street:
+        type: string
+      zip_code:
+        type: string
+    type: object
+  protocol.RequestOrder:
+    properties:
+      customer_id:
+        type: string
+      menu_ids:
+        items:
+          type: string
+        type: array
+      ordered_addr:
+        $ref: '#/definitions/protocol.RequestAddress'
+      price:
+        type: integer
+      status:
+        description: Status 접수중/접수취소/추가접수/접수중/조리중/배달중/배달완료
+        type: string
+      store_id:
+        type: string
+    type: object
+  protocol.RequestPostMenu:
+    properties:
+      description:
+        type: string
+      limit_count:
+        type: string
+      name:
+        type: string
+      origin:
+        type: string
+      possible:
+        type: boolean
+      price:
+        type: integer
+      store_id:
+        type: string
+    required:
+    - name
+    - origin
+    - possible
+    - price
+    - store_id
+    type: object
+  protocol.RequestPostStore:
+    properties:
+      address:
+        $ref: '#/definitions/protocol.RequestAddress'
+      name:
+        type: string
+      store_phone:
+        type: string
+      user_id:
+        type: string
+    type: object
+  protocol.RequestPostUser:
+    properties:
+      name:
+        type: string
+      nic_name:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+      role:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /app/v1/orders:
+    post:
+      consumes:
+      - application/json
+      description: 메뉴 주문을 할 수 있다.
+      parameters:
+      - description: RequestOrder JSON
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/protocol.RequestOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: call Post Order, return id by json.
+  /app/v1/stores:
+    post:
+      consumes:
+      - application/json
+      description: 가게정보를 등록 할 수 있다.
+      parameters:
+      - description: RequestPostStore JSON
+        in: body
+        name: store
+        required: true
+        schema:
+          $ref: '#/definitions/protocol.RequestPostStore'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: call Post store, return posted id by json.
+  /app/v1/stores/menu:
+    delete:
+      consumes:
+      - application/json
+      description: 메뉴를 삭제할 수 있다.
+      parameters:
+      - description: store-id
+        in: query
+        name: store-id
+        required: true
+        type: string
+      - description: menu-id
+        in: query
+        name: menu-id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+      summary: call Delete menu in store, return deleted count by json.
+    post:
+      consumes:
+      - application/json
+      description: 메뉴를 등록할 수 있다.
+      parameters:
+      - description: RequestPostMenu JSON
+        in: body
+        name: menu
+        required: true
+        schema:
+          $ref: '#/definitions/protocol.RequestPostMenu'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: call Post menu in store, return saved id by json.
+    put:
+      consumes:
+      - application/json
+      description: 메뉴를 수정할 수 있다.
+      parameters:
+      - description: menu-id
+        in: query
+        name: menu-id
+        required: true
+        type: string
+      - description: RequestPostMenu JSON
+        in: body
+        name: menu
+        required: true
+        schema:
+          $ref: '#/definitions/protocol.RequestPostMenu'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: call Post store, return updated count by json.
+  /app/v1/users/join:
+    post:
+      consumes:
+      - application/json
+      description: 회원가입을 할 수 있다.
+      parameters:
+      - description: RequestPostUser JSON
+        in: body
+        name: menu
+        required: true
+        schema:
+          $ref: '#/definitions/protocol.RequestPostUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: call Post user, return saved id by json.
+  /home/info:
+    get:
+      consumes:
+      - application/json
+      description: App 에 대해 간략적인 정보를(소개) 제공해 준다.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/info.Info'
+      summary: call App Information, return Info by json.
+swagger: "2.0"
