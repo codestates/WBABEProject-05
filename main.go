@@ -1,6 +1,7 @@
 package main
 
 import (
+	app2 "github.com/codestates/WBABEProject-05/common/app"
 	"github.com/codestates/WBABEProject-05/common/flag"
 	config2 "github.com/codestates/WBABEProject-05/config"
 	gin2 "github.com/codestates/WBABEProject-05/contorller"
@@ -11,7 +12,7 @@ import (
 )
 
 var (
-	app   = NewApp()
+	app   = app2.NewApp()
 	flags = []*flag.FlagCategory{
 		flag.ServerConfigFlag,
 		flag.LogConfigFlag,
