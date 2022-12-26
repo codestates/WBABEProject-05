@@ -32,6 +32,16 @@ func (u *userControl) PutUser(c *gin.Context) {
 func (u *userControl) DeleteUser(c *gin.Context) {
 
 }
+
+// PostUser godoc
+// @Summary call Post user, return saved id by json.
+// @Description 회원가입을 할 수 있다.
+// @name PostUser
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/users/join [post]
+// @Param menu body protocol.RequestPostUser true "RequestPostUser JSON"
+// @Success 200 {object} map[string]string
 func (u *userControl) PostUser(c *gin.Context) {
 	reqU := &protocol.RequestPostUser{}
 	err := c.ShouldBindJSON(reqU)
