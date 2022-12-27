@@ -190,6 +190,14 @@ POST   /app/v1/orders
 
 
 ### Post User
+request json :
+{
+"name": "hoon",
+"nic_name":"우와아앙",
+"password":"1234",
+"phone_number": "010-4231-1234",
+"role":"store"
+}
 
 ![Post_User](./readme_images/swagger-post-user1.png)
 
@@ -197,6 +205,18 @@ POST   /app/v1/orders
 
 
 ### Post Store
+request json :
+{
+"user_id":"63a70d7708ff1911c06bdc9b",
+"name":"제발",
+"address":{
+"street":"테스트거리",
+"detail":"오른쪽",
+"zip_code":"1241-21"
+},
+"recommend_menues":[],
+"store_phone":"010-2222-3333"
+}
 
 ![Post_Store](./readme_images/swagger-post-store.png)
 
@@ -204,6 +224,15 @@ POST   /app/v1/orders
 
 
 ### Post Menu
+request json :
+{
+"store_id":"63a75a75ffc54d798e52d633",
+"name": "불고기피자1",
+"price": 20000,
+"origin": "국내산",
+"possible": true,
+"description":"맛있어용짱!"
+}
 
 ![Post_Menu](./readme_images/swagger-post-menu.png)
 
@@ -211,6 +240,20 @@ POST   /app/v1/orders
 
 
 ### Post Order
+ex)
+request json
+{
+"store_id": "63a75a75ffc54d798e52d633",
+"customer_id": "63a70d7708ff1911c06bdc9b",
+"price":9999,
+"menu_ids":["63a7b610b18f4976a484427f"],
+"status":"접수중",
+"ordered_addr":{
+"street":"테스트거리",
+"detail":"오른쪽",
+"zip_code":"1241-21"
+}
+}
 
 ![Post_Order](./readme_images/swagger-post-order.png)
 
@@ -218,6 +261,16 @@ POST   /app/v1/orders
 
 
 ### Put Menu
+request query : store_id=63a7b610b18f4976a484427f
+request json :
+{
+"store_id":"63a75a75ffc54d798e52d633",
+"name": "불고기피자1",
+"price": 20000,
+"origin": "국내산",
+"possible": true,
+"description":"맛있어용짱!"
+}
 
 ![Put_Menu](./readme_images/swagger-put-menu.png)
 
@@ -225,6 +278,9 @@ POST   /app/v1/orders
 
 
 ### Delete Menu
+request query : 
+store_id="63a75a75ffc54d798e52d633"&menu_id="63a7b610b18f4976a484427f"
+
 
 ![Delete_Menu](./readme_images/swagger-delete-menu.png)
 
