@@ -184,7 +184,9 @@ POST   /app/v1/orders
 - 좀 더 개선사항들이 보여 이 부분도 시간을 더 갖고 싶지만.. 이점은 조금 아쉽지만,
 - 그래도 어떤식으로 `Golang 에서 객체지향을 녹이면 좋을지 이번 프로젝트를 통해 어느정도 느끼고 꺠달은것 같아 재밌는 프로젝트였다.`
 
+
 ### Swagger 전체
+- http://localhost:8080/swagger/index.html#/
 
 ![Swagger_전체](./readme_images/swagger-total.png)
 
@@ -239,27 +241,6 @@ request json :
 ![Post_Menu](./readme_images/swagger-post-menu-return.png)
 
 
-### Post Order
-ex)
-request json
-{
-"store_id": "63a75a75ffc54d798e52d633",
-"customer_id": "63a70d7708ff1911c06bdc9b",
-"price":9999,
-"menu_ids":["63a7b610b18f4976a484427f"],
-"status":"접수중",
-"ordered_addr":{
-"street":"테스트거리",
-"detail":"오른쪽",
-"zip_code":"1241-21"
-}
-}
-
-![Post_Order](./readme_images/swagger-post-order.png)
-
-![Post_Order](./readme_images/swagger-post-order-return.png)
-
-
 ### Put Menu
 request query : store_id=63a7b610b18f4976a484427f
 request json :
@@ -287,5 +268,32 @@ store_id="63a75a75ffc54d798e52d633"&menu_id="63a7b610b18f4976a484427f"
 ![Delete_Menu](./readme_images/swagger-delete-menu-return.png)
 
 
+### Post Order
+ex)
+request json
+{
+"store_id": "63a75a75ffc54d798e52d633",
+"customer_id": "63a70d7708ff1911c06bdc9b",
+"price":9999,
+"menu_ids":["63a7b610b18f4976a484427f"],
+"status":"접수중",
+"ordered_addr":{
+"street":"테스트거리",
+"detail":"오른쪽",
+"zip_code":"1241-21"
+}
+}
+
+![Post_Order](./readme_images/swagger-post-order.png)
+
+![Post_Order](./readme_images/swagger-post-order-return.png)
 
 
+
+### Get Store
+ex)
+request query store_id=63a7b610b18f4976a484427f
+
+![Get_Store](./readme_images/swagger-get-store-one.png)
+
+![Get_Store](./readme_images/swagger-get-store-one-return.png)
