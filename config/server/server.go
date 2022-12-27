@@ -12,6 +12,7 @@ type ServerConfig struct {
 }
 
 func NewSeverConfig(fPath string) *ServerConfig {
+	//아래 코드를 early-return 하도록 만들 수 있을까요?
 	cfg := new(ServerConfig)
 	if file, err := os.Open(fPath); err != nil {
 		log.Println("start app... does not exists config file in ", fPath)

@@ -18,6 +18,7 @@ type ApiResponse[T any] struct {
 func (a *ApiResponse[T]) Response(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 	c.JSON(a.Code, a)
+	//필요 없는 코드는 삭제하는 것이 좋을 것 같습니다
 	return
 }
 func Success() *ApiResponse[any] {

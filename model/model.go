@@ -21,8 +21,10 @@ type model struct {
 var mongoM *model
 
 func LoadMongoModel(uri string) error {
+	// 아래 코드를 short syntax로 변경할 수 있을 것 같습니다.
 	m := newModel()
 	err := m.Connect(uri)
+	// checkClient가 반환값을 갖고있는데, 아래 코드에 반환값 체크 로직을 넣으면 어떨까요?
 	m.checkClient()
 	if err != nil {
 		logger.AppLog.Error(err)
@@ -40,6 +42,7 @@ func (m *model) Connect(uri string) error {
 
 	opt := options.Client().SetMaxPoolSize(100).SetTimeout(common.DatabaseClientTimeOut)
 	client, err := mongo.Connect(ctx, opt.ApplyURI(uri))
+	// if block이 return을 한다면, else block의 내용을 outdent 할 수 있습니다.
 	if err != nil {
 		logger.AppLog.Error(err)
 		return err
@@ -101,7 +104,7 @@ func newModel() *model {
 func (m *model) checkClient() error {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
-
+	// 아래 코드를 short syntax로 변경할 수 있을 것 같습니다.
 	err := m.client.Ping(ctx, nil)
 	if err != nil {
 		logger.AppLog.Error(err)
