@@ -11,6 +11,7 @@ import (
 )
 
 type DBConfig struct {
+	//Acronym의 경우에는 Uppercase를 유지하는 것이 권장되고 있습니다.
 	MongoUri   string
 	DbName     string
 	User       string
