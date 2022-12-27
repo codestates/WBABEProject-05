@@ -114,7 +114,7 @@ paths:
             additionalProperties:
               type: string
             type: object
-      summary: call Post Order, return id by json.
+      summary: call Post Order, return posted id by json.
   /app/v1/stores:
     post:
       consumes:
@@ -209,7 +209,7 @@ paths:
             additionalProperties:
               type: string
             type: object
-      summary: call Post store, return updated count by json.
+      summary: call Put menu, return updated count by json.
   /app/v1/users/join:
     post:
       consumes:

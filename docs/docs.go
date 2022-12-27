@@ -25,7 +25,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call Post Order, return id by json.",
+                "summary": "call Post Order, return posted id by json.",
                 "parameters": [
                     {
                         "description": "RequestOrder JSON",
@@ -93,7 +93,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call Post store, return updated count by json.",
+                "summary": "call Put menu, return updated count by json.",
                 "parameters": [
                     {
                         "type": "string",

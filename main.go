@@ -45,6 +45,7 @@ func init() {
 	}
 	model.SetModeler(model.MongoModel)
 	model.LoadMongoCollections(mongoCollectionNames, config2.DBConfig.DbName)
+	model.CreateIndexesInModels()
 	model.InjectModelsMongoDependency(model.MongoCollection)
 
 	// service

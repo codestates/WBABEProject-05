@@ -24,7 +24,7 @@ func NewOrderRecordControl(svc order.OrderRecordServicer) *orderRecordControl {
 }
 
 // RegisterOrderRecord godoc
-// @Summary call Post Order, return id by json.
+// @Summary call Post Order, return posted id by json.
 // @Description 메뉴 주문을 할 수 있다.
 // @name RegisterOrderRecord
 // @Accept  json

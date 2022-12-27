@@ -23,3 +23,7 @@ func InjectModelsMongoDependency(m map[string]*mongo.Collection) {
 	store.StoreModel = store.NewStoreModel(m[StoreCollectionName])
 	user.UserModel = user.NewUserModel(m[UserCollectionName])
 }
+
+func CreateIndexesInModels() {
+	AppModel.CreateIndex(UserCollectionName, "nic_name", "phone_number")
+}

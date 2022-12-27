@@ -82,7 +82,7 @@ func (s *storeControl) PutSoreAndRecommendMenu(c *gin.Context) {
 }
 
 // PutMenu godoc
-// @Summary call Post store, return updated count by json.
+// @Summary call Put menu, return updated count by json.
 // @Description 메뉴를 수정할 수 있다.
 // @name PutMenu
 // @Accept  json
