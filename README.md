@@ -99,6 +99,7 @@
 - util 패키지는 flag 및 범용적으로 사용하게될 사항들을 넣어주자.
 - logger 관련사항은 logger 패키지에 넣어주자.
 - router 와 관련된 사항은 router 패키지에서 다룰 것이다.
+- 조금 더 유연한 프로그램을 위해 controller 계층과 model 계층사이에 service 계층을 추가할 것이다.
 
 ### git-branch 전략
 
@@ -154,19 +155,80 @@ test> rs.initiate()
 - 현재 구현된 API
 
 
-    GET    /
-	GET    /info           
-    POST   /users/join     
-    POST   /stores         
-    POST   /stores/menu    
-    DELETE /stores/menu    
-    PUT    /stores/menu
+GET    /home/                    
+GET    /home/info               
+POST   /app/v1/users/join     
+POST   /app/v1/stores            
+POST   /app/v1/stores/menu     
+DELETE /app/v1/stores/menu    
+PUT    /app/v1/stores/menu      
+GET    /app/v1/stores/swag/store    
+POST   /app/v1/orders
 
+## 느낀점
 
-- 몽고DB로 원하는 데이터를 뽑고 가공하는게 쉽지않다... 생각보다 더 쉽지 않아서 큰일이다.
+#### 아쉬운점
+- 몽고DB로 원하는 데이터를 뽑고 가공하는게 쉽지않다... 생각보다 더 쉽지 않아서 시간이 많이 소요되었다.
 - entity 설계만 끝나면 전체적인 도메인 구성과 쿼리는 어렵지 않을것이라 생각했는데.. 
 - 정규화와 트랜젝션을 지양한다는 점에서 설계에 고민을 많이하기도 했고, 오히려 고민을 하다보니 더 복잡해진것 같기도하고, 무엇보다 mongo 쿼리가 처음 써보는거다보니 상당히 쉽지 않다.
+- 익숙하지 않아 오래걸리다보니, 확장성이 뛰어난 몽고DB 이니까 처음엔 그냥 RDBMS 와 비슷한 구조로 가져가고 필요하다면 그냥 트랜잭션을 사용했어야 했나 싶다.
+- jwt, 단위 test 등 적용하고 싶은게 많았지만.. 조금 아쉽다..
 
+#### 좋았던점
+- 그래도 이번 프로젝트로 그동안 커리큘럼을 진행하면서 `Golang 에서는 어떻게 객체지향적으로 코드를 작성할 수 있을까?` 를 수 없이 고민했었는데 이번에 나름 만족할만한 구조로 개발을 했다.
+- 각 계층은 의존성을 최소화하기 위해 interface 를 통해 소통을 하도록 DIP 지킬 수 있도록 작성했다. 이는 나중에 쉽게 구현로직을 변경할 수 있게 해준다. 변경된 Dependency 를 inject 해줘야 하기에 완벽한 OCP 는 아니겠지만
+  초기에 Dependency 를 inject 받은 interface 를 Public 하게 열고 사용하여 최대한 OCP 가 이루어지도록 하였다. 이로써 사용하는 계층은 확장에는 열려있고 변경에는 닫혀있게 된다.
+- 또한 각 구현체는 싱글톤으로 사용되도록 구현했으며, 좀 더 SRP 에 가깝도록 구현로직과 생산로직을 분리, 각 계층에 Dependency 를 Inject 해주는 manager 를 두었다.
+- 그동안 main 메서드에 많은 로직이 들어가는 것 같아 불편했는데 이 부분도 init() 메서드와 app struct 를 활용해 깔끔하게 만들었고, main.go 파일 안에서 전체 프로젝트 코드들의 구성이 한눈에 드러날 수 있도록 했다.
+- golang 은 상속이 안돼, 가끔 재상용의 불편을 느꼈는데, composite 패턴과 앞서 말한 Dependency 를 inject 받은 interface Public 하게 열어두어 재사용이 용이하게 하였다.
+- 좀 더 개선사항들이 보여 이 부분도 시간을 더 갖고 싶지만.. 이점은 조금 아쉽지만, 
+- 그래도 어떤식으로 `Golang 에서 객체지향을 녹이면 좋을지 이번 프로젝트를 통해 어느정도 느끼고 꺠달은것 같아 재밌는 프로젝트였다.`
+
+### Swagger 전체 
+
+![Swagger_전체](./readme_images/swagger-total.png)
+
+
+### Post User
+
+![Post_User](./readme_images/swagger-post-user1.png)
+
+![Post_User](./readme_images/swagger-post-user-return.png)
+
+
+### Post Store
+
+![Post_Store](./readme_images/swagger-post-store.png)
+
+![Post_Store](./readme_images/swagger-post-store-return.png)
+
+
+### Post Menu
+
+![Post_Menu](./readme_images/swagger-post-menu.png)
+
+![Post_Menu](./readme_images/swagger-post-menu-return.png)
+
+
+### Post Order
+
+![Post_Order](./readme_images/swagger-post-order.png)
+
+![Post_Order](./readme_images/swagger-post-order-return.png)
+
+
+### Put Menu
+
+![Put_Menu](./readme_images/swagger-put-menu.png)
+
+![Put_Menu](./readme_images/swagger-put-menu-return.png)
+
+
+### Delete Menu
+
+![Delete_Menu](./readme_images/swagger-delete-menu.png)
+
+![Delete_Menu](./readme_images/swagger-delete-menu-return.png)
 
 
 
