@@ -20,4 +20,7 @@ type StoreContoller interface {
 
 	// PostStore : 점포 등록
 	PostStore(c *gin.Context)
+
+	// GetStoreInSwagForTest : swagger 테스트를 위한 store 조회
+	GetStoreInSwagForTest(c *gin.Context)
 }

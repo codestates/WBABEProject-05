@@ -133,3 +133,16 @@ func (s *storeMenuService) RegisterStore(store *protocol.RequestPostStore) (stri
 	}
 	return savedId, nil
 }
+
+func (s *storeMenuService) FindStore(storeId string) (*entity.Store, error) {
+	id, err := primitive.ObjectIDFromHex(storeId)
+	if err != nil {
+		return nil, err
+	}
+
+	store, err := s.storeModel.SelectStore(id)
+	if err != nil {
+		return nil, err
+	}
+	return store, nil
+}

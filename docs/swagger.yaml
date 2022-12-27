@@ -1,4 +1,66 @@
 definitions:
+  entity.Address:
+    properties:
+      detail:
+        type: string
+      street:
+        type: string
+      zipCode:
+        type: string
+    type: object
+  entity.BaseTime:
+    properties:
+      created_at:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  entity.Menu:
+    properties:
+      baseTime:
+        $ref: '#/definitions/entity.BaseTime'
+      description:
+        type: string
+      id:
+        type: string
+      limitCount:
+        description: |-
+          OrderCount 총 주문수 --> 주문내역으로 확인하자
+          LimitCount 한정수량 ex) "non" , "1", "10"
+        type: string
+      name:
+        type: string
+      origin:
+        description: Origin 원산지
+        type: string
+      possible:
+        type: boolean
+      price:
+        type: integer
+    type: object
+  entity.Store:
+    properties:
+      address:
+        $ref: '#/definitions/entity.Address'
+      baseTime:
+        $ref: '#/definitions/entity.BaseTime'
+      id:
+        type: string
+      menu:
+        items:
+          $ref: '#/definitions/entity.Menu'
+        type: array
+      name:
+        type: string
+      recommendMenus:
+        items:
+          $ref: '#/definitions/entity.Menu'
+        type: array
+      storePhone:
+        type: string
+      userId:
+        type: string
+    type: object
   info.Info:
     properties:
       author:
@@ -14,6 +76,38 @@ definitions:
           type: string
         type: array
       version:
+        type: string
+    type: object
+  protocol.ApiResponse-any:
+    properties:
+      code:
+        type: integer
+      data: {}
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  protocol.ApiResponse-entity_Store:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/entity.Store'
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  protocol.ApiResponse-info_Info:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/info.Info'
+      error:
+        type: string
+      message:
         type: string
     type: object
   protocol.RequestAddress:
@@ -111,9 +205,7 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call Post Order, return posted id by json.
   /app/v1/stores:
     post:
@@ -133,9 +225,7 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call Post store, return posted id by json.
   /app/v1/stores/menu:
     delete:
@@ -159,9 +249,7 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: integer
-            type: object
+            $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call Delete menu in store, return deleted count by json.
     post:
       consumes:
@@ -180,9 +268,7 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call Post menu in store, return saved id by json.
     put:
       consumes:
@@ -206,10 +292,27 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call Put menu, return updated count by json.
+  /app/v1/stores/swag/store:
+    get:
+      consumes:
+      - application/json
+      description: 특정 store 의 모든 정보를 스웨거 테스트를 위해 보여준다.
+      parameters:
+      - description: store_id
+        in: query
+        name: store_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-entity_Store'
+      summary: call Get store, return store by json.
   /app/v1/users/join:
     post:
       consumes:
@@ -228,9 +331,7 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call Post user, return saved id by json.
   /home/info:
     get:
@@ -243,6 +344,6 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/info.Info'
+            $ref: '#/definitions/protocol.ApiResponse-info_Info'
       summary: call App Information, return Info by json.
 swagger: "2.0"

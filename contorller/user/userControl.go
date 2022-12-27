@@ -41,7 +41,7 @@ func (u *userControl) DeleteUser(c *gin.Context) {
 // @Produce  json
 // @Router /app/v1/users/join [post]
 // @Param menu body protocol.RequestPostUser true "RequestPostUser JSON"
-// @Success 200 {object} map[string]string
+// @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) PostUser(c *gin.Context) {
 	reqU := &protocol.RequestPostUser{}
 	err := c.ShouldBindJSON(reqU)

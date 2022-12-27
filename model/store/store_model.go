@@ -54,11 +54,17 @@ func (s *storeModel) UpdateMenu(storeId primitive.ObjectID, menu *entity.Menu) (
 
 	return int(result.ModifiedCount), nil
 }
-func (s *storeModel) SelectMenus() {
+func (s *storeModel) SelectStore(storeId primitive.ObjectID) (*entity.Store, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
 
-}
-func (s *storeModel) SelectMenu() {
-
+	var store *entity.Store
+	filter := bson.D{{"_id", storeId}}
+	err := s.collection.FindOne(ctx, filter).Decode(&store)
+	if err != nil {
+		return nil, err
+	}
+	return store, nil
 }
 
 // TODO 테스트필요

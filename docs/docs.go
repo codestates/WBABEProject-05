@@ -41,10 +41,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
                         }
                     }
                 }
@@ -75,10 +72,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
                         }
                     }
                 }
@@ -116,10 +110,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
                         }
                     }
                 }
@@ -148,10 +139,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
                         }
                     }
                 }
@@ -185,10 +173,36 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "integer"
-                            }
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/v1/stores/swag/store": {
+            "get": {
+                "description": "특정 store 의 모든 정보를 스웨거 테스트를 위해 보여준다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "call Get store, return store by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "store_id",
+                        "name": "store_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-entity_Store"
                         }
                     }
                 }
@@ -219,10 +233,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
                         }
                     }
                 }
@@ -242,7 +253,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/info.Info"
+                            "$ref": "#/definitions/protocol.ApiResponse-info_Info"
                         }
                     }
                 }
@@ -250,6 +261,97 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "entity.Address": {
+            "type": "object",
+            "properties": {
+                "detail": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                },
+                "zipCode": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.BaseTime": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Menu": {
+            "type": "object",
+            "properties": {
+                "baseTime": {
+                    "$ref": "#/definitions/entity.BaseTime"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "limitCount": {
+                    "description": "OrderCount 총 주문수 --\u003e 주문내역으로 확인하자\nLimitCount 한정수량 ex) \"non\" , \"1\", \"10\"",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "origin": {
+                    "description": "Origin 원산지",
+                    "type": "string"
+                },
+                "possible": {
+                    "type": "boolean"
+                },
+                "price": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.Store": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "$ref": "#/definitions/entity.Address"
+                },
+                "baseTime": {
+                    "$ref": "#/definitions/entity.BaseTime"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "menu": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Menu"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "recommendMenus": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Menu"
+                    }
+                },
+                "storePhone": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
         "info.Info": {
             "type": "object",
             "properties": {
@@ -272,6 +374,55 @@ const docTemplate = `{
                     }
                 },
                 "version": {
+                    "type": "string"
+                }
+            }
+        },
+        "protocol.ApiResponse-any": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "protocol.ApiResponse-entity_Store": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.Store"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "protocol.ApiResponse-info_Info": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/info.Info"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "message": {
                     "type": "string"
                 }
             }

@@ -27,6 +27,8 @@ func StoresHandler(storesUrl *gin.RouterGroup) {
 	storesUrl.POST("/menu", store2.StoreControl.PostMenu)     // 메뉴 등록
 	storesUrl.DELETE("/menu", store2.StoreControl.DeleteMenu) // 메뉴 삭제
 	storesUrl.PUT("/menu", store2.StoreControl.PutMenu)
+	// "/swag/store" sagger 테스트용
+	storesUrl.GET("/swag/store", store2.StoreControl.GetStoreInSwagForTest)
 }
 
 // OrdersHandler ("/orders")

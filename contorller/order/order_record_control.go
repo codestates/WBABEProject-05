@@ -31,7 +31,7 @@ func NewOrderRecordControl(svc order.OrderRecordServicer) *orderRecordControl {
 // @Produce  json
 // @Router /app/v1/orders [post]
 // @Param order body protocol.RequestOrder true "RequestOrder JSON"
-// @Success 200 {object} map[string]string
+// @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) RegisterOrderRecord(c *gin.Context) {
 	reqO := &protocol.RequestOrder{}
 	err := c.ShouldBindJSON(reqO)

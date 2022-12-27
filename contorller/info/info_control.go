@@ -2,7 +2,7 @@ package info
 
 import (
 	"github.com/codestates/WBABEProject-05/common/flag"
-	info3 "github.com/codestates/WBABEProject-05/config/info"
+	"github.com/codestates/WBABEProject-05/config/info"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"github.com/gin-gonic/gin"
 )
@@ -27,10 +27,10 @@ func NewInfoControl() *infoControl {
 // @Accept  json
 // @Produce  json
 // @Router /home/info [get]
-// @Success 200 {object} Info
+// @Success 200 {object} protocol.ApiResponse[info.Info]
 func (h *infoControl) GetInformation(c *gin.Context) {
 	path := flag.Flags[flag.InformationFlag.Name]
-	info := info3.NewInfo(*path)
+	info := info.NewInfo(*path)
 
 	protocol.SuccessData(info).Response(c)
 }
