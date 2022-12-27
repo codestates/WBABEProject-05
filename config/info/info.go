@@ -19,15 +19,16 @@ type Info struct {
 
 func NewInfo(fPath string) *Info {
 	info := new(Info)
-	if file, err := os.Open(fPath); err != nil {
+	file, err := os.Open(fPath)
+	defer file.Close()
+	if err != nil {
 		log.Println("start app... does not exists config file in ", fPath)
 		panic(err)
-	} else {
-		defer file.Close()
-		if err := toml.NewDecoder(file).Decode(info); err != nil {
-			log.Println("start app... toml decode, fail")
-			panic(err)
-		}
-		return info
 	}
+
+	if err := toml.NewDecoder(file).Decode(info); err != nil {
+		log.Println("start app... toml decode, fail")
+		panic(err)
+	}
+	return info
 }

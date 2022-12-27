@@ -19,41 +19,43 @@ type DBConfig struct {
 }
 
 func NewDbConfig(fPath string) *DBConfig {
-	dbcfg := new(DBConfig)
-	if file, err := os.Open(fPath); err != nil {
+	cfg := new(DBConfig)
+
+	file, err := os.Open(fPath)
+	defer file.Close()
+	if err != nil {
 		log.Println("start app... does not exists config file in ", fPath)
 		panic(err)
-	} else {
-		defer file.Close()
-		if err := toml.NewDecoder(file).Decode(dbcfg); err != nil {
-			log.Println("start app... toml decode, fail")
-			panic(err)
-		}
-		return dbcfg
 	}
+
+	if err := toml.NewDecoder(file).Decode(cfg); err != nil {
+		log.Println("start app... toml decode, fail")
+		panic(err)
+	}
+	return cfg
 }
 
 func WriteBackup(fPath string, T any) error {
-	if data, err := json.MarshalIndent(T, "", "    "); err != nil {
+	data, err := json.MarshalIndent(T, "", "    ")
+	if err != nil {
 		return err
-	} else {
-		fileP := fmt.Sprintf(fPath + time.Now().Format("2006-01-02") + ".txt")
-		f, err := os.OpenFile(
-			fileP,
-			os.O_CREATE|os.O_RDWR|os.O_APPEND,
-			os.FileMode(0644))
-		defer f.Close()
-		w := bufio.NewWriter(f)
-
-		_, err = fmt.Fprint(w, string(data)+"\n")
-		if err != nil {
-			return err
-		}
-
-		err = w.Flush()
-		if err != nil {
-			return err
-		}
-		return nil
 	}
+
+	path := fPath + time.Now().Format("2006-01-02") + ".txt"
+	file := fmt.Sprintf(path)
+	f, err := os.OpenFile(
+		file, os.O_CREATE|os.O_RDWR|os.O_APPEND, os.FileMode(0644),
+	)
+	defer f.Close()
+
+	w := bufio.NewWriter(f)
+	if _, err = fmt.Fprint(w, string(data)+"\n"); err != nil {
+		return err
+	}
+
+	if err = w.Flush(); err != nil {
+		return err
+	}
+
+	return nil
 }

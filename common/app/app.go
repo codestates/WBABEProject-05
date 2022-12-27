@@ -67,6 +67,7 @@ func (a *App) graceExit() {
 	if err := a.Server.Shutdown(ctx); err != nil {
 		logger.AppLog.Error("Server Shutdown:", err)
 	}
+
 	select {
 	case <-ctx.Done():
 		tl := fmt.Sprintf("timeout of %s seconds.", rt.String())

@@ -26,16 +26,17 @@ func (l *Log) GetSettingValues() (path, level string, size, backup, age int) {
 }
 
 func NewLogConfig(fPath string) *Log {
-	lcfg := new(Log)
-	if file, err := os.Open(fPath); err != nil {
+	cfg := new(Log)
+	file, err := os.Open(fPath)
+	defer file.Close()
+	if err != nil {
 		log.Println("start app... does not exists config file in ", fPath)
 		panic(err)
-	} else {
-		defer file.Close()
-		if err := toml.NewDecoder(file).Decode(lcfg); err != nil {
-			log.Println("start app... toml decode, fail")
-			panic(err)
-		}
-		return lcfg
 	}
+
+	if err := toml.NewDecoder(file).Decode(cfg); err != nil {
+		log.Println("start app... toml decode, fail")
+		panic(err)
+	}
+	return cfg
 }
