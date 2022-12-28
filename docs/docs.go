@@ -261,7 +261,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "entity.Address": {
+        "dom.Address": {
             "type": "object",
             "properties": {
                 "detail": {
@@ -275,7 +275,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.BaseTime": {
+        "dom.BaseTime": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -286,11 +286,11 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.Menu": {
+        "dom.Menu": {
             "type": "object",
             "properties": {
                 "baseTime": {
-                    "$ref": "#/definitions/entity.BaseTime"
+                    "$ref": "#/definitions/dom.BaseTime"
                 },
                 "description": {
                     "type": "string"
@@ -321,10 +321,10 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "address": {
-                    "$ref": "#/definitions/entity.Address"
+                    "$ref": "#/definitions/dom.Address"
                 },
                 "baseTime": {
-                    "$ref": "#/definitions/entity.BaseTime"
+                    "$ref": "#/definitions/dom.BaseTime"
                 },
                 "id": {
                     "type": "string"
@@ -332,7 +332,7 @@ const docTemplate = `{
                 "menu": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.Menu"
+                        "$ref": "#/definitions/dom.Menu"
                     }
                 },
                 "name": {
@@ -341,7 +341,7 @@ const docTemplate = `{
                 "recommendMenus": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.Menu"
+                        "$ref": "#/definitions/dom.Menu"
                     }
                 },
                 "storePhone": {
