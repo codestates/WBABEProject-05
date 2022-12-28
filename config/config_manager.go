@@ -9,7 +9,7 @@ import (
 )
 
 var AppInfo *info.Info
-var DBConfig *db.DBConfig
+var DBConfig *db.DB
 var LogConfig *log.Log
 var AppServerConfig *server.ServerConfig
 
