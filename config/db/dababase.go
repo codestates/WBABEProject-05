@@ -10,16 +10,16 @@ import (
 	"time"
 )
 
-type DBConfig struct {
-	MongoUri   string
-	DbName     string
+type DB struct {
+	URI        string
+	DBName     string
 	User       string
-	Pwd        string
+	PWD        string
 	BackupPath string
 }
 
-func NewDbConfig(fPath string) *DBConfig {
-	cfg := new(DBConfig)
+func NewDbConfig(fPath string) *DB {
+	cfg := new(DB)
 
 	file, err := os.Open(fPath)
 	defer file.Close()

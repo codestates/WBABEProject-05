@@ -38,13 +38,13 @@ func init() {
 	logger.SetAppLog(logger.ZapLog)
 
 	// model
-	err := model.LoadMongoModel(config2.DBConfig.MongoUri)
+	err := model.LoadMongoModel(config2.DBConfig.URI)
 	if err != nil {
 		panic(err)
 		return
 	}
 	model.SetModeler(model.MongoModel)
-	model.LoadMongoCollections(mongoCollectionNames, config2.DBConfig.DbName)
+	model.LoadMongoCollections(mongoCollectionNames, config2.DBConfig.DBName)
 	model.CreateIndexesInModels()
 	model.InjectModelsMongoDependency(model.MongoCollection)
 
