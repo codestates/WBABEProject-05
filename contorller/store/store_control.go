@@ -156,11 +156,11 @@ func (s *storeControl) PostStore(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[entity.Store]
 func (s *storeControl) GetStoreInSwagForTest(c *gin.Context) {
 	strId := c.Query("store_id")
-	store, err := s.storeMenuService.FindStore(strId)
+	str, err := s.storeMenuService.FindStore(strId)
 	if err != nil {
 		logger.AppLog.Info(err)
 		protocol.Fail(utilErr.NewError(err)).Response(c)
 		return
 	}
-	protocol.SuccessData(store).Response(c)
+	protocol.SuccessData(str).Response(c)
 }

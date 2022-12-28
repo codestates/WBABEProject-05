@@ -2,6 +2,7 @@ package login
 
 import (
 	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/model/entity/dom"
 	"github.com/codestates/WBABEProject-05/model/user"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -35,7 +36,7 @@ func (u *userService) RegisterUser(usr *protocol.RequestPostUser) (string, error
 		Password:    hashPassword,
 		PhoneNumber: usr.PhoneNumber,
 		Role:        usr.Role,
-		BaseTime: &entity.BaseTime{
+		BaseTime: &dom.BaseTime{
 			Created_at: time.Now(),
 			Updated_at: time.Now(),
 		},

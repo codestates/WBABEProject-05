@@ -1,7 +1,7 @@
 package protocol
 
 import (
-	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/model/entity/dom"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -10,7 +10,7 @@ type RequestPutMenu struct {
 	menu   *RequestPostMenu `json:"menu" validate:"required"`
 }
 
-func (r *RequestPutMenu) ToStoreIdAndMenu() ([12]byte, *entity.Menu, error) {
+func (r *RequestPutMenu) ToStoreIdAndMenu() ([12]byte, *dom.Menu, error) {
 	storeId, menuWithNewId, err := r.menu.ToStoreIdAndMenuNewId()
 	if err != nil {
 		return [12]byte{}, nil, err

@@ -1,6 +1,9 @@
 package entity
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"github.com/codestates/WBABEProject-05/model/entity/dom"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type User struct {
 	Id          primitive.ObjectID `bson:"_id"`
@@ -9,5 +12,5 @@ type User struct {
 	Password    string             `bson:"password"`
 	PhoneNumber string             `bson:"phone_number"`
 	Role        string             `bson:"role"`
-	BaseTime    *BaseTime          `bson:"base_time"`
+	BaseTime    *dom.BaseTime      `bson:"base_time"`
 }

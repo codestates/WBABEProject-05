@@ -44,17 +44,16 @@ func (u *userControl) DeleteUser(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) PostUser(c *gin.Context) {
 	reqU := &protocol.RequestPostUser{}
-	err := c.ShouldBindJSON(reqU)
-	if err != nil {
+	if err := c.ShouldBindJSON(reqU); err != nil {
 		protocol.Fail(error2.BadRequestError).Response(c)
 		return
 	}
+
 	savedId, err := u.userService.RegisterUser(reqU)
 	if err != nil {
 		protocol.Fail(error2.NewError(err)).Response(c)
 		return
 	}
-	protocol.SuccessData(gin.H{
-		"user_id": savedId,
-	}).Response(c)
+
+	protocol.SuccessData(gin.H{"user_id": savedId}).Response(c)
 }

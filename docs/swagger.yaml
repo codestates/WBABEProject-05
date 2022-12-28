@@ -1,5 +1,5 @@
 definitions:
-  entity.Address:
+  dom.Address:
     properties:
       detail:
         type: string
@@ -8,17 +8,17 @@ definitions:
       zipCode:
         type: string
     type: object
-  entity.BaseTime:
+  dom.BaseTime:
     properties:
       created_at:
         type: string
       updated_at:
         type: string
     type: object
-  entity.Menu:
+  dom.Menu:
     properties:
       baseTime:
-        $ref: '#/definitions/entity.BaseTime'
+        $ref: '#/definitions/dom.BaseTime'
       description:
         type: string
       id:
@@ -41,20 +41,20 @@ definitions:
   entity.Store:
     properties:
       address:
-        $ref: '#/definitions/entity.Address'
+        $ref: '#/definitions/dom.Address'
       baseTime:
-        $ref: '#/definitions/entity.BaseTime'
+        $ref: '#/definitions/dom.BaseTime'
       id:
         type: string
       menu:
         items:
-          $ref: '#/definitions/entity.Menu'
+          $ref: '#/definitions/dom.Menu'
         type: array
       name:
         type: string
       recommendMenus:
         items:
-          $ref: '#/definitions/entity.Menu'
+          $ref: '#/definitions/dom.Menu'
         type: array
       storePhone:
         type: string

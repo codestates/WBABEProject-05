@@ -1,4 +1,4 @@
-package entity
+package dom
 
 type Address struct {
 	Street  string

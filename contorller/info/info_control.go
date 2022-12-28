@@ -30,7 +30,7 @@ func NewInfoControl() *infoControl {
 // @Success 200 {object} protocol.ApiResponse[info.Info]
 func (h *infoControl) GetInformation(c *gin.Context) {
 	path := flag.Flags[flag.InformationFlag.Name]
-	info := info.NewInfo(*path)
+	inf := info.NewInfo(*path)
 
-	protocol.SuccessData(info).Response(c)
+	protocol.SuccessData(inf).Response(c)
 }

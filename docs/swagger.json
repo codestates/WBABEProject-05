@@ -249,7 +249,7 @@
         }
     },
     "definitions": {
-        "entity.Address": {
+        "dom.Address": {
             "type": "object",
             "properties": {
                 "detail": {
@@ -263,7 +263,7 @@
                 }
             }
         },
-        "entity.BaseTime": {
+        "dom.BaseTime": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -274,11 +274,11 @@
                 }
             }
         },
-        "entity.Menu": {
+        "dom.Menu": {
             "type": "object",
             "properties": {
                 "baseTime": {
-                    "$ref": "#/definitions/entity.BaseTime"
+                    "$ref": "#/definitions/dom.BaseTime"
                 },
                 "description": {
                     "type": "string"
@@ -309,10 +309,10 @@
             "type": "object",
             "properties": {
                 "address": {
-                    "$ref": "#/definitions/entity.Address"
+                    "$ref": "#/definitions/dom.Address"
                 },
                 "baseTime": {
-                    "$ref": "#/definitions/entity.BaseTime"
+                    "$ref": "#/definitions/dom.BaseTime"
                 },
                 "id": {
                     "type": "string"
@@ -320,7 +320,7 @@
                 "menu": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.Menu"
+                        "$ref": "#/definitions/dom.Menu"
                     }
                 },
                 "name": {
@@ -329,7 +329,7 @@
                 "recommendMenus": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.Menu"
+                        "$ref": "#/definitions/dom.Menu"
                     }
                 },
                 "storePhone": {

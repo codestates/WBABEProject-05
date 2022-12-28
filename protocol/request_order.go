@@ -2,6 +2,7 @@ package protocol
 
 import (
 	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/model/entity/dom"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
@@ -43,7 +44,7 @@ func (r *RequestOrder) ToReceipt() (*entity.Receipt, error) {
 		Price:        r.Price,
 		Status:       r.Status,
 		CustomerAddr: r.CustomerAddr.ToAddress(),
-		BaseTime: &entity.BaseTime{
+		BaseTime: &dom.BaseTime{
 			Created_at: time.Now(),
 			Updated_at: time.Now(),
 		},
