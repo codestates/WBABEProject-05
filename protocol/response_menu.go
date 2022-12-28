@@ -1,6 +1,8 @@
 package protocol
 
-import "github.com/codestates/WBABEProject-05/model/entity"
+import (
+	"github.com/codestates/WBABEProject-05/model/entity/dom"
+)
 
 type ResponseMenu struct {
 	Id          string `json:"menu_id"`
@@ -12,7 +14,7 @@ type ResponseMenu struct {
 	Description string `json:"description"`
 }
 
-func NewResponseMenuFromMenu(menu entity.Menu) *ResponseMenu {
+func NewResponseMenuFromMenu(menu dom.Menu) *ResponseMenu {
 	return &ResponseMenu{
 		Id:          menu.Id.Hex(),
 		Name:        menu.Name,

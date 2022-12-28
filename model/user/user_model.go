@@ -16,7 +16,6 @@ func NewUserModel(col *mongo.Collection) *userModel {
 	if usrMdInstance != nil {
 		return usrMdInstance
 	}
-	//collection := mod.GetCollection(Store, "wbe")
 	usrMdInstance = &userModel{
 		collection: col,
 	}

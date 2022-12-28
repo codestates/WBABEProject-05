@@ -5,6 +5,7 @@ import (
 	"github.com/codestates/WBABEProject-05/common/flag"
 	"github.com/codestates/WBABEProject-05/config/db"
 	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/model/entity/dom"
 	"github.com/codestates/WBABEProject-05/model/store"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -97,31 +98,13 @@ func (s *storeMenuService) RegisterStore(store *protocol.RequestPostStore) (stri
 		return "", err
 	}
 
-	//rlen := len(store.RecommendMenus)
-	//var menus = make([]*entity.Menu, rlen)
-	//if rlen > 0 {
-	//	var pob []primitive.ObjectID
-	//	for i, menuId := range store.RecommendMenus {
-	//		obi, err := primitive.ObjectIDFromHex(menuId)
-	//		if err != nil {
-	//			return "", err
-	//		}
-	//		pob[i] = obi
-	//	}
-	//
-	//	menus, err = s.storeModel.SelectMenusByIds(pob)
-	//	if err != nil {
-	//		return "", err
-	//	}
-	//}
-
 	st := &entity.Store{
 		Id:         primitive.NewObjectID(),
 		UserId:     uid,
 		Name:       store.Name,
 		Address:    store.Address.ToAddress(),
 		StorePhone: store.StorePhone,
-		BaseTime: &entity.BaseTime{
+		BaseTime: &dom.BaseTime{
 			Created_at: time.Now(),
 			Updated_at: time.Now(),
 		},

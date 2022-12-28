@@ -34,8 +34,7 @@ func NewOrderRecordControl(svc order.OrderRecordServicer) *orderRecordControl {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) RegisterOrderRecord(c *gin.Context) {
 	reqO := &protocol.RequestOrder{}
-	err := c.ShouldBindJSON(reqO)
-	if err != nil {
+	if err := c.ShouldBindJSON(reqO); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
@@ -45,9 +44,8 @@ func (o *orderRecordControl) RegisterOrderRecord(c *gin.Context) {
 		protocol.Fail(utilErr.NewError(err)).Response(c)
 		return
 	}
-	protocol.SuccessData(gin.H{
-		"posted_id": recordedId,
-	}).Response(c)
+
+	protocol.SuccessData(gin.H{"posted_id": recordedId}).Response(c)
 }
 func (o *orderRecordControl) ModifyOrderRecord(c *gin.Context) {
 

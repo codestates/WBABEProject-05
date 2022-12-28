@@ -11,28 +11,26 @@ type orderRecordService struct {
 
 var instance *orderRecordService
 
-func NewOrderRecordService(
-	rd receipt.ReceiptModeler,
-) *orderRecordService {
+func NewOrderRecordService(rd receipt.ReceiptModeler) *orderRecordService {
 	if instance != nil {
 		return instance
 	}
-	instance = &orderRecordService{
-		receiptModel: rd,
-	}
+
+	instance = &orderRecordService{receiptModel: rd}
 	return instance
 }
 
 func (o *orderRecordService) RegisterOrderRecord(order *protocol.RequestOrder) (string, error) {
-	receipt, err := order.ToReceipt()
+	rct, err := order.ToReceipt()
 	if err != nil {
 		return "", err
 	}
 
-	insertedId, err := o.receiptModel.InsertReceipt(receipt)
+	insertedId, err := o.receiptModel.InsertReceipt(rct)
 	if err != nil {
 		return "", err
 	}
+
 	return insertedId, nil
 }
 func (o *orderRecordService) ModifyOrderRecord() {

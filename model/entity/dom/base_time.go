@@ -1,4 +1,4 @@
-package entity
+package dom
 
 import "time"
 

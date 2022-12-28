@@ -3,6 +3,7 @@ package store
 import (
 	"github.com/codestates/WBABEProject-05/common"
 	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/model/entity/dom"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -26,7 +27,7 @@ func NewStoreModel(col *mongo.Collection) *storeModel {
 	return instance
 }
 
-func (s *storeModel) InsertMenu(storeId primitive.ObjectID, menu *entity.Menu) (int, error) {
+func (s *storeModel) InsertMenu(storeId primitive.ObjectID, menu *dom.Menu) (int, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -41,7 +42,7 @@ func (s *storeModel) InsertMenu(storeId primitive.ObjectID, menu *entity.Menu) (
 func (s *storeModel) DeleteMenu() {
 
 }
-func (s *storeModel) UpdateMenu(storeId primitive.ObjectID, menu *entity.Menu) (int, error) {
+func (s *storeModel) UpdateMenu(storeId primitive.ObjectID, menu *dom.Menu) (int, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -60,15 +61,14 @@ func (s *storeModel) SelectStore(storeId primitive.ObjectID) (*entity.Store, err
 
 	var store *entity.Store
 	filter := bson.D{{"_id", storeId}}
-	err := s.collection.FindOne(ctx, filter).Decode(&store)
-	if err != nil {
+	if err := s.collection.FindOne(ctx, filter).Decode(&store); err != nil {
 		return nil, err
 	}
 	return store, nil
 }
 
 // TODO 테스트필요
-func (s *storeModel) SelectMenusByIds(storeId primitive.ObjectID, menuIds []primitive.ObjectID) ([]*entity.Menu, error) {
+func (s *storeModel) SelectMenusByIds(storeId primitive.ObjectID, menuIds []primitive.ObjectID) ([]*dom.Menu, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -76,12 +76,12 @@ func (s *storeModel) SelectMenusByIds(storeId primitive.ObjectID, menuIds []prim
 	opt := bson.M{"menu": true}
 	menuCursor, err := s.collection.Find(ctx, filter, options.Find().SetProjection(opt).SetLimit(5))
 	if err != nil {
-		return []*entity.Menu{}, err
+		return []*dom.Menu{}, err
 	}
 
-	var menus []*entity.Menu
+	var menus []*dom.Menu
 	if err = menuCursor.All(ctx, &menus); err != nil {
-		return []*entity.Menu{}, err
+		return []*dom.Menu{}, err
 	}
 	return menus, nil
 }
@@ -104,8 +104,7 @@ func (s *storeModel) SelectMenuByIdAndDelete(storeId, menuId primitive.ObjectID)
 	var store *entity.Store
 	filter := bson.M{"_id": storeId, "menu": bson.M{"$elemMatch": bson.M{"_id": menuId}}}
 	opt := bson.M{"$pop": bson.M{"menu": -1}}
-	err := s.collection.FindOneAndUpdate(ctx, filter, opt).Decode(&store)
-	if err != nil {
+	if err := s.collection.FindOneAndUpdate(ctx, filter, opt).Decode(&store); err != nil {
 		return nil, err
 	}
 	return store, nil
