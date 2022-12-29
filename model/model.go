@@ -22,15 +22,16 @@ var mongoM *model
 
 func LoadMongoModel(uri string) error {
 	m := newModel()
-	err := m.Connect(uri)
-	m.checkClient()
-	if err != nil {
+	if err := m.Connect(uri); err != nil {
 		logger.AppLog.Error(err)
 		return err
-	} else {
-		m.exposeModel()
 	}
 
+	if err := m.checkClient(); err != nil {
+		return err
+	}
+
+	m.exposeModel()
 	return nil
 }
 
@@ -43,9 +44,9 @@ func (m *model) Connect(uri string) error {
 	if err != nil {
 		logger.AppLog.Error(err)
 		return err
-	} else {
-		mongoM.client = client
 	}
+
+	mongoM.client = client
 	return nil
 }
 
@@ -102,8 +103,7 @@ func (m *model) checkClient() error {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	err := m.client.Ping(ctx, nil)
-	if err != nil {
+	if err := m.client.Ping(ctx, nil); err != nil {
 		logger.AppLog.Error(err)
 		return err
 	}

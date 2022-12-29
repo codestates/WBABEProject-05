@@ -105,8 +105,8 @@ func (s *storeMenuService) RegisterStore(store *protocol.RequestPostStore) (stri
 		Address:    store.Address.ToAddress(),
 		StorePhone: store.StorePhone,
 		BaseTime: &dom.BaseTime{
-			Created_at: time.Now(),
-			Updated_at: time.Now(),
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
 		},
 	}
 
