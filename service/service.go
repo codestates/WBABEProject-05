@@ -12,8 +12,7 @@ type service struct {
 }
 
 func (svc *service) ValidateStruct(s interface{}) error {
-	err := validate.Struct(s)
-	if err != nil {
+	if err := validate.Struct(s); err != nil {
 		logger.AppLog.Error(err)
 		return err
 	}

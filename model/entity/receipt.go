@@ -7,7 +7,7 @@ import (
 
 // Receipt 거래내역
 type Receipt struct {
-	Id         primitive.ObjectID   `bson:"id"`
+	Id         primitive.ObjectID   `bson:"_id"`
 	StoreId    primitive.ObjectID   `bson:"store_id"`
 	CustomerId primitive.ObjectID   `bson:"customer_id"`
 	Menu       []primitive.ObjectID `bson:"menu"`

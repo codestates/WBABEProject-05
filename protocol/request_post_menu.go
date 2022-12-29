@@ -31,8 +31,8 @@ func (r *RequestPostMenu) ToStoreIdAndMenuNewId() (primitive.ObjectID, *dom.Menu
 		LimitCount:  r.LimitCount,
 		Description: r.Description,
 		BaseTime: &dom.BaseTime{
-			Created_at: time.Now(),
-			Updated_at: time.Now(),
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
 		},
 	}
 	return id, menu, nil
@@ -57,8 +57,8 @@ func (r *RequestPostMenu) ToStoreIdAndMenuMatchId(menuId string) (primitive.Obje
 		LimitCount:  r.LimitCount,
 		Description: r.Description,
 		BaseTime: &dom.BaseTime{
-			Created_at: time.Now(),
-			Updated_at: time.Now(),
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
 		},
 	}
 	return sid, menu, nil

@@ -37,8 +37,8 @@ func (u *userService) RegisterUser(usr *protocol.RequestPostUser) (string, error
 		PhoneNumber: usr.PhoneNumber,
 		Role:        usr.Role,
 		BaseTime: &dom.BaseTime{
-			Created_at: time.Now(),
-			Updated_at: time.Now(),
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
 		},
 	}
 	savedId, err := u.userModel.PostUser(userEntity)

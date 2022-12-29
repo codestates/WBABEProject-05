@@ -26,10 +26,10 @@ func (r *receiptModel) InsertReceipt(receipt *entity.Receipt) (string, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	_, err := r.collection.InsertOne(ctx, receipt)
-	if err != nil {
+	if _, err := r.collection.InsertOne(ctx, receipt); err != nil {
 		return "", err
 	}
+
 	return receipt.Id.Hex(), nil
 }
 func (r *receiptModel) UpdateReceipt() {

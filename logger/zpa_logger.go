@@ -43,8 +43,7 @@ func NewLogger(lcfg LogConfigure) (zapLogger *zapLogger) {
 	writeSyncer := getLogWriter(lPath, size, backup, age)
 	encoder := getEncoder()
 	var l = new(zapcore.Level)
-	err := l.UnmarshalText([]byte(level))
-	if err != nil {
+	if err := l.UnmarshalText([]byte(level)); err != nil {
 		panic("logger load, fail")
 	}
 	core := zapcore.NewCore(encoder, writeSyncer, l)
@@ -55,46 +54,39 @@ func NewLogger(lcfg LogConfigure) (zapLogger *zapLogger) {
 }
 
 func (z *zapLogger) Debug(ctx ...interface{}) {
-	var b bytes.Buffer
-	for _, str := range ctx {
-		b.WriteString(str.(string))
-		b.WriteString(" ")
-	}
+	b := z.newWrittenBuffer(ctx)
 
 	lg.Debug("debug", zap.String("-", b.String()))
 }
 
 // Info is a convenient alias for Root().Info
 func (z *zapLogger) Info(ctx ...interface{}) {
-	// ~
-	var b bytes.Buffer
-	for _, str := range ctx {
-		b.WriteString(str.(string))
-		b.WriteString(" ")
-	}
+	b := z.newWrittenBuffer(ctx)
+
 	lg.Info("info", zap.String("-", b.String()))
 }
 
 // Warn is a convenient alias for Root().Warn
 func (z *zapLogger) Warn(ctx ...interface{}) {
-	// ~
-	var b bytes.Buffer
-	for _, str := range ctx {
-		b.WriteString(str.(string))
-		b.WriteString(" ")
-	}
+	b := z.newWrittenBuffer(ctx)
+
 	lg.Warn("warn", zap.String("-", b.String()))
 }
 
 // Error is a convenient alias for Root().Error
 func (z *zapLogger) Error(ctx ...interface{}) {
-	// ~
+	b := z.newWrittenBuffer(ctx)
+
+	lg.Error("error", zap.String("-", b.String()))
+}
+
+func (z *zapLogger) newWrittenBuffer(ctx []interface{}) *bytes.Buffer {
 	var b bytes.Buffer
 	for _, str := range ctx {
 		b.WriteString(str.(string))
 		b.WriteString(" ")
 	}
-	lg.Error("error", zap.String("-", b.String()))
+	return &b
 }
 
 // GinLogger applied logger in gin

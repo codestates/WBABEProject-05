@@ -45,8 +45,8 @@ func (r *RequestOrder) ToReceipt() (*entity.Receipt, error) {
 		Status:       r.Status,
 		CustomerAddr: r.CustomerAddr.ToAddress(),
 		BaseTime: &dom.BaseTime{
-			Created_at: time.Now(),
-			Updated_at: time.Now(),
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
 		},
 	}
 	return rc, nil
