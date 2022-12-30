@@ -1,6 +1,7 @@
 package store
 
 import (
+	"fmt"
 	"github.com/codestates/WBABEProject-05/common"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/entity/dom"
@@ -76,14 +77,52 @@ func (s *storeModel) SelectMenusByIds(storeId primitive.ObjectID, menuIds []prim
 	opt := bson.M{"menu": true}
 	menuCursor, err := s.collection.Find(ctx, filter, options.Find().SetProjection(opt).SetLimit(5))
 	if err != nil {
-		return []*dom.Menu{}, err
+		return nil, err
 	}
 
 	var menus []*dom.Menu
 	if err = menuCursor.All(ctx, &menus); err != nil {
-		return []*dom.Menu{}, err
+		return nil, err
 	}
 	return menus, nil
+}
+
+func (s *storeModel) SelectMenusSortBy(storeId primitive.ObjectID, sort string) ([]*dom.Menu, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	//var menus *[]*dom.Menu
+	filter := bson.D{{"_id", storeId}}
+	prj := bson.M{"menu": true}
+
+	//opt := options.Find().SetProjection(prj)
+	//menuCursor, err := s.collection.Find(ctx, filter, opt)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//var store entity.Store
+	//if err = menuCursor.All(ctx, &store); err != nil {
+	//	return nil, err
+	//}
+	//fmt.Println(store)
+	//for i, menu := range store.Menu {
+	//	fmt.Println(i, menu)
+	//}
+
+	var store entity.Store
+
+	opt := options.FindOne().SetProjection(prj).SetSort(bson.M{"": ""}) //객체내에 배열sort 어렵네...
+	err := s.collection.FindOne(ctx, filter, opt).Decode(&store)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(store)
+	for i, menu := range store.Menu {
+		fmt.Println("------")
+		fmt.Println(i, menu)
+	}
+	return nil, nil
 }
 
 func (s *storeModel) InsertStore(store *entity.Store) (string, error) {

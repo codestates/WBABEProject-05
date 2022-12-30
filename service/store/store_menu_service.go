@@ -88,8 +88,17 @@ func (s *storeMenuService) ModifyStoreAndRecommendMenus() {
 func (s *storeMenuService) FindRecommendMenusSortedTimeDesc() {
 
 }
-func (s *storeMenuService) FindMenusSortedPage() {
+func (s *storeMenuService) FindMenusSortedPage(storeId string) ([]*dom.Menu, error) {
+	id, err := primitive.ObjectIDFromHex(storeId)
+	if err != nil {
+		return nil, err
+	}
 
+	menus, err := s.storeModel.SelectMenusSortBy(id, "")
+	if err != nil {
+		return nil, err
+	}
+	return menus, nil
 }
 
 func (s *storeMenuService) RegisterStore(store *protocol.RequestPostStore) (string, error) {

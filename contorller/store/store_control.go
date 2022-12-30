@@ -116,7 +116,14 @@ func (s *storeControl) GetRecommendMenusSortedTimeDesc(c *gin.Context) {
 }
 
 func (s *storeControl) GetMenuSortedPages(c *gin.Context) {
-	s.storeMenuService.FindMenusSortedPage()
+	strId := c.Query("store-id")
+	// TODO sort 조건 추가
+	menus, err := s.storeMenuService.FindMenusSortedPage(strId)
+	if err != nil {
+		protocol.Fail(utilErr.NewError(err)).Response(c)
+		return
+	}
+	protocol.SuccessData(menus).Response(c)
 }
 
 // PostStore godoc
@@ -152,10 +159,10 @@ func (s *storeControl) PostStore(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/stores/swag/store [get]
-// @Param store_id query string true "store_id"
+// @Param store-id query string true "store_id"
 // @Success 200 {object} protocol.ApiResponse[entity.Store]
 func (s *storeControl) GetStoreInSwagForTest(c *gin.Context) {
-	strId := c.Query("store_id")
+	strId := c.Query("store-id")
 	str, err := s.storeMenuService.FindStore(strId)
 	if err != nil {
 		logger.AppLog.Info(err)

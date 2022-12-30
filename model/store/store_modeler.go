@@ -17,6 +17,8 @@ type StoreModeler interface {
 	// UpdateMenu 메뉴 수정 : 사업장에서 기존의 메뉴 정보 변경기능(ex. 가격변경, 원산지 변경, soldout) 금일 추천 메뉴 설정 변경, 리스트 출력, / 성공 여부 리턴
 	UpdateMenu(storeId primitive.ObjectID, menu *dom.Menu) (int, error)
 	SelectStore(storeId primitive.ObjectID) (*entity.Store, error)
+	// SelectMenusSortBy 페이지 조건 적용해서 해보자 sort , skip limit
+	SelectMenusSortBy(storeId primitive.ObjectID, sort string) ([]*dom.Menu, error)
 
 	//TODO  메뉴 리스트 조회 : 메뉴 리스트 조회 및 정렬(추천/평점/주문수/최신) / 각 카테고리별  sort 리스트 출력(ex. order by 추천, 평점, 재주문수, 최신), 결과 5~10여개 임의 생성 출력, sorting 여부 확인
 

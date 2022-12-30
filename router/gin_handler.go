@@ -29,6 +29,7 @@ func StoresHandler(storesUrl *gin.RouterGroup) {
 	storesUrl.PUT("/menu", store2.StoreControl.PutMenu)
 	// "/swag/store" sagger 테스트용
 	storesUrl.GET("/swag/store", store2.StoreControl.GetStoreInSwagForTest)
+	storesUrl.GET("/menus", store2.StoreControl.GetMenuSortedPages)
 }
 
 // OrdersHandler ("/orders")
