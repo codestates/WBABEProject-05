@@ -50,19 +50,41 @@ func (m *model) Connect(uri string) error {
 	return nil
 }
 
-func (m *model) CreateIndex(colName string, indexName ...string) {
+// CreateIndexes 인덱스 생성
+func (m *model) CreateIndexes(colName string, indexName ...string) {
 	ctx, cancel := util.GetContext(util.ModelTimeOut)
 	defer cancel()
 
 	var indexModels []mongo.IndexModel
 	for _, name := range indexName {
-		idxModel := mongo.IndexModel{
+		IDXModel := mongo.IndexModel{
 			Keys: bson.M{name: 1}, Options: options.Index().SetUnique(true),
 		}
-		indexModels = append(indexModels, idxModel)
+		indexModels = append(indexModels, IDXModel)
 	}
-	_, err := MongoCollection[colName].Indexes().CreateMany(ctx, indexModels)
-	if err != nil {
+
+	if _, err := MongoCollection[colName].Indexes().CreateMany(ctx, indexModels); err != nil {
+		logger.AppLog.Error(err)
+		return
+	}
+}
+
+// CreateComplexIndex 복합 인텍스 생성
+func (m *model) CreateCompoundIndex(colName string, indexName ...string) {
+	ctx, cancel := util.GetContext(util.ModelTimeOut)
+	defer cancel()
+
+	var aggregationIDXs []bson.E
+	for _, name := range indexName {
+		aggregationIDXs = append(aggregationIDXs, bson.E{name, 1})
+	}
+
+	IDXModel := mongo.IndexModel{
+		Keys:    aggregationIDXs,
+		Options: options.Index().SetUnique(true),
+	}
+
+	if _, err := MongoCollection[colName].Indexes().CreateOne(ctx, IDXModel); err != nil {
 		logger.AppLog.Error(err)
 		return
 	}

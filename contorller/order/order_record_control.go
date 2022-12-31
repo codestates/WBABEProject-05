@@ -1,8 +1,9 @@
 package order
 
 import (
-	utilErr "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/protocol"
+	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
+	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/order"
 	"github.com/gin-gonic/gin"
 )
@@ -33,19 +34,19 @@ func NewOrderRecordControl(svc order.OrderRecordServicer) *orderRecordControl {
 // @Param order body protocol.RequestOrder true "RequestOrder JSON"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) RegisterOrderRecord(c *gin.Context) {
-	reqO := &protocol.RequestOrder{}
+	reqO := &request.RequestOrder{}
 	if err := c.ShouldBindJSON(reqO); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
 
-	recordedId, err := o.orderService.RegisterOrderRecord(reqO)
+	recordedID, err := o.orderService.RegisterOrderRecord(reqO)
 	if err != nil {
 		protocol.Fail(utilErr.NewError(err)).Response(c)
 		return
 	}
 
-	protocol.SuccessData(gin.H{"posted_id": recordedId}).Response(c)
+	protocol.SuccessData(gin.H{"posted_id": recordedID}).Response(c)
 }
 func (o *orderRecordControl) ModifyOrderRecord(c *gin.Context) {
 

@@ -2,13 +2,10 @@ package login
 
 import (
 	"github.com/codestates/WBABEProject-05/model/entity"
-	"github.com/codestates/WBABEProject-05/model/entity/dom"
 	"github.com/codestates/WBABEProject-05/model/user"
-	"github.com/codestates/WBABEProject-05/protocol"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"github.com/codestates/WBABEProject-05/protocol/request"
 	"golang.org/x/crypto/bcrypt"
 	"log"
-	"time"
 )
 
 type userService struct {
@@ -27,37 +24,43 @@ func NewUserService(modeler user.UserModeler) *userService {
 	return instance
 }
 
-func (u *userService) RegisterUser(usr *protocol.RequestPostUser) (string, error) {
-	hashPassword := HashPassword(usr.Password)
-	userEntity := &entity.User{
-		Id:          primitive.NewObjectID(),
-		Name:        usr.Name,
-		NicName:     usr.NicName,
-		Password:    hashPassword,
-		PhoneNumber: usr.PhoneNumber,
-		Role:        usr.Role,
-		BaseTime: &dom.BaseTime{
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
-	}
-	savedId, err := u.userModel.PostUser(userEntity)
+func (u *userService) RegisterUser(usr *request.RequestUser) (string, error) {
+	postUser := usr.NewPostUser()
+	postUser.Password = u.hashPassword(usr.Password)
+	savedId, err := u.userModel.PostUser(postUser)
 	if err != nil {
 		return "", err
 	}
 	return savedId, err
 }
-func (u *userService) ModifyUser() {
+func (u *userService) ModifyUser(ID string, usr *request.RequestUser) (int, error) {
+	updateUser, err := usr.NewUpdateUser(ID)
+	if err != nil {
+		return 0, err
+	}
 
+	updateCount, err := u.userModel.PutUser(updateUser)
+	if err != nil {
+		return 0, err
+	}
+	return updateCount, nil
 }
-func (u *userService) FindUser() {
-
+func (u *userService) FindUser(id string) (*entity.User, error) {
+	findUser, err := u.userModel.SelectUser(id)
+	if err != nil {
+		return nil, err
+	}
+	return findUser, nil
 }
-func (u *userService) DeleteUser() {
-
+func (u *userService) DeleteUser(id string) (int, error) {
+	deleteUser, err := u.DeleteUser(id)
+	if err != nil {
+		return 0, err
+	}
+	return deleteUser, nil
 }
 
-func HashPassword(password string) string {
+func (u *userService) hashPassword(password string) string {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
 		log.Panic(err)
@@ -65,7 +68,7 @@ func HashPassword(password string) string {
 	return string(bytes)
 }
 
-func VerifyPassword(userPassword string, providedPassword string) (bool, error) {
+func (u *userService) verifyPassword(userPassword string, providedPassword string) (bool, error) {
 	err := bcrypt.CompareHashAndPassword([]byte(providedPassword), []byte(userPassword))
 	check := true
 	if err != nil {

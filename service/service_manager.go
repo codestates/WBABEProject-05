@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/receipt"
 	store2 "github.com/codestates/WBABEProject-05/model/store"
 	user2 "github.com/codestates/WBABEProject-05/model/user"
@@ -10,7 +11,11 @@ import (
 )
 
 func InjectServicesDependency() {
-	store.StoreMenuService = store.NewStoreMenuService(store2.StoreModel)
+	store.StoreMenuService = store.NewStoreMenuService(store2.StoreModel, menu.MenuModel)
 	order.OrderRecordService = order.NewOrderRecordService(receipt.ReceiptModel)
 	login.UserService = login.NewUserService(user2.UserModel)
+}
+
+func SetServicer() {
+	Service = NewService()
 }

@@ -30,7 +30,7 @@ func (r *receiptModel) InsertReceipt(receipt *entity.Receipt) (string, error) {
 		return "", err
 	}
 
-	return receipt.Id.Hex(), nil
+	return receipt.ID.Hex(), nil
 }
 func (r *receiptModel) UpdateReceipt() {
 

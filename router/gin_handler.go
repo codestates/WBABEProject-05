@@ -19,13 +19,16 @@ func HomeHandler(homeUrl *gin.RouterGroup) {
 // UsersHandler ("/users")
 func UsersHandler(usersUrl *gin.RouterGroup) {
 	usersUrl.POST("/join", user2.UserControl.PostUser)
+	usersUrl.POST("/id", user2.UserControl.GetUser)
 }
 
 // StoresHandler ("/stores")
 func StoresHandler(storesUrl *gin.RouterGroup) {
-	storesUrl.POST("", store2.StoreControl.PostStore)         // 가게 등록
-	storesUrl.POST("/menu", store2.StoreControl.PostMenu)     // 메뉴 등록
-	storesUrl.DELETE("/menu", store2.StoreControl.DeleteMenu) // 메뉴 삭제
+	storesUrl.POST("", store2.StoreControl.PostStore)           // 가게 등록
+	storesUrl.PUT("/id", store2.StoreControl.PutSore)           // 가게 등록
+	storesUrl.GET("/id", store2.StoreControl.GetRecommendMenus) // 가게 등록
+	storesUrl.POST("/menu", store2.StoreControl.PostMenu)       // 메뉴 등록
+	storesUrl.DELETE("/menu", store2.StoreControl.DeleteMenu)   // 메뉴 삭제
 	storesUrl.PUT("/menu", store2.StoreControl.PutMenu)
 	// "/swag/store" sagger 테스트용
 	storesUrl.GET("/swag/store", store2.StoreControl.GetStoreInSwagForTest)

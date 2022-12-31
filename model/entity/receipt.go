@@ -5,15 +5,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// Receipt 거래내역
+// Status 접수중/접수취소/추가접수/접수중/조리중/배달중/배달완료
 type Receipt struct {
-	Id         primitive.ObjectID   `bson:"_id"`
-	StoreId    primitive.ObjectID   `bson:"store_id"`
-	CustomerId primitive.ObjectID   `bson:"customer_id"`
-	Menu       []primitive.ObjectID `bson:"menu"`
-	Price      int                  `bson:"price"`
+	ID         primitive.ObjectID   `bson:"_id,omitempty"`
+	StoreID    primitive.ObjectID   `bson:"store_id,omitempty"`
+	CustomerID primitive.ObjectID   `bson:"customer_id,omitempty"`
+	Menu       []primitive.ObjectID `bson:"menu,omitempty"`
+	Price      int                  `bson:"price,omitempty"`
 	// Status 접수중/접수취소/추가접수/접수중/조리중/배달중/배달완료
-	Status       string        `bson:"status"`
+	Status       string        `bson:"status,omitempty"`
 	CustomerAddr *dom.Address  `bson:"ordered_addr"`
 	BaseTime     *dom.BaseTime `bson:"base_time"`
 }

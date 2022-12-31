@@ -1,6 +1,8 @@
 package receipt
 
-import "github.com/codestates/WBABEProject-05/model/entity"
+import (
+	"github.com/codestates/WBABEProject-05/model/entity"
+)
 
 var ReceiptModel ReceiptModeler
 
