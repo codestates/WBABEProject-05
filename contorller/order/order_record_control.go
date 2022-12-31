@@ -6,6 +6,7 @@ import (
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/order"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 var instance *orderRecordControl
@@ -46,7 +47,10 @@ func (o *orderRecordControl) PostOrderRecord(c *gin.Context) {
 		return
 	}
 
-	protocol.SuccessData(gin.H{"posted_id": recordedID}).Response(c)
+	protocol.SuccessCodeAndData(
+		http.StatusCreated,
+		gin.H{"posted_id": recordedID},
+	).Response(c)
 }
 
 func (o *orderRecordControl) PutOrderRecordFromCustomer(c *gin.Context) {

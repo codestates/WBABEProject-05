@@ -1,8 +1,10 @@
 package order
 
 import (
+	"errors"
 	"fmt"
 	"github.com/codestates/WBABEProject-05/common/util"
+	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/receipt"
@@ -35,7 +37,7 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 		return "", err
 	}
 
-	menus, err := o.menuModel.SelectMenusByIds(order.StoreId, order.Menus)
+	menus, err := o.menuModel.SelectMenusByIDs(order.StoreId, order.Menus)
 	if err != nil {
 		return "", err
 	}
@@ -53,6 +55,13 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 	insertedId, err := o.receiptModel.InsertReceipt(rct)
 	if err != nil {
 		return "", err
+	}
+
+	// OrderCount 의 증가는 비즈니스상 중요하지않아 로그로만 관리
+	count, err := o.menuModel.UpdateMenusInCOrderCount(order.Menus)
+	if err != nil || count == 0 {
+		msg := fmt.Sprintf("does not update order count Menu IDs %v", order.Menus)
+		logger.AppLog.Error(errors.New(msg))
 	}
 
 	return insertedId, nil
@@ -126,7 +135,7 @@ func (o *orderRecordService) FindOrderRecord(orderID string) (*response.Response
 		return nil, err
 	}
 	menuIDs := util.ConvertObjIDsToStrings(foundReceipt.Menus)
-	menus, err := o.menuModel.SelectMenusByIds(foundReceipt.StoreID.Hex(), menuIDs)
+	menus, err := o.menuModel.SelectMenusByIDs(foundReceipt.StoreID.Hex(), menuIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +144,7 @@ func (o *orderRecordService) FindOrderRecord(orderID string) (*response.Response
 }
 
 func (o *orderRecordService) FiendSelectedMenusTotalPrice(storeID string, menuIDs []string) (*response.ResponseCheckPrice, error) {
-	menus, err := o.menuModel.SelectMenusByIds(storeID, menuIDs)
+	menus, err := o.menuModel.SelectMenusByIDs(storeID, menuIDs)
 	if err != nil {
 		return nil, err
 	}

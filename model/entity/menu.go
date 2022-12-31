@@ -8,21 +8,22 @@ import (
 )
 
 type Menu struct {
-	ID             primitive.ObjectID `bson:"_id,omitempty"`
-	StoreID        primitive.ObjectID `bson:"store_id"`
-	Name           string             `bson:"name,omitempty"`
-	LimitCount     string             `bson:"limit_count,omitempty"`
-	Possible       bool               `bson:"possible,omitempty"`
-	Price          int                `bson:"price,omitempty"`
-	Origin         string             `bson:"origin,omitempty"`
-	Description    string             `bson:"description,omitempty"`
-	RecommendCount int                `bson:"recommend_count,omitempty"`
-	Rating         float64            `bson:"rating,omitempty"`
-	ReOrderCount   int                `bson:"re_order_count,omitempty"`
-	BaseTime       *dom.BaseTime      `bson:"base_time"`
+	ID               primitive.ObjectID `bson:"_id,omitempty"`
+	StoreID          primitive.ObjectID `bson:"store_id"`
+	Name             string             `bson:"name,omitempty"`
+	LimitCount       string             `bson:"limit_count,omitempty"`
+	Possible         bool               `bson:"possible,omitempty"`
+	Price            int                `bson:"price,omitempty"`
+	Origin           string             `bson:"origin,omitempty"`
+	Description      string             `bson:"description,omitempty"`
+	Rating           float64            `bson:"rating,omitempty"`
+	OrderCount       int                `bson:"order_count,omitempty"`
+	ReviewCount      int                `bson:"review_count"`
+	TotalReviewScore int                `bson:"total_review_score"`
+	BaseTime         *dom.BaseTime      `bson:"base_time"`
 }
 
-func (m *Menu) NewUpdateMenuBsonSetD() bson.D {
+func (m *Menu) NewUpdateMenuBsonSetDWithPost() bson.D {
 	return bson.D{
 		{"$set",
 			bson.D{
@@ -32,9 +33,19 @@ func (m *Menu) NewUpdateMenuBsonSetD() bson.D {
 				{"price", m.Price},
 				{"origin", m.Origin},
 				{"description", m.Description},
-				{"recommend_count", m.RecommendCount},
-				{"rating", m.Rating},
-				{"re_order_count", m.ReOrderCount},
+				{"base_time.updated_at", time.Now()},
+			},
+		},
+	}
+}
+
+func (m *Menu) NewUpdateMenuBsonSetDAboutReview() bson.D {
+	return bson.D{
+		{"$set",
+			bson.D{
+				{"Rating", m.Rating},
+				{"ReviewCount", m.ReviewCount},
+				{"TotalReviewScore", m.TotalReviewScore},
 				{"base_time.updated_at", time.Now()},
 			},
 		},

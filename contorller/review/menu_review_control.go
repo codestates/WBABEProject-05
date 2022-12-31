@@ -6,6 +6,7 @@ import (
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/customer"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 var instance *menuReviewControl
@@ -24,9 +25,38 @@ func NeMenuReviewControl(svc customer.MenuReviewServicer) *menuReviewControl {
 	return instance
 }
 
-func (m *menuReviewControl) GetReviewsSortedPage(c *gin.Context) {
+func (m *menuReviewControl) GetMenuSortedPagesByUserID(c *gin.Context) {
+	page := &request.RequestPage{}
+	userID := c.Query("user-id")
+	if err := c.ShouldBindQuery(page); err != nil || userID == "" {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
 
+	reviews, err := m.menuReviewService.FindReviewSortedPageByUserID(userID, page)
+	if err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+	protocol.SuccessData(reviews).Response(c)
 }
+
+func (m *menuReviewControl) GetMenuSortedPagesByMenuID(c *gin.Context) {
+	page := &request.RequestPage{}
+	menuID := c.Query("menu-id")
+	if err := c.ShouldBindQuery(page); err != nil || menuID == "" {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	reviews, err := m.menuReviewService.FindReviewSortedPageByMenuID(menuID, page)
+	if err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+	protocol.SuccessData(reviews).Response(c)
+}
+
 func (m *menuReviewControl) PostMenuReview(c *gin.Context) {
 	reqR := &request.RequestPostReview{}
 	if err := c.ShouldBindJSON(reqR); err != nil {
@@ -39,7 +69,8 @@ func (m *menuReviewControl) PostMenuReview(c *gin.Context) {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
-	protocol.SuccessData(gin.H{
-		"saved_id": savedID,
-	}).Response(c)
+	protocol.SuccessCodeAndData(
+		http.StatusCreated,
+		gin.H{"saved_id": savedID},
+	).Response(c)
 }

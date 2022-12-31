@@ -46,7 +46,21 @@ func (m *menuModel) UpdateMenu(menu *entity.Menu) (int, error) {
 	defer cancel()
 
 	filter := bson.M{"_id": menu.ID}
-	opt := menu.NewUpdateMenuBsonSetD()
+	opt := menu.NewUpdateMenuBsonSetDWithPost()
+	result, err := m.collection.UpdateOne(ctx, filter, opt)
+	if err != nil {
+		return 0, err
+	}
+
+	return int(result.ModifiedCount), nil
+}
+
+func (m *menuModel) UpdateAboutRating(menu *entity.Menu) (int, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	filter := bson.M{"_id": menu.ID}
+	opt := menu.NewUpdateMenuBsonSetDAboutReview()
 	result, err := m.collection.UpdateOne(ctx, filter, opt)
 	if err != nil {
 		return 0, err
@@ -97,7 +111,7 @@ func (m *menuModel) SelectTotalCount(storeID string) (int, error) {
 	return int(count), nil
 }
 
-func (m *menuModel) SelectMenusByIds(storeID string, menuIDs []string) ([]*entity.Menu, error) {
+func (m *menuModel) SelectMenusByIDs(storeID string, menuIDs []string) ([]*entity.Menu, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -128,11 +142,28 @@ func (m *menuModel) SelectMenusByIds(storeID string, menuIDs []string) ([]*entit
 	return menus, nil
 }
 
-func (m *menuModel) SelectMenuByIdsAndDelete(menuId string) (*entity.Menu, error) {
+func (m *menuModel) SelectMenuByID(menuID string) (*entity.Menu, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	mID, err := primitive.ObjectIDFromHex(menuId)
+	mID, err := primitive.ObjectIDFromHex(menuID)
+	if err != nil {
+		return nil, err
+	}
+
+	var menu *entity.Menu
+	filter := bson.M{"_id": mID}
+	if err := m.collection.FindOne(ctx, filter).Decode(&menu); err != nil {
+		return nil, err
+	}
+	return menu, nil
+}
+
+func (m *menuModel) SelectMenuByIdsAndDelete(menuID string) (*entity.Menu, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	mID, err := primitive.ObjectIDFromHex(menuID)
 	if err != nil {
 		return nil, err
 	}
@@ -143,4 +174,25 @@ func (m *menuModel) SelectMenuByIdsAndDelete(menuId string) (*entity.Menu, error
 		return nil, err
 	}
 	return menu, nil
+}
+
+func (m *menuModel) UpdateMenusInCOrderCount(menus []string) (int, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	IDs, err := util.ConvertStringsToObjIDs(menus)
+	if err != nil {
+		return 0, err
+	}
+
+	var filters []bson.E
+	for _, ID := range IDs {
+		filters = append(filters, bson.E{"_id", ID})
+	}
+	opt := bson.D{{"$mul", bson.M{"$inc": bson.M{"order_count": 1}}}}
+	result, err := m.collection.UpdateMany(ctx, filters, opt)
+	if err != nil {
+		return 0, err
+	}
+	return int(result.ModifiedCount), nil
 }

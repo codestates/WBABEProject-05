@@ -1,7 +1,6 @@
 package request
 
 import (
-	"github.com/codestates/WBABEProject-05/common/util"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/entity/dom"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -9,10 +8,11 @@ import (
 )
 
 type RequestPostReview struct {
-	StoreID string   `json:"store_id,omitempty"`
-	UserID  string   `json:"user_id,omitempty"`
-	Menu    []string `json:"menu_ids,omitempty"`
-	Content string   `json:"content,omitempty"`
+	StoreID string `json:"store_id,omitempty"`
+	UserID  string `json:"user_id,omitempty"`
+	Menu    string `json:"menu_ids,omitempty"`
+	Content string `json:"content,omitempty"`
+	Rating  int    `json:"rating"`
 }
 
 func (r *RequestPostReview) NewReview() (*entity.Review, error) {
@@ -26,7 +26,8 @@ func (r *RequestPostReview) NewReview() (*entity.Review, error) {
 		return nil, err
 	}
 
-	mIDs, err := util.ConvertStringsToObjIDs(r.Menu)
+	mID, err := primitive.ObjectIDFromHex((r.Menu))
+
 	if err != nil {
 		return nil, err
 	}
@@ -35,8 +36,9 @@ func (r *RequestPostReview) NewReview() (*entity.Review, error) {
 		ID:      primitive.NewObjectID(),
 		StoreID: sID,
 		UserID:  uID,
-		Menu:    mIDs,
+		Menu:    mID,
 		Content: r.Content,
+		Rating:  r.Rating,
 		BaseTime: &dom.BaseTime{
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),

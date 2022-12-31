@@ -18,14 +18,20 @@ type MenuModeler interface {
 	// UpdateMenu 메뉴 수정 : 사업장에서 기존의 메뉴 정보 변경기능(ex. 가격변경, 원산지 변경, soldout) 금일 추천 메뉴 설정 변경, 리스트 출력, / 성공 여부 리턴
 	UpdateMenu(menu *entity.Menu) (int, error)
 
+	UpdateAboutRating(menu *entity.Menu) (int, error)
+
 	// SelectSortLimitedMenus 메뉴 리스트 조회 및 정렬(추천/평점/주문수/최신)
 	SelectSortLimitedMenus(storeID string, sort *page.Sort, skip, limit int) ([]*entity.Menu, error)
 	SelectTotalCount(storeID string) (int, error)
 
 	//TODO  메뉴 리스트 조회 : 메뉴 리스트 조회 및 정렬(추천/평점/주문수/최신) / 각 카테고리별  sort 리스트 출력(ex. order by 추천, 평점, 재주문수, 최신), 결과 5~10여개 임의 생성 출력, sorting 여부 확인
 
-	// SelectMenusByIds 메뉴 5개를 가져온다. (추천메뉴 최대 5개로 정했기에, 최신순서로)
-	SelectMenusByIds(storeID string, menuIDs []string) ([]*entity.Menu, error)
+	// SelectMenusByIDs 메뉴 5개를 가져온다. (추천메뉴 최대 5개로 정했기에, 최신순서로)
+	SelectMenusByIDs(storeID string, menuIDs []string) ([]*entity.Menu, error)
+
+	SelectMenuByID(menuID string) (*entity.Menu, error)
 
 	SelectMenuByIdsAndDelete(menuId string) (*entity.Menu, error)
+
+	UpdateMenusInCOrderCount(menus []string) (int, error)
 }

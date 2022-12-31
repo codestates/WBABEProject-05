@@ -91,9 +91,10 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
-	protocol.SuccessData(gin.H{
-		"posted_id": modiCount,
-	}).Response(c)
+	protocol.SuccessCodeAndData(
+		http.StatusCreated,
+		gin.H{"posted_id": modiCount},
+	).Response(c)
 }
 
 // PutMenu godoc

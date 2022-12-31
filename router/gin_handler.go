@@ -50,5 +50,6 @@ func OrdersHandler(ordersUrl *gin.RouterGroup) {
 // ReviewHandler ("/reviews")
 func ReviewHandler(reviewsUrl *gin.RouterGroup) {
 	reviewsUrl.POST("", review.MenuReviewControl.PostMenuReview)
-	reviewsUrl.POST("", review.MenuReviewControl.PostMenuReview)
+	reviewsUrl.GET("/menu/id", review.MenuReviewControl.GetMenuSortedPagesByMenuID)
+	reviewsUrl.GET("/user/id", review.MenuReviewControl.GetMenuSortedPagesByUserID)
 }
