@@ -177,6 +177,21 @@ func (s *storeControl) GetRecommendMenus(c *gin.Context) {
 	protocol.SuccessData(resStore).Response(c)
 }
 
+func (s *storeControl) GetStoresSortedPage(c *gin.Context) {
+	page := &request.RequestPage{}
+	if err := c.ShouldBindQuery(page); err != nil {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	stores, err := s.storeMenuService.FindStoresSortedPage(page)
+	if err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+	protocol.SuccessData(stores).Response(c)
+}
+
 // GetStoreInSwagForTest godoc
 // @Summary call Get store, return store by json.
 // @Description 특정 store 의 모든 정보를 스웨거 테스트를 위해 보여준다.

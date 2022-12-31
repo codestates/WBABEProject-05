@@ -3,9 +3,11 @@ package store
 import (
 	"github.com/codestates/WBABEProject-05/common"
 	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/protocol/page"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // TODO 싱글톤을 메서드보다 변수로 갖다쓰는게 낫지않나? init 과 함께 사용하면 될것같은데 나중에 해보자
@@ -77,4 +79,36 @@ func (s *storeModel) UpdateStore(store *entity.Store) (int, error) {
 	}
 
 	return int(updateResult.ModifiedCount), nil
+}
+
+func (s *storeModel) SelectSortLimitedStore(sort *page.Sort, skip int, limit int) ([]*entity.Store, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	filter := bson.M{}
+	opt := options.Find().SetSort(bson.M{sort.Name: sort.Direction}).SetSkip(int64(skip)).SetLimit(int64(limit))
+
+	receiptCursor, err := s.collection.Find(ctx, filter, opt)
+	if err != nil {
+		return nil, err
+	}
+
+	var stores []*entity.Store
+	if err = receiptCursor.All(ctx, &stores); err != nil {
+		return nil, err
+	}
+
+	return stores, nil
+}
+
+func (s *storeModel) SelectTotalCount() (int, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	count, err := s.collection.CountDocuments(ctx, bson.M{})
+	if err != nil {
+		return 0, err
+	}
+
+	return int(count), nil
 }

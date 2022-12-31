@@ -106,9 +106,6 @@ func (o *orderRecordService) ModifyOrderRecordFromStore(order *request.RequestPu
 
 func (o *orderRecordService) FindOrderRecordsSortedPage(userID string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := pg.CurrentPage * pg.ContentCount
-	if skip > 0 {
-		skip--
-	}
 
 	receipts, err := o.receiptModel.SelectSortLimitedReceipt(userID, pg.Sort, skip, pg.ContentCount)
 	if err != nil {

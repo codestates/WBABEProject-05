@@ -113,9 +113,6 @@ func (s *storeMenuService) DeleteMenuAndBackup(menuId string) (int, error) {
 
 func (s *storeMenuService) FindMenusSortedPage(storeID string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := pg.CurrentPage * pg.ContentCount
-	if skip > 0 {
-		skip--
-	}
 
 	menus, err := s.menuModel.SelectSortLimitedMenus(storeID, pg.Sort, skip, pg.ContentCount)
 	if err != nil {
@@ -154,4 +151,22 @@ func (s *storeMenuService) FindStore(storeID string) (*entity.Store, error) {
 		return nil, err
 	}
 	return foundStore, nil
+}
+
+func (s *storeMenuService) FindStoresSortedPage(pg *request.RequestPage) (*page.PageData[any], error) {
+	skip := pg.CurrentPage * pg.ContentCount
+
+	receipts, err := s.storeModel.SelectSortLimitedStore(pg.Sort, skip, pg.ContentCount)
+	if err != nil {
+		return nil, err
+	}
+
+	totalCount, err := s.storeModel.SelectTotalCount()
+	if err != nil {
+		return nil, err
+	}
+
+	pgInfo := pg.NewPageInfo(totalCount)
+
+	return page.NewPageData(receipts, pgInfo), nil
 }

@@ -2,6 +2,7 @@ package store
 
 import (
 	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/protocol/page"
 )
 
 var StoreModel StoreModeler
@@ -12,4 +13,6 @@ type StoreModeler interface {
 	SelectStoreByPhone(storePhone string) (*entity.Store, error)
 	InsertStore(store *entity.Store) (string, error)
 	UpdateStore(store *entity.Store) (int, error)
+	SelectSortLimitedStore(sort *page.Sort, skip int, limit int) ([]*entity.Store, error)
+	SelectTotalCount() (int, error)
 }

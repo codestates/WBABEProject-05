@@ -19,6 +19,8 @@ type StoreContoller interface {
 
 	GetRecommendMenus(c *gin.Context)
 
+	GetStoresSortedPage(c *gin.Context)
+
 	// GetStoreInSwagForTest : swagger 테스트를 위한 store 조회
 	GetStoreInSwagForTest(c *gin.Context)
 }

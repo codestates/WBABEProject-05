@@ -32,9 +32,6 @@ func NewMenuReviewService(rMod review.ReviewModeler, mMod menu.MenuModeler) *men
 // FindReviewsSortedPage 메뉴 조회 : 개별 메뉴별 평점 및 리뷰 보기, / 해당 메뉴 선택시 메뉴에 따른 평점 및 리뷰 데이터 리턴
 func (m *menuReviewService) FindReviewSortedPageByMenuID(menuID string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := pg.CurrentPage * pg.ContentCount
-	if skip > 0 {
-		skip--
-	}
 
 	reviews, err := m.reviewModel.SelectSortLimitedReviewsByMenuID(menuID, pg.Sort, skip, pg.ContentCount)
 	if err != nil {
@@ -52,9 +49,6 @@ func (m *menuReviewService) FindReviewSortedPageByMenuID(menuID string, pg *requ
 }
 func (m *menuReviewService) FindReviewSortedPageByUserID(userID string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := pg.CurrentPage * pg.ContentCount
-	if skip > 0 {
-		skip--
-	}
 
 	reviews, err := m.reviewModel.SelectSortLimitedReviewsByUserID(userID, pg.Sort, skip, pg.ContentCount)
 	if err != nil {
