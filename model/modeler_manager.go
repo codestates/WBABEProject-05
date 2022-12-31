@@ -29,10 +29,17 @@ func InjectModelsMongoDependency(m map[string]*mongo.Collection) {
 }
 
 func CreateIndexesInModels() {
-	AppModel.CreateIndexes(UserCollectionName, "nic_name", "phone_number")
-	AppModel.CreateCompoundIndex(UserCollectionName, "nic_name", "phone_number")
+	// User Collection
+	AppModel.CreateIndexes(UserCollectionName, true, "nic_name", "phone_number")
+	AppModel.CreateCompoundIndex(UserCollectionName, true, "nic_name", "phone_number")
 
-	AppModel.CreateIndexes(StoreCollectionName, "store_phone")
+	// Store Collection
+	AppModel.CreateIndexes(StoreCollectionName, true, "store_phone")
 
-	AppModel.CreateCompoundIndex(MenuCollectionName, "store_id", "name")
+	// MenuCollection
+	AppModel.CreateIndexes(MenuCollectionName, false, "store_id")
+	AppModel.CreateCompoundIndex(MenuCollectionName, true, "store_id", "name")
+
+	// Receipt Collection
+	AppModel.CreateIndexes(ReceiptCollectionName, false, "user-id")
 }

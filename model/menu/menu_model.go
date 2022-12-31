@@ -80,11 +80,16 @@ func (m *menuModel) SelectSortLimitedMenus(storeID string, sort *page.Sort, skip
 	return menus, nil
 }
 
-func (m *menuModel) SelectTotalCount() (int, error) {
+func (m *menuModel) SelectTotalCount(storeID string) (int, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	count, err := m.collection.CountDocuments(ctx, bson.M{})
+	ID, err := primitive.ObjectIDFromHex(storeID)
+	if err != nil {
+		return 0, err
+	}
+
+	count, err := m.collection.CountDocuments(ctx, bson.M{"store_id": ID})
 	if err != nil {
 		return 0, err
 	}

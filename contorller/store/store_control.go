@@ -44,7 +44,7 @@ func (s *storeControl) PostStore(c *gin.Context) {
 
 	savedId, err := s.storeMenuService.RegisterStore(reqS)
 	if err != nil {
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 	protocol.SuccessCodeAndData(
@@ -62,7 +62,7 @@ func (s *storeControl) PutSore(c *gin.Context) {
 	}
 	cnt, err := s.storeMenuService.ModifyStore(storeID, store)
 	if err != nil {
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -88,7 +88,7 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 
 	modiCount, err := s.storeMenuService.RegisterMenu(reqM)
 	if err != nil {
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -115,7 +115,7 @@ func (s *storeControl) PutMenu(c *gin.Context) {
 	}
 	cnt, err := s.storeMenuService.ModifyMenu(mid, reqM)
 	if err != nil {
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 
@@ -142,7 +142,7 @@ func (s *storeControl) DeleteMenu(c *gin.Context) {
 	}
 	count, err := s.storeMenuService.DeleteMenuAndBackup(menuId)
 	if err != nil {
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -157,10 +157,9 @@ func (s *storeControl) GetMenuSortedPages(c *gin.Context) {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
-	// TODO sort 조건 추가
 	menus, err := s.storeMenuService.FindMenusSortedPage(srtID, page)
 	if err != nil {
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(menus).Response(c)
@@ -170,7 +169,7 @@ func (s *storeControl) GetRecommendMenus(c *gin.Context) {
 	storeID := c.Query("store-id")
 	resStore, err := s.storeMenuService.FindRecommendMenus(storeID)
 	if err != nil {
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 
@@ -191,7 +190,7 @@ func (s *storeControl) GetStoreInSwagForTest(c *gin.Context) {
 	str, err := s.storeMenuService.FindStore(strId)
 	if err != nil {
 		logger.AppLog.Info(err)
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(str).Response(c)

@@ -17,7 +17,6 @@ type ApiResponse[T any] struct {
 
 func (a *ApiResponse[T]) Response(c *gin.Context) {
 	c.JSON(a.Code, a)
-	return
 }
 func Success() *ApiResponse[any] {
 	return SuccessDataAndCustomMessage("success", "ok")

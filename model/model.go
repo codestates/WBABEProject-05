@@ -51,14 +51,14 @@ func (m *model) Connect(uri string) error {
 }
 
 // CreateIndexes 인덱스 생성
-func (m *model) CreateIndexes(colName string, indexName ...string) {
+func (m *model) CreateIndexes(colName string, unique bool, indexName ...string) {
 	ctx, cancel := util.GetContext(util.ModelTimeOut)
 	defer cancel()
 
 	var indexModels []mongo.IndexModel
 	for _, name := range indexName {
 		IDXModel := mongo.IndexModel{
-			Keys: bson.M{name: 1}, Options: options.Index().SetUnique(true),
+			Keys: bson.M{name: 1}, Options: options.Index().SetUnique(unique),
 		}
 		indexModels = append(indexModels, IDXModel)
 	}
@@ -70,7 +70,7 @@ func (m *model) CreateIndexes(colName string, indexName ...string) {
 }
 
 // CreateComplexIndex 복합 인텍스 생성
-func (m *model) CreateCompoundIndex(colName string, indexName ...string) {
+func (m *model) CreateCompoundIndex(colName string, unique bool, indexName ...string) {
 	ctx, cancel := util.GetContext(util.ModelTimeOut)
 	defer cancel()
 
@@ -81,7 +81,7 @@ func (m *model) CreateCompoundIndex(colName string, indexName ...string) {
 
 	IDXModel := mongo.IndexModel{
 		Keys:    aggregationIDXs,
-		Options: options.Index().SetUnique(true),
+		Options: options.Index().SetUnique(unique),
 	}
 
 	if _, err := MongoCollection[colName].Indexes().CreateOne(ctx, IDXModel); err != nil {

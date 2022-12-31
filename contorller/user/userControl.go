@@ -71,7 +71,7 @@ func (u *userControl) PutUser(c *gin.Context) {
 
 	cnt, err := u.userService.ModifyUser(usrID, reqU)
 	if err != nil {
-		protocol.Fail(error2.NewError(err)).Response(c)
+		protocol.Fail(error2.NewApiError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -97,7 +97,7 @@ func (u *userControl) DeleteUser(c *gin.Context) {
 
 	cnt, err := u.userService.DeleteUser(userID)
 	if err != nil {
-		protocol.Fail(error2.NewError(err)).Response(c)
+		protocol.Fail(error2.NewApiError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -123,7 +123,7 @@ func (u *userControl) PostUser(c *gin.Context) {
 
 	savedId, err := u.userService.RegisterUser(reqU)
 	if err != nil {
-		protocol.Fail(error2.NewError(err)).Response(c)
+		protocol.Fail(error2.NewApiError(err)).Response(c)
 		return
 	}
 

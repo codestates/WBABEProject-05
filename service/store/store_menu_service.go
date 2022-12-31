@@ -10,7 +10,7 @@ import (
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/store"
 	error2 "github.com/codestates/WBABEProject-05/protocol/error"
-	page2 "github.com/codestates/WBABEProject-05/protocol/page"
+	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"
 )
@@ -111,25 +111,25 @@ func (s *storeMenuService) DeleteMenuAndBackup(menuId string) (int, error) {
 	return 1, nil
 }
 
-func (s *storeMenuService) FindMenusSortedPage(storeID string, page *request.RequestPage) (*page2.PageData[any], error) {
-	skip := (page.CurrentPage * page.ContentCount)
+func (s *storeMenuService) FindMenusSortedPage(storeID string, pg *request.RequestPage) (*page.PageData[any], error) {
+	skip := pg.CurrentPage * pg.ContentCount
 	if skip > 0 {
 		skip--
 	}
 
-	menus, err := s.menuModel.SelectSortLimitedMenus(storeID, page.Sort, skip, page.ContentCount)
+	menus, err := s.menuModel.SelectSortLimitedMenus(storeID, pg.Sort, skip, pg.ContentCount)
 	if err != nil {
 		return nil, err
 	}
 
-	totalCount, err := s.menuModel.SelectTotalCount()
+	totalCount, err := s.menuModel.SelectTotalCount(storeID)
 	if err != nil {
 		return nil, err
 	}
 
-	pgInfo := page.NewPageInfo(totalCount)
+	pgInfo := pg.NewPageInfo(totalCount)
 
-	return page2.NewPageData(menus, pgInfo), nil
+	return page.NewPageData(menus, pgInfo), nil
 }
 
 func (s *storeMenuService) FindRecommendMenus(storeID string) (*response.ResponseStore, error) {

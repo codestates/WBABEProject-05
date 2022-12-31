@@ -12,7 +12,7 @@ import (
 
 func InjectServicesDependency() {
 	store.StoreMenuService = store.NewStoreMenuService(store2.StoreModel, menu.MenuModel)
-	order.OrderRecordService = order.NewOrderRecordService(receipt.ReceiptModel)
+	order.OrderRecordService = order.NewOrderRecordService(receipt.ReceiptModel, menu.MenuModel)
 	login.UserService = login.NewUserService(user2.UserModel)
 }
 

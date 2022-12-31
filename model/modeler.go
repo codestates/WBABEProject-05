@@ -4,8 +4,8 @@ var AppModel Modeler
 
 type Modeler interface {
 	Connect(uri string) error
-	CreateIndexes(colName string, indexName ...string)
-	CreateCompoundIndex(colName string, indexName ...string)
+	CreateIndexes(colName string, unique bool, indexName ...string)
+	CreateCompoundIndex(colName string, unique bool, indexName ...string)
 }
 
 func SetModeler(modeler Modeler) {
