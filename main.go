@@ -25,6 +25,7 @@ var (
 		model.ReviewCollectionName,
 		model.StoreCollectionName,
 		model.UserCollectionName,
+		model.MenuCollectionName,
 	}
 )
 
@@ -49,6 +50,7 @@ func init() {
 	model.InjectModelsMongoDependency(model.MongoCollection)
 
 	// service
+	service.SetServicer()
 	service.InjectServicesDependency()
 
 	// controller

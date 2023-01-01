@@ -1,0 +1,49 @@
+POST {{host}}{{v1}}/orders/order
+Content-Type: application/json
+
+{
+  "store_id": "63b13667c261c10ddffa2eb5",
+  "customer_id": "63b1364bc261c10ddffa2eb3",
+  "menu_ids":["63b1370fc261c10ddffa2eb8", "63b1370cc261c10ddffa2eb7"],
+  "ordered_addr":{
+    "street":"테스트거리",
+    "detail":"오른쪽",
+    "zip_code":"1241-21"
+  }
+}
+### => 63b1381ca6a0036664b843e5
+
+###
+PUT {{host}}{{v1}}/orders/order/customer
+Content-Type: application/json
+
+{
+  "order_id": "63b1381ca6a0036664b843e5",
+  "store_id": "63b13667c261c10ddffa2eb5",
+  "customer_id": "63b1364bc261c10ddffa2eb3",
+  "menu_ids": ["63b1370fc261c10ddffa2eb8"],
+  "ordered_addr":{
+    "street":"테스트거리수정집입니다.",
+    "detail":"왼쪽으로바꾸겠습니다.",
+    "zip_code":"1241-21"
+  }
+}
+
+###
+PUT {{host}}{{v1}}/orders/order/store
+Content-Type: application/json
+
+{
+  "order_id": "63b1384aa6a0036664b843e6",
+  "status": "주문접수완료"
+}
+### => TODO status enum 처럼 특정 값들로 제약 필요
+###
+GET {{host}}{{v1}}/orders/order/price?store-id=63b13667c261c10ddffa2eb5&menu-ids=63b1370fc261c10ddffa2eb8,63b1370cc261c10ddffa2eb7
+
+###
+GET {{host}}{{v1}}/orders/pages/customer?customer-id=63b1364bc261c10ddffa2eb3&current-page=0&content-count=5&name=base_time.updated_at&direction=-1
+
+###
+GET {{host}}{{v1}}/orders/pages/store?store-id=63b13667c261c10ddffa2eb5&current-page=0&content-count=5&name=base_time.updated_at&direction=-1
+

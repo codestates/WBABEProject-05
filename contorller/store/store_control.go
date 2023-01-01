@@ -1,11 +1,13 @@
 package store
 
 import (
-	utilErr "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/protocol"
+	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
+	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/store"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 var instance *storeControl
@@ -24,6 +26,50 @@ func NewStoreControl(svc store.StoreMenuServicer) *storeControl {
 	return instance
 }
 
+// PostStore godoc
+// @Summary call Post store, return posted id by json.
+// @Description 가게정보를 등록 할 수 있다.
+// @name PostStore
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/stores [post]
+// @Param store body protocol.RequestPostStore true "RequestPostStore JSON"
+// @Success 201 {object} protocol.ApiResponse[any]
+func (s *storeControl) PostStore(c *gin.Context) {
+	reqS := &request.RequestPostStore{}
+	if err := c.ShouldBindJSON(reqS); err != nil {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	savedId, err := s.storeMenuService.RegisterStore(reqS)
+	if err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+	protocol.SuccessCodeAndData(
+		http.StatusCreated,
+		gin.H{"saved_id": savedId},
+	).Response(c)
+}
+
+func (s *storeControl) PutSore(c *gin.Context) {
+	var store *request.RequestPutStore
+	storeID := c.Query("store-id")
+	if err := c.ShouldBind(&store); err != nil {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+	cnt, err := s.storeMenuService.ModifyStore(storeID, store)
+	if err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+	protocol.SuccessData(gin.H{
+		"updated_count": cnt,
+	}).Response(c)
+}
+
 // PostMenu godoc
 // @Summary call Post menu in store, return saved id by json.
 // @Description 메뉴를 등록할 수 있다.
@@ -31,23 +77,51 @@ func NewStoreControl(svc store.StoreMenuServicer) *storeControl {
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/stores/menu [post]
-// @Param menu body protocol.RequestPostMenu true "RequestPostMenu JSON"
+// @Param menu body request.RequestMenu true "RequestMenu JSON"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) PostMenu(c *gin.Context) {
-	reqM := &protocol.RequestPostMenu{}
-	err := c.ShouldBindJSON(reqM)
-	if err != nil {
+	reqM := &request.RequestMenu{}
+	if err := c.ShouldBindJSON(reqM); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
 
 	modiCount, err := s.storeMenuService.RegisterMenu(reqM)
 	if err != nil {
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
+	protocol.SuccessCodeAndData(
+		http.StatusCreated,
+		gin.H{"posted_id": modiCount},
+	).Response(c)
+}
+
+// PutMenu godoc
+// @Summary call Put menu, return updated count by json.
+// @Description 메뉴를 수정할 수 있다.
+// @name PutMenu
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/stores/menu [put]
+// @Param menu-id query string true "menu-id"
+// @Param menu body request.RequestMenu true "RequestMenu JSON"
+// @Success 200 {object} protocol.ApiResponse[any]
+func (s *storeControl) PutMenu(c *gin.Context) {
+	reqM := &request.RequestMenu{}
+	mid := c.Query("menu-id")
+	if err := c.ShouldBindJSON(reqM); err != nil || mid == "" {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+	cnt, err := s.storeMenuService.ModifyMenu(mid, reqM)
+	if err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+
 	protocol.SuccessData(gin.H{
-		"posted_count": modiCount,
+		"updated_count": cnt,
 	}).Response(c)
 }
 
@@ -62,15 +136,14 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 // @Param menu-id query string true "menu-id"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) DeleteMenu(c *gin.Context) {
-	storeId := c.Query("store-id")
 	menuId := c.Query("menu-id")
-	if menuId == "" || storeId == "" {
+	if menuId == "" {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
-	count, err := s.storeMenuService.DeleteMenuAndBackup(storeId, menuId)
+	count, err := s.storeMenuService.DeleteMenuAndBackup(menuId)
 	if err != nil {
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -78,71 +151,45 @@ func (s *storeControl) DeleteMenu(c *gin.Context) {
 	}).Response(c)
 }
 
-func (s *storeControl) PutSoreAndRecommendMenu(c *gin.Context) {
-	s.storeMenuService.ModifyStoreAndRecommendMenus()
-}
-
-// PutMenu godoc
-// @Summary call Put menu, return updated count by json.
-// @Description 메뉴를 수정할 수 있다.
-// @name PutMenu
-// @Accept  json
-// @Produce  json
-// @Router /app/v1/stores/menu [put]
-// @Param menu-id query string true "menu-id"
-// @Param menu body protocol.RequestPostMenu true "RequestPostMenu JSON"
-// @Success 200 {object} protocol.ApiResponse[any]
-func (s *storeControl) PutMenu(c *gin.Context) {
-	reqM := &protocol.RequestPostMenu{}
-	mid := c.Query("menu-id")
-	err := c.ShouldBindJSON(reqM)
-	if err != nil || mid == "" {
-		protocol.Fail(utilErr.BadRequestError).Response(c)
-		return
-	}
-	cnt, err := s.storeMenuService.ModifyMenu(mid, reqM)
-	if err != nil {
-		protocol.Fail(utilErr.NewError(err)).Response(c)
-		return
-	}
-
-	protocol.SuccessData(gin.H{
-		"updated_count": cnt,
-	}).Response(c)
-}
-
-func (s *storeControl) GetRecommendMenusSortedTimeDesc(c *gin.Context) {
-	s.storeMenuService.FindRecommendMenusSortedTimeDesc()
-}
-
 func (s *storeControl) GetMenuSortedPages(c *gin.Context) {
-	s.storeMenuService.FindMenusSortedPage()
-}
-
-// PostStore godoc
-// @Summary call Post store, return posted id by json.
-// @Description 가게정보를 등록 할 수 있다.
-// @name PostStore
-// @Accept  json
-// @Produce  json
-// @Router /app/v1/stores [post]
-// @Param store body protocol.RequestPostStore true "RequestPostStore JSON"
-// @Success 200 {object} protocol.ApiResponse[any]
-func (s *storeControl) PostStore(c *gin.Context) {
-	reqS := &protocol.RequestPostStore{}
-	err := c.ShouldBindJSON(reqS)
-	if err != nil {
+	page := &request.RequestPage{}
+	srtID := c.Query("store-id")
+	if err := c.ShouldBindQuery(page); err != nil || srtID == "" {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
-	savedId, err := s.storeMenuService.RegisterStore(reqS)
+	menus, err := s.storeMenuService.FindMenusSortedPage(srtID, page)
 	if err != nil {
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
-	protocol.SuccessData(gin.H{
-		"saved_id": savedId,
-	}).Response(c)
+	protocol.SuccessData(menus).Response(c)
+}
+
+func (s *storeControl) GetRecommendMenus(c *gin.Context) {
+	storeID := c.Query("store-id")
+	resStore, err := s.storeMenuService.FindRecommendMenus(storeID)
+	if err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+
+	protocol.SuccessData(resStore).Response(c)
+}
+
+func (s *storeControl) GetStoresSortedPage(c *gin.Context) {
+	page := &request.RequestPage{}
+	if err := c.ShouldBindQuery(page); err != nil {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	stores, err := s.storeMenuService.FindStoresSortedPage(page)
+	if err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+	protocol.SuccessData(stores).Response(c)
 }
 
 // GetStoreInSwagForTest godoc
@@ -152,14 +199,14 @@ func (s *storeControl) PostStore(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/stores/swag/store [get]
-// @Param store_id query string true "store_id"
+// @Param store-id query string true "store_id"
 // @Success 200 {object} protocol.ApiResponse[entity.Store]
 func (s *storeControl) GetStoreInSwagForTest(c *gin.Context) {
-	strId := c.Query("store_id")
+	strId := c.Query("store-id")
 	str, err := s.storeMenuService.FindStore(strId)
 	if err != nil {
 		logger.AppLog.Info(err)
-		protocol.Fail(utilErr.NewError(err)).Response(c)
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(str).Response(c)

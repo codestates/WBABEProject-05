@@ -6,12 +6,11 @@ import (
 )
 
 type Review struct {
-	Id      primitive.ObjectID
-	StoreId primitive.ObjectID
-	UserId  primitive.ObjectID
-	Menu    dom.Menu
-	// Rating 1~5점
-	Rating  int
-	Content string
-	dom.BaseTime
+	ID         primitive.ObjectID `bson:"_id,omitempty"`
+	StoreID    primitive.ObjectID `bson:"store_id,omitempty"`
+	CustomerID primitive.ObjectID `bson:"customer_id,omitempty"`
+	Menu       primitive.ObjectID `bson:"menu_id,omitempty"`
+	Content    string             `bson:"content,omitempty"`
+	Rating     int                `bson:"rating"`
+	BaseTime   *dom.BaseTime      `bson:"base_time"`
 }

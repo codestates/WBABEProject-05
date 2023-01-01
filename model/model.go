@@ -22,15 +22,16 @@ var mongoM *model
 
 func LoadMongoModel(uri string) error {
 	m := newModel()
-	err := m.Connect(uri)
-	m.checkClient()
-	if err != nil {
+	if err := m.Connect(uri); err != nil {
 		logger.AppLog.Error(err)
 		return err
-	} else {
-		m.exposeModel()
 	}
 
+	if err := m.checkClient(); err != nil {
+		return err
+	}
+
+	m.exposeModel()
 	return nil
 }
 
@@ -43,25 +44,47 @@ func (m *model) Connect(uri string) error {
 	if err != nil {
 		logger.AppLog.Error(err)
 		return err
-	} else {
-		mongoM.client = client
 	}
+
+	mongoM.client = client
 	return nil
 }
 
-func (m *model) CreateIndex(colName string, indexName ...string) {
+// CreateIndexes 인덱스 생성
+func (m *model) CreateIndexes(colName string, unique bool, indexName ...string) {
 	ctx, cancel := util.GetContext(util.ModelTimeOut)
 	defer cancel()
 
 	var indexModels []mongo.IndexModel
 	for _, name := range indexName {
-		idxModel := mongo.IndexModel{
-			Keys: bson.M{name: 1}, Options: options.Index().SetUnique(true),
+		IDXModel := mongo.IndexModel{
+			Keys: bson.M{name: 1}, Options: options.Index().SetUnique(unique),
 		}
-		indexModels = append(indexModels, idxModel)
+		indexModels = append(indexModels, IDXModel)
 	}
-	_, err := MongoCollection[colName].Indexes().CreateMany(ctx, indexModels)
-	if err != nil {
+
+	if _, err := MongoCollection[colName].Indexes().CreateMany(ctx, indexModels); err != nil {
+		logger.AppLog.Error(err)
+		return
+	}
+}
+
+// CreateComplexIndex 복합 인텍스 생성
+func (m *model) CreateCompoundIndex(colName string, unique bool, indexName ...string) {
+	ctx, cancel := util.GetContext(util.ModelTimeOut)
+	defer cancel()
+
+	var aggregationIDXs []bson.E
+	for _, name := range indexName {
+		aggregationIDXs = append(aggregationIDXs, bson.E{name, 1})
+	}
+
+	IDXModel := mongo.IndexModel{
+		Keys:    aggregationIDXs,
+		Options: options.Index().SetUnique(unique),
+	}
+
+	if _, err := MongoCollection[colName].Indexes().CreateOne(ctx, IDXModel); err != nil {
 		logger.AppLog.Error(err)
 		return
 	}
@@ -102,8 +125,7 @@ func (m *model) checkClient() error {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	err := m.client.Ping(ctx, nil)
-	if err != nil {
+	if err := m.client.Ping(ctx, nil); err != nil {
 		logger.AppLog.Error(err)
 		return err
 	}

@@ -2,8 +2,8 @@ package protocol
 
 import (
 	"fmt"
-	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/logger"
+	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -16,41 +16,43 @@ type ApiResponse[T any] struct {
 }
 
 func (a *ApiResponse[T]) Response(c *gin.Context) {
-	c.Header("Content-Type", "application/json")
 	c.JSON(a.Code, a)
-	return
 }
 func Success() *ApiResponse[any] {
-	return SuccessAndCustomMessage("success", "ok")
+	return SuccessDataAndCustomMessage("success", "ok")
 }
 
 func SuccessData[T any](d T) *ApiResponse[any] {
-	return SuccessAndCustomMessage(d, "ok")
+	return SuccessDataAndCustomMessage(d, "ok")
 }
 
-func SuccessAndCustomMessage[T any](d T, msg string) *ApiResponse[any] {
-	return SuccessCustom(http.StatusOK, d, msg)
+func SuccessCodeAndData[T any](c int, d T) *ApiResponse[any] {
+	return SuccessCustom(c, d, "ok")
 }
 
-func SuccessCustom[T any](c int, d T, msg string) *ApiResponse[any] {
+func SuccessDataAndCustomMessage[T any](d T, MSG string) *ApiResponse[any] {
+	return SuccessCustom(http.StatusOK, d, MSG)
+}
+
+func SuccessCustom[T any](c int, d T, MSG string) *ApiResponse[any] {
 	return &ApiResponse[any]{
 		Code:    c,
 		Data:    d,
-		Message: msg,
+		Message: MSG,
 	}
 }
 
-func Fail(e error2.Error) *ApiResponse[any] {
-	return FailCustomMessage(e, e.Err.Error())
+func Fail(e error2.ApiError) *ApiResponse[any] {
+	return FailCustomMessage(e, e.MSG)
 }
 
-func FailCustomMessage(e error2.Error, msg string) *ApiResponse[any] {
-	errLogMsg := fmt.Sprintf("Error is %s, Code %d, Message : %s By %s", e.Name, e.Code, msg, e.Err)
-	logger.AppLog.Error(errLogMsg)
+func FailCustomMessage(e error2.ApiError, MSG string) *ApiResponse[any] {
+	errLogMSG := fmt.Sprintf("Error is %s, Code %d, Message : %s By %s", e.Name, e.Code, MSG, e.MSG)
+	logger.AppLog.Error(errLogMSG)
 	return &ApiResponse[any]{
 		Code:      e.Code,
 		Data:      nil,
-		Message:   msg,
+		Message:   MSG,
 		ErrorName: e.Name,
 	}
 }

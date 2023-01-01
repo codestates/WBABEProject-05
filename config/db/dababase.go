@@ -41,12 +41,19 @@ func WriteBackup(fPath string, T any) error {
 		return err
 	}
 
+	if err := os.MkdirAll(fPath, 0700); err != nil {
+		return err
+	}
+
 	path := fPath + time.Now().Format("2006-01-02") + ".txt"
 	file := fmt.Sprintf(path)
 	f, err := os.OpenFile(
-		file, os.O_CREATE|os.O_RDWR|os.O_APPEND, os.FileMode(0644),
+		file, os.O_CREATE|os.O_RDWR|os.O_APPEND, os.FileMode(0700),
 	)
 	defer f.Close()
+	if err != nil {
+		return err
+	}
 
 	w := bufio.NewWriter(f)
 	if _, err = fmt.Fprint(w, string(data)+"\n"); err != nil {
