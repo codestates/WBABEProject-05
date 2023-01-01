@@ -8,7 +8,7 @@ type ResponseOrder struct {
 	ID           string            `json:"_id,omitempty"`
 	StoreID      string            `json:"store_id,omitempty"`
 	CustomerID   string            `json:"customer_id,omitempty"`
-	Menu         []*ResponseMenu   `json:"menu,omitempty"`
+	Menus        []*ResponseMenu   `json:"menus,omitempty"`
 	Price        int               `json:"price,omitempty"`
 	Status       string            `json:"status,omitempty"`
 	CustomerAddr *ResponseAddress  `json:"ordered_addr"`
@@ -21,7 +21,7 @@ func FromReceiptAndMenus(receipt *entity.Receipt, menus []*entity.Menu) *Respons
 		ID:           receipt.ID.Hex(),
 		StoreID:      receipt.StoreID.Hex(),
 		CustomerID:   receipt.CustomerID.Hex(),
-		Menu:         FromMenus(menus),
+		Menus:        FromMenus(menus),
 		Price:        receipt.Price,
 		Status:       receipt.Status,
 		CustomerAddr: FromAddr(receipt.CustomerAddr),

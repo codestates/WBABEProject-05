@@ -1,18 +1,18 @@
 package request
 
 type RequestPutCustomerOrder struct {
-	ID           string          `json:"order_id,omitempty"`
-	StoreID      string          `json:"store_id,omitempty"`
-	CustomerID   string          `json:"customer_id,omitempty"`
-	Menus        []string        `json:"menu_ids,omitempty"`
-	CustomerAddr *RequestAddress `json:"ordered_addr"`
+	ID           string          `json:"order_id" validate:"required"`
+	StoreID      string          `json:"store_id" validate:"required"`
+	CustomerID   string          `json:"customer_id" validate:"required"`
+	MenuIDs      []string        `json:"menu_ids" validate:"required"`
+	CustomerAddr *RequestAddress `json:"ordered_addr" validate:"required"`
 }
 
 func (r *RequestPutCustomerOrder) ToRequestOrder() *RequestOrder {
 	return &RequestOrder{
 		StoreId:      r.StoreID,
 		CustomerId:   r.CustomerID,
-		Menus:        r.Menus,
+		Menus:        r.MenuIDs,
 		CustomerAddr: r.CustomerAddr,
 	}
 }

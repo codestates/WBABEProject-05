@@ -43,7 +43,7 @@ func (u *userService) ModifyUser(ID string, usr *request.RequestPutUser) (int, e
 	if err != nil {
 		return 0, err
 	}
-	return updateCount, nil
+	return int(updateCount), nil
 }
 func (u *userService) FindUser(id string) (*response.ResponseUser, error) {
 	findUser, err := u.userModel.SelectUser(id)
@@ -58,7 +58,7 @@ func (u *userService) DeleteUser(id string) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	return deleteUser, nil
+	return int(deleteUser), nil
 }
 
 func (u *userService) hashPassword(password string) string {

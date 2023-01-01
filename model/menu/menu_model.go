@@ -2,11 +2,10 @@ package menu
 
 import (
 	"github.com/codestates/WBABEProject-05/common"
-	"github.com/codestates/WBABEProject-05/common/util"
 	"github.com/codestates/WBABEProject-05/model/entity"
+	mongo2 "github.com/codestates/WBABEProject-05/model/util"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -38,10 +37,8 @@ func (m *menuModel) InsertMenu(menu *entity.Menu) (string, error) {
 
 	return menu.ID.Hex(), nil
 }
-func (m *menuModel) DeleteMenu() {
 
-}
-func (m *menuModel) UpdateMenu(menu *entity.Menu) (int, error) {
+func (m *menuModel) UpdateMenu(menu *entity.Menu) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -52,10 +49,10 @@ func (m *menuModel) UpdateMenu(menu *entity.Menu) (int, error) {
 		return 0, err
 	}
 
-	return int(result.ModifiedCount), nil
+	return result.ModifiedCount, nil
 }
 
-func (m *menuModel) UpdateAboutRating(menu *entity.Menu) (int, error) {
+func (m *menuModel) UpdateAboutRating(menu *entity.Menu) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -66,21 +63,20 @@ func (m *menuModel) UpdateAboutRating(menu *entity.Menu) (int, error) {
 		return 0, err
 	}
 
-	return int(result.ModifiedCount), nil
+	return result.ModifiedCount, nil
 }
 
 func (m *menuModel) SelectSortLimitedMenus(storeID string, sort *page.Sort, skip, limit int) ([]*entity.Menu, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := primitive.ObjectIDFromHex(storeID)
+	ID, err := mongo2.ConvertStringToObjID(storeID)
 	if err != nil {
 		return nil, err
 	}
 
 	filter := bson.M{"store_id": ID}
-	opt := options.Find().SetSort(bson.M{sort.Name: sort.Direction}).SetSkip(int64(skip)).SetLimit(int64(limit))
-	//opt := options.Find().SetSort(bson.M{sort.Name: sort.Direction})
+	opt := mongo2.NewSortFindOptions(sort, skip, limit)
 	menusCursor, err := m.collection.Find(ctx, filter, opt)
 	if err != nil {
 		return nil, err
@@ -94,11 +90,11 @@ func (m *menuModel) SelectSortLimitedMenus(storeID string, sort *page.Sort, skip
 	return menus, nil
 }
 
-func (m *menuModel) SelectTotalCount(storeID string) (int, error) {
+func (m *menuModel) SelectTotalCount(storeID string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := primitive.ObjectIDFromHex(storeID)
+	ID, err := mongo2.ConvertStringToObjID(storeID)
 	if err != nil {
 		return 0, err
 	}
@@ -108,19 +104,19 @@ func (m *menuModel) SelectTotalCount(storeID string) (int, error) {
 		return 0, err
 	}
 
-	return int(count), nil
+	return count, nil
 }
 
 func (m *menuModel) SelectMenusByIDs(storeID string, menuIDs []string) ([]*entity.Menu, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	sID, err := primitive.ObjectIDFromHex(storeID)
+	sID, err := mongo2.ConvertStringToObjID(storeID)
 	if err != nil {
 		return nil, err
 	}
 
-	inID, err := util.ConvertStringsToObjIDs(menuIDs)
+	inID, err := mongo2.ConvertStringsToObjIDs(menuIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -139,6 +135,7 @@ func (m *menuModel) SelectMenusByIDs(storeID string, menuIDs []string) ([]*entit
 	if err = menuCursor.All(ctx, &menus); err != nil {
 		return nil, err
 	}
+
 	return menus, nil
 }
 
@@ -146,7 +143,7 @@ func (m *menuModel) SelectMenuByID(menuID string) (*entity.Menu, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	mID, err := primitive.ObjectIDFromHex(menuID)
+	mID, err := mongo2.ConvertStringToObjID(menuID)
 	if err != nil {
 		return nil, err
 	}
@@ -156,6 +153,7 @@ func (m *menuModel) SelectMenuByID(menuID string) (*entity.Menu, error) {
 	if err := m.collection.FindOne(ctx, filter).Decode(&menu); err != nil {
 		return nil, err
 	}
+
 	return menu, nil
 }
 
@@ -163,7 +161,7 @@ func (m *menuModel) SelectMenuByIdsAndDelete(menuID string) (*entity.Menu, error
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	mID, err := primitive.ObjectIDFromHex(menuID)
+	mID, err := mongo2.ConvertStringToObjID(menuID)
 	if err != nil {
 		return nil, err
 	}
@@ -176,26 +174,21 @@ func (m *menuModel) SelectMenuByIdsAndDelete(menuID string) (*entity.Menu, error
 	return menu, nil
 }
 
-func (m *menuModel) UpdateMenusInCOrderCount(menus []string) (int, error) {
+func (m *menuModel) UpdateMenusInCOrderCount(menus []string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	IDs, err := util.ConvertStringsToObjIDs(menus)
+	IDs, err := mongo2.ConvertStringsToObjIDs(menus)
 	if err != nil {
 		return 0, err
 	}
 
-	//var filters []bson.E
-	//for _, ID := range IDs {
-	//	filters = append(filters, bson.E{"_id", ID})
-	//}
-	//    .updateMany({"_id" : {"$in" : [new ObjectId("63b0f93fe303f470c77b2d1f"), new ObjectId("63b0fb17e303f470c77b2d20")]}},
-	//        {"$inc":{"order_count": 1}})
 	filter := bson.M{"_id": bson.M{"$in": IDs}}
 	opt := bson.M{"$inc": bson.M{"order_count": 1}}
 	result, err := m.collection.UpdateMany(ctx, filter, opt)
 	if err != nil {
 		return 0, err
 	}
-	return int(result.ModifiedCount), nil
+
+	return result.ModifiedCount, nil
 }

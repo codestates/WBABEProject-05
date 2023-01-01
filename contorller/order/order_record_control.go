@@ -1,7 +1,7 @@
 package order
 
 import (
-	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/model/util"
 	"github.com/codestates/WBABEProject-05/protocol"
 	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
@@ -27,14 +27,15 @@ func NewOrderRecordControl(svc order.OrderRecordServicer) *orderRecordControl {
 	return instance
 }
 
-// RegisterOrderRecord godoc
+// PostOrderRecord godoc
+// @Tags 주문기록
 // @Summary call Post Order, return posted id by json.
 // @Description 메뉴 주문을 할 수 있다.
-// @name RegisterOrderRecord
+// @name PostOrderRecord
 // @Accept  json
 // @Produce  json
-// @Router /app/v1/orders [post]
-// @Param order body protocol.RequestOrder true "RequestOrder JSON"
+// @Router /app/v1/orders/order [post]
+// @Param order body request.RequestOrder true "RequestOrder JSON"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) PostOrderRecord(c *gin.Context) {
 	reqO := &request.RequestOrder{}
@@ -55,6 +56,16 @@ func (o *orderRecordControl) PostOrderRecord(c *gin.Context) {
 	).Response(c)
 }
 
+// PutOrderRecordFromCustomer godoc
+// @Tags 주문기록
+// @Summary call Put order records in customer, return updated count by json.
+// @Description 사용자가 주문을 변경 할 수 있다.
+// @name PutOrderRecordFromCustomer
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/orders/order/customer [put]
+// @Param RequestPutCustomerOrder body request.RequestPutCustomerOrder true "RequestPutCustomerOrder"
+// @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) PutOrderRecordFromCustomer(c *gin.Context) {
 	reqO := &request.RequestPutCustomerOrder{}
 	err := c.ShouldBindJSON(reqO)
@@ -73,6 +84,16 @@ func (o *orderRecordControl) PutOrderRecordFromCustomer(c *gin.Context) {
 	}).Response(c)
 }
 
+// PutOrderRecordFromStore godoc
+// @Tags 주문기록
+// @Summary call Put order records in store, return updated count by json.
+// @Description 가게에서 주문 상태를 변경 할 수 있다.
+// @name PutOrderRecordFromStore
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/orders/order/store [put]
+// @Param RequestPutStoreOrder body request.RequestPutStoreOrder true "RequestPutStoreOrder"
+// @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) PutOrderRecordFromStore(c *gin.Context) {
 	reqO := &request.RequestPutStoreOrder{}
 	err := c.ShouldBindJSON(reqO)
@@ -91,6 +112,18 @@ func (o *orderRecordControl) PutOrderRecordFromStore(c *gin.Context) {
 	}).Response(c)
 }
 
+// GetCustomerOrderRecordsSortedPage godoc
+// @Tags 주문기록
+// @Summary call Get sorted pages customer order records, return order records by json.
+// @Description 특정 사용자의 주문기록들을 볼 수 있다.
+// @name GetCustomerOrderRecordsSortedPage
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/orders/pages/customer [get]
+// @Param customer-id query string true "customer-id"
+// @Param RequestPage query request.RequestPage true "RequestPage"
+// @Param Sort query page.Sort true "Sort"
+// @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 	page := &request.RequestPage{}
 	customerID := c.Query("customer-id")
@@ -99,7 +132,7 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 		return
 	}
 
-	receipts, err := o.orderService.FindOrderRecordsSortedPage(customerID, entity.CustomerRole, page)
+	receipts, err := o.orderService.FindOrderRecordsSortedPage(customerID, util.CustomerRole, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
@@ -107,6 +140,18 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 	protocol.SuccessData(receipts).Response(c)
 }
 
+// GetStoreOrderRecordsSortedPage godoc
+// @Tags 주문기록
+// @Summary call Get sorted pages store order records, return order records by json.
+// @Description 특정 가게의 주문기록들을 볼 수 있다.
+// @name GetStoreOrderRecordsSortedPage
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/orders/pages/store [get]
+// @Param store-id query string true "store-id"
+// @Param RequestPage query request.RequestPage true "RequestPage"
+// @Param Sort query page.Sort true "Sort"
+// @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 	page := &request.RequestPage{}
 	storeID := c.Query("store-id")
@@ -115,7 +160,7 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 		return
 	}
 
-	receipts, err := o.orderService.FindOrderRecordsSortedPage(storeID, entity.StoreRole, page)
+	receipts, err := o.orderService.FindOrderRecordsSortedPage(storeID, util.StoreRole, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
@@ -123,6 +168,16 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 	protocol.SuccessData(receipts).Response(c)
 }
 
+// GetOrderRecord godoc
+// @Tags 주문기록
+// @Summary call Get order-record, return order-record by json.
+// @Description 특정 주문기록을 볼 수 있다.
+// @name GetOrderRecord
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/orders/order [get]
+// @Param order-id query string true "order-id"
+// @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetOrderRecord(c *gin.Context) {
 	ordrID := c.Query("order-id")
 	resOrder, err := o.orderService.FindOrderRecord(ordrID)
@@ -133,6 +188,16 @@ func (o *orderRecordControl) GetOrderRecord(c *gin.Context) {
 	protocol.SuccessData(resOrder).Response(c)
 }
 
+// GetSelectedMenusTotalPrice godoc
+// @Tags 주문기록
+// @Summary call Get selected menus total price, return total price by json.
+// @Description 선택한 메뉴들의 총 가격을 알 수 있다.
+// @name GetSelectedMenusTotalPrice
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/orders/order/price [get]
+// @Param RequestCheckPrice query request.RequestCheckPrice true "RequestCheckPrice"
+// @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetSelectedMenusTotalPrice(c *gin.Context) {
 	reqCheckP := &request.RequestCheckPrice{}
 	if err := c.ShouldBindQuery(reqCheckP); err != nil || reqCheckP.Menus == nil {

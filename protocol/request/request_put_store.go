@@ -1,8 +1,8 @@
 package request
 
 import (
-	"github.com/codestates/WBABEProject-05/common/util"
 	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/model/util"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -11,7 +11,7 @@ type RequestPutStore struct {
 	Name           string          `json:"name" validate:"required"`
 	Address        *RequestAddress `json:"address" validate:"required"`
 	StorePhone     string          `json:"store_phone" validate:"required"`
-	RecommendMenus []string        `json:"recommend_menus,omitempty"`
+	RecommendMenus []string        `json:"recommend_menus"`
 }
 
 func (r *RequestPutStore) NewPutStore(storeID string) (*entity.Store, error) {

@@ -21,3 +21,11 @@ func ConvertStringsToObjIDs(stringIDs []string) ([]primitive.ObjectID, error) {
 	}
 	return inID, nil
 }
+
+func ConvertObjIDToString(objIDs primitive.ObjectID) string {
+	return objIDs.Hex()
+}
+
+func ConvertStringToObjID(stringID string) (primitive.ObjectID, error) {
+	return primitive.ObjectIDFromHex(stringID)
+}

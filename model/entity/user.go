@@ -7,11 +7,6 @@ import (
 	"time"
 )
 
-const (
-	CustomerRole = "customer"
-	StoreRole    = "store"
-)
-
 type User struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	Name        string             `bson:"name,omitempty"`
@@ -22,7 +17,7 @@ type User struct {
 	BaseTime    *dom.BaseTime      `bson:"base_time"`
 }
 
-func (u *User) NewUpdateUserBsonSetD() bson.D {
+func (u *User) NewBsonSetDForUpdateUser() bson.D {
 	return bson.D{
 		{"$set",
 			bson.D{
