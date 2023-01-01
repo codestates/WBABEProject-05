@@ -306,15 +306,11 @@ paths:
       - in: query
         name: current_page
         type: integer
-      - description: sort-name
-        in: query
-        name: sort-name
-        required: true
-        type: string
-      - description: description
-        in: query
-        name: description
-        required: true
+      - in: query
+        name: direction
+        type: integer
+      - in: query
+        name: sort_name
         type: string
       produces:
       - application/json
@@ -344,15 +340,11 @@ paths:
       - in: query
         name: current_page
         type: integer
-      - description: sort-name
-        in: query
-        name: sort-name
-        required: true
-        type: string
-      - description: description
-        in: query
-        name: description
-        required: true
+      - in: query
+        name: direction
+        type: integer
+      - in: query
+        name: sort_name
         type: string
       produces:
       - application/json
@@ -382,15 +374,11 @@ paths:
       - in: query
         name: current_page
         type: integer
-      - description: sort-name
-        in: query
-        name: sort-name
-        required: true
-        type: string
-      - description: description
-        in: query
-        name: description
-        required: true
+      - in: query
+        name: direction
+        type: integer
+      - in: query
+        name: sort_name
         type: string
       produces:
       - application/json
@@ -420,15 +408,11 @@ paths:
       - in: query
         name: current_page
         type: integer
-      - description: sort-name
-        in: query
-        name: sort-name
-        required: true
-        type: string
-      - description: description
-        in: query
-        name: description
-        required: true
+      - in: query
+        name: direction
+        type: integer
+      - in: query
+        name: sort_name
         type: string
       produces:
       - application/json
@@ -475,15 +459,11 @@ paths:
       - in: query
         name: current_page
         type: integer
-      - description: sort-name
-        in: query
-        name: sort-name
-        required: true
-        type: string
-      - description: description
-        in: query
-        name: description
-        required: true
+      - in: query
+        name: direction
+        type: integer
+      - in: query
+        name: sort_name
         type: string
       produces:
       - application/json
@@ -580,15 +560,11 @@ paths:
       - in: query
         name: current_page
         type: integer
-      - description: sort-name
-        in: query
-        name: sort-name
-        required: true
-        type: string
-      - description: description
-        in: query
-        name: description
-        required: true
+      - in: query
+        name: direction
+        type: integer
+      - in: query
+        name: sort_name
         type: string
       produces:
       - application/json

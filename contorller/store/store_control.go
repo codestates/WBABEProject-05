@@ -175,8 +175,7 @@ func (s *storeControl) DeleteMenu(c *gin.Context) {
 // @Router /app/v1/stores/store/menus [get]
 // @Param store-id query string true "store-id"
 // @Param RequestPage query request.RequestPage true "RequestPage"
-// @Param sort-name query string true "sort-name"
-// @Param description query string true "description"
+// @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) GetMenuSortedPages(c *gin.Context) {
 	page := &request.RequestPage{}
@@ -223,8 +222,7 @@ func (s *storeControl) GetRecommendMenus(c *gin.Context) {
 // @Produce  json
 // @Router /app/v1/stores [get]
 // @Param RequestPage query request.RequestPage true "RequestPage"
-// @Param sort-name query string true "sort-name"
-// @Param description query string true "description"
+// @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) GetStoresSortedPage(c *gin.Context) {
 	page := &request.RequestPage{}

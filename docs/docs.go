@@ -218,18 +218,14 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "sort-name",
-                        "name": "sort-name",
-                        "in": "query",
-                        "required": true
+                        "type": "integer",
+                        "name": "direction",
+                        "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "description",
-                        "name": "description",
-                        "in": "query",
-                        "required": true
+                        "name": "sort_name",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -274,18 +270,14 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "sort-name",
-                        "name": "sort-name",
-                        "in": "query",
-                        "required": true
+                        "type": "integer",
+                        "name": "direction",
+                        "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "description",
-                        "name": "description",
-                        "in": "query",
-                        "required": true
+                        "name": "sort_name",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -330,18 +322,14 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "sort-name",
-                        "name": "sort-name",
-                        "in": "query",
-                        "required": true
+                        "type": "integer",
+                        "name": "direction",
+                        "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "description",
-                        "name": "description",
-                        "in": "query",
-                        "required": true
+                        "name": "sort_name",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -386,18 +374,14 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "sort-name",
-                        "name": "sort-name",
-                        "in": "query",
-                        "required": true
+                        "type": "integer",
+                        "name": "direction",
+                        "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "description",
-                        "name": "description",
-                        "in": "query",
-                        "required": true
+                        "name": "sort_name",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -469,18 +453,14 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "sort-name",
-                        "name": "sort-name",
-                        "in": "query",
-                        "required": true
+                        "type": "integer",
+                        "name": "direction",
+                        "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "description",
-                        "name": "description",
-                        "in": "query",
-                        "required": true
+                        "name": "sort_name",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -628,18 +608,14 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "sort-name",
-                        "name": "sort-name",
-                        "in": "query",
-                        "required": true
+                        "type": "integer",
+                        "name": "direction",
+                        "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "description",
-                        "name": "description",
-                        "in": "query",
-                        "required": true
+                        "name": "sort_name",
+                        "in": "query"
                     }
                 ],
                 "responses": {

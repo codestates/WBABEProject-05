@@ -122,8 +122,7 @@ func (o *orderRecordControl) PutOrderRecordFromStore(c *gin.Context) {
 // @Router /app/v1/orders/pages/customer [get]
 // @Param customer-id query string true "customer-id"
 // @Param RequestPage query request.RequestPage true "RequestPage"
-// @Param sort-name query string true "sort-name"
-// @Param description query string true "description"
+// @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 	page := &request.RequestPage{}
@@ -151,8 +150,7 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 // @Router /app/v1/orders/pages/store [get]
 // @Param store-id query string true "store-id"
 // @Param RequestPage query request.RequestPage true "RequestPage"
-// @Param sort-name query string true "sort-name"
-// @Param description query string true "description"
+// @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 	page := &request.RequestPage{}

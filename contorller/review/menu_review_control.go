@@ -36,8 +36,7 @@ func NewMenuReviewControl(svc customer.MenuReviewServicer) *menuReviewControl {
 // @Router /app/v1/reviews/customer [get]
 // @Param customer-id query string true "customer-id"
 // @Param RequestPage query request.RequestPage true "RequestPage"
-// @Param sort-name query string true "sort-name"
-// @Param description query string true "description"
+// @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (m *menuReviewControl) GetMenuSortedPagesByCustomerID(c *gin.Context) {
 	page := &request.RequestPage{}
@@ -65,8 +64,7 @@ func (m *menuReviewControl) GetMenuSortedPagesByCustomerID(c *gin.Context) {
 // @Router /app/v1/reviews/menu [get]
 // @Param menu-id query string true "menu-id"
 // @Param RequestPage query request.RequestPage true "RequestPage"
-// @Param sort-name query string true "sort-name"
-// @Param description query string true "description"
+// @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (m *menuReviewControl) GetMenuReviewSortedPagesByMenuID(c *gin.Context) {
 	page := &request.RequestPage{}
