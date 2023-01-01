@@ -228,6 +228,8 @@ GET    /app/v1/reviews/customer
 
 ## UseCase 로 보는 Swagger 
 
+- 추가적으로 아래 이미지들을 보면 페이지관련 query string 은 편의상 빈값으로 요청을 보냈는데, 서버에서 빈 값으로 요청이 오면 첫페이지 5개씩 최신순으로 기본값 처리한다.
+
 ![전체1](./readme_images/swagger/usecase/5사용자가입_요청.png)
 
 ![전체1](./readme_images/swagger/usecase/6사용자가입_응답.png)
