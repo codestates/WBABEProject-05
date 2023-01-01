@@ -1,0 +1,43 @@
+POST {{host}}{{v1}}/stores/store
+Content-Type: application/json
+
+{
+  "user_id": "63b13650c261c10ddffa2eb4",
+  "name": "가게1이예요.",
+  "address": {
+    "street": "테스트거리",
+    "detail": "오른쪽입니다.",
+    "zip_code": "1241-21"
+  },
+  "store_phone": "010-8282-2323"
+}
+### => 63b13667c261c10ddffa2eb5
+
+###
+GET {{host}}{{v1}}/stores?current-page=0&content-count=6&name=base_time.updated_at&direction=-1
+### => TODO 메뉴가 삭제되면 store 의 recommend 여기서도 빠지는 CASE CADE 기능이 필요
+
+###
+# PUT의 recommend_menus 넣을경우 ==> 메뉴등록 선행필요
+PUT {{host}}{{v1}}/stores/store?store-id=63b13667c261c10ddffa2eb5
+Content-Type: application/json
+
+{
+  "user_id": "63b1349d0c648d04b7f512b4",
+  "name": "가게1수정이예요.",
+  "address": {
+    "street": "테스트거리",
+    "detail": "오른쪽입니다.",
+    "zip_code": "1241-21"
+  },
+  "store_phone": "010-6222-2323",
+  "recommend_menus": ["63b1370fc261c10ddffa2eb8", "63b1370cc261c10ddffa2eb7"]
+}
+### => TODO 유효한 menu들인지도 검증필요할듯
+
+###
+GET {{host}}{{v1}}/stores/store/recommends?store-id=63b13667c261c10ddffa2eb5
+Content-Type: application/json
+
+###
+
