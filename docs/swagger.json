@@ -4,7 +4,37 @@
         "contact": {}
     },
     "paths": {
-        "/app/v1/orders": {
+        "/app/v1/orders/order": {
+            "get": {
+                "description": "특정 주문기록을 볼 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "주문기록"
+                ],
+                "summary": "call Get order-record, return order-record by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "order-id",
+                        "name": "order-id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "메뉴 주문을 할 수 있다.",
                 "consumes": [
@@ -12,6 +42,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "주문기록"
                 ],
                 "summary": "call Post Order, return posted id by json.",
                 "parameters": [
@@ -21,13 +54,377 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/protocol.RequestOrder"
+                            "$ref": "#/definitions/request.RequestOrder"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/v1/orders/order/customer": {
+            "put": {
+                "description": "사용자가 주문을 변경 할 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "주문기록"
+                ],
+                "summary": "call Put order records in customer, return updated count by json.",
+                "parameters": [
+                    {
+                        "description": "RequestPutCustomerOrder",
+                        "name": "RequestPutCustomerOrder",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RequestPutCustomerOrder"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/v1/orders/order/price": {
+            "get": {
+                "description": "선택한 메뉴들의 총 가격을 알 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "주문기록"
+                ],
+                "summary": "call Get selected menus total price, return total price by json.",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "name": "menu_ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "store_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/v1/orders/order/store": {
+            "put": {
+                "description": "가게에서 주문 상태를 변경 할 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "주문기록"
+                ],
+                "summary": "call Put order records in store, return updated count by json.",
+                "parameters": [
+                    {
+                        "description": "RequestPutStoreOrder",
+                        "name": "RequestPutStoreOrder",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RequestPutStoreOrder"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/v1/orders/pages/customer": {
+            "get": {
+                "description": "특정 사용자의 주문기록들을 볼 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "주문기록"
+                ],
+                "summary": "call Get sorted pages customer order records, return order records by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "customer-id",
+                        "name": "customer-id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "name": "content_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "current_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort-name",
+                        "name": "sort-name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "description",
+                        "name": "description",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/v1/orders/pages/store": {
+            "get": {
+                "description": "특정 가게의 주문기록들을 볼 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "주문기록"
+                ],
+                "summary": "call Get sorted pages store order records, return order records by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "store-id",
+                        "name": "store-id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "name": "content_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "current_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort-name",
+                        "name": "sort-name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "description",
+                        "name": "description",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/v1/reviews/customer": {
+            "get": {
+                "description": "특정 사용자의 리뷰들을 볼 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "메뉴리뷰"
+                ],
+                "summary": "call Get sorted page menu reviews, return sorted page menu reviews by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "customer-id",
+                        "name": "customer-id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "name": "content_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "current_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort-name",
+                        "name": "sort-name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "description",
+                        "name": "description",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/v1/reviews/menu": {
+            "get": {
+                "description": "특정 메뉴의 리뷰들을 볼 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "메뉴리뷰"
+                ],
+                "summary": "call Get sorted page menu reviews, return sorted page menu reviews by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "menu-id",
+                        "name": "menu-id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "name": "content_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "current_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort-name",
+                        "name": "sort-name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "description",
+                        "name": "description",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/v1/reviews/review": {
+            "post": {
+                "description": "메뉴 리뷰를 작성 할 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "메뉴리뷰"
+                ],
+                "summary": "call Post menu review, return saved id by json.",
+                "parameters": [
+                    {
+                        "description": "RequestPostReview JSON",
+                        "name": "RequestPostReview",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RequestPostReview"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/protocol.ApiResponse-any"
                         }
@@ -36,24 +433,42 @@
             }
         },
         "/app/v1/stores": {
-            "post": {
-                "description": "가게정보를 등록 할 수 있다.",
+            "get": {
+                "description": "가게들 정보를 보여준다.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call Post store, return posted id by json.",
+                "tags": [
+                    "가게"
+                ],
+                "summary": "call Get store pages, return store pages data by json.",
                 "parameters": [
                     {
-                        "description": "RequestPostStore JSON",
-                        "name": "store",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/protocol.RequestPostStore"
-                        }
+                        "type": "integer",
+                        "name": "content_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "current_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort-name",
+                        "name": "sort-name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "description",
+                        "name": "description",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -66,7 +481,166 @@
                 }
             }
         },
-        "/app/v1/stores/menu": {
+        "/app/v1/stores/store": {
+            "get": {
+                "description": "특정 가게의 정보를 보여준다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "가게"
+                ],
+                "summary": "call Get store, return store by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "store_id",
+                        "name": "store-id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "가게를 수정할 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "가게"
+                ],
+                "summary": "call Put store, return modify count by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "store-id",
+                        "name": "store-id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "RequestPutStore JSON",
+                        "name": "RequestPutStore",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RequestPutStore"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "가게정보를 등록 할 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "가게"
+                ],
+                "summary": "call Post store, return posted id by json.",
+                "parameters": [
+                    {
+                        "description": "RequestPostStore JSON",
+                        "name": "RequestPostStore",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RequestPostStore"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/v1/stores/store/menus": {
+            "get": {
+                "description": "특정 가게 메뉴 리스트를 보여준다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "가게"
+                ],
+                "summary": "call Get sorted menu page, return sorted menu pages data by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "store-id",
+                        "name": "store-id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "name": "content_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "current_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort-name",
+                        "name": "sort-name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "description",
+                        "name": "description",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/app/v1/stores/store/menus/menu": {
             "put": {
                 "description": "메뉴를 수정할 수 있다.",
                 "consumes": [
@@ -74,6 +648,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "가게"
                 ],
                 "summary": "call Put menu, return updated count by json.",
                 "parameters": [
@@ -85,12 +662,12 @@
                         "required": true
                     },
                     {
-                        "description": "RequestPostMenu JSON",
-                        "name": "menu",
+                        "description": "RequestMenu JSON",
+                        "name": "RequestMenu",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/protocol.RequestPostMenu"
+                            "$ref": "#/definitions/request.RequestMenu"
                         }
                     }
                 ],
@@ -111,21 +688,24 @@
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call Post menu in store, return saved id by json.",
+                "tags": [
+                    "가게"
+                ],
+                "summary": "call Post menu, return saved id by json.",
                 "parameters": [
                     {
-                        "description": "RequestPostMenu JSON",
-                        "name": "menu",
+                        "description": "RequestMenu JSON",
+                        "name": "RequestMenu",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/protocol.RequestPostMenu"
+                            "$ref": "#/definitions/request.RequestMenu"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/protocol.ApiResponse-any"
                         }
@@ -140,15 +720,11 @@
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call Delete menu in store, return deleted count by json.",
+                "tags": [
+                    "가게"
+                ],
+                "summary": "call Delete menu, return deleted count by json.",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "store-id",
-                        "name": "store-id",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "menu-id",
@@ -167,21 +743,24 @@
                 }
             }
         },
-        "/app/v1/stores/swag/store": {
+        "/app/v1/stores/store/recommends": {
             "get": {
-                "description": "특정 store 의 모든 정보를 스웨거 테스트를 위해 보여준다.",
+                "description": "특정 가게의 추천 메뉴 상세 정보 보여준다.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call Get store, return store by json.",
+                "tags": [
+                    "가게"
+                ],
+                "summary": "call Get store and recommend menus, return store and recommend menus data by json.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "store_id",
-                        "name": "store_id",
+                        "description": "store-id",
+                        "name": "store-id",
                         "in": "query",
                         "required": true
                     }
@@ -190,13 +769,82 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/protocol.ApiResponse-entity_Store"
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
                         }
                     }
                 }
             }
         },
-        "/app/v1/users/join": {
+        "/app/v1/users/user": {
+            "get": {
+                "description": "사용자 정보를 보여준다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "사용자정보"
+                ],
+                "summary": "call Get user, return user by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user-id",
+                        "name": "user-id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "사용자 정보를 수정 할 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "사용자정보"
+                ],
+                "summary": "call Put user, return updated count by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user-id",
+                        "name": "user-id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "RequestUser JSON",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RequestUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "회원가입을 할 수 있다.",
                 "consumes": [
@@ -205,16 +853,49 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "사용자정보"
+                ],
                 "summary": "call Post user, return saved id by json.",
                 "parameters": [
                     {
-                        "description": "RequestPostUser JSON",
+                        "description": "RequestUser JSON",
                         "name": "menu",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/protocol.RequestPostUser"
+                            "$ref": "#/definitions/request.RequestUser"
                         }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "사용자 정보를 삭제 할 수 있다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "사용자정보"
+                ],
+                "summary": "call Delete user, return delete count by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user-id",
+                        "name": "user-id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -241,7 +922,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/protocol.ApiResponse-info_Info"
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
                         }
                     }
                 }
@@ -249,119 +930,13 @@
         }
     },
     "definitions": {
-        "dom.Address": {
+        "page.Sort": {
             "type": "object",
             "properties": {
-                "detail": {
-                    "type": "string"
-                },
-                "street": {
-                    "type": "string"
-                },
-                "zipCode": {
-                    "type": "string"
-                }
-            }
-        },
-        "dom.BaseTime": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                }
-            }
-        },
-        "dom.Menu": {
-            "type": "object",
-            "properties": {
-                "baseTime": {
-                    "$ref": "#/definitions/dom.BaseTime"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "limitCount": {
-                    "description": "OrderCount 총 주문수 --\u003e 주문내역으로 확인하자\nLimitCount 한정수량 ex) \"non\" , \"1\", \"10\"",
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "origin": {
-                    "description": "Origin 원산지",
-                    "type": "string"
-                },
-                "possible": {
-                    "type": "boolean"
-                },
-                "price": {
+                "direction": {
                     "type": "integer"
-                }
-            }
-        },
-        "entity.Store": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "$ref": "#/definitions/dom.Address"
                 },
-                "baseTime": {
-                    "$ref": "#/definitions/dom.BaseTime"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "menu": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dom.Menu"
-                    }
-                },
-                "name": {
-                    "type": "string"
-                },
-                "recommendMenus": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dom.Menu"
-                    }
-                },
-                "storePhone": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "string"
-                }
-            }
-        },
-        "info.Info": {
-            "type": "object",
-            "properties": {
-                "author": {
-                    "type": "string"
-                },
-                "blog": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "spec": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "version": {
+                "sort_name": {
                     "type": "string"
                 }
             }
@@ -381,42 +956,13 @@
                 }
             }
         },
-        "protocol.ApiResponse-entity_Store": {
+        "request.RequestAddress": {
             "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer"
-                },
-                "data": {
-                    "$ref": "#/definitions/entity.Store"
-                },
-                "error": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "protocol.ApiResponse-info_Info": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer"
-                },
-                "data": {
-                    "$ref": "#/definitions/info.Info"
-                },
-                "error": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "protocol.RequestAddress": {
-            "type": "object",
+            "required": [
+                "detail",
+                "street",
+                "zip_code"
+            ],
             "properties": {
                 "detail": {
                     "type": "string"
@@ -429,36 +975,10 @@
                 }
             }
         },
-        "protocol.RequestOrder": {
-            "type": "object",
-            "properties": {
-                "customer_id": {
-                    "type": "string"
-                },
-                "menu_ids": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "ordered_addr": {
-                    "$ref": "#/definitions/protocol.RequestAddress"
-                },
-                "price": {
-                    "type": "integer"
-                },
-                "status": {
-                    "description": "Status 접수중/접수취소/추가접수/접수중/조리중/배달중/배달완료",
-                    "type": "string"
-                },
-                "store_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "protocol.RequestPostMenu": {
+        "request.RequestMenu": {
             "type": "object",
             "required": [
+                "description",
                 "name",
                 "origin",
                 "possible",
@@ -489,11 +1009,70 @@
                 }
             }
         },
-        "protocol.RequestPostStore": {
+        "request.RequestOrder": {
             "type": "object",
+            "required": [
+                "customer_id",
+                "menu_ids",
+                "ordered_addr",
+                "store_id"
+            ],
+            "properties": {
+                "customer_id": {
+                    "type": "string"
+                },
+                "menu_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ordered_addr": {
+                    "$ref": "#/definitions/request.RequestAddress"
+                },
+                "store_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.RequestPostReview": {
+            "type": "object",
+            "required": [
+                "content",
+                "customer_id",
+                "menu_id",
+                "rating",
+                "store_id"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "customer_id": {
+                    "type": "string"
+                },
+                "menu_id": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "integer"
+                },
+                "store_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.RequestPostStore": {
+            "type": "object",
+            "required": [
+                "address",
+                "name",
+                "store_phone",
+                "user_id"
+            ],
             "properties": {
                 "address": {
-                    "$ref": "#/definitions/protocol.RequestAddress"
+                    "$ref": "#/definitions/request.RequestAddress"
                 },
                 "name": {
                     "type": "string"
@@ -506,8 +1085,89 @@
                 }
             }
         },
-        "protocol.RequestPostUser": {
+        "request.RequestPutCustomerOrder": {
             "type": "object",
+            "required": [
+                "customer_id",
+                "menu_ids",
+                "order_id",
+                "ordered_addr",
+                "store_id"
+            ],
+            "properties": {
+                "customer_id": {
+                    "type": "string"
+                },
+                "menu_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "order_id": {
+                    "type": "string"
+                },
+                "ordered_addr": {
+                    "$ref": "#/definitions/request.RequestAddress"
+                },
+                "store_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.RequestPutStore": {
+            "type": "object",
+            "required": [
+                "address",
+                "name",
+                "store_phone",
+                "user_id"
+            ],
+            "properties": {
+                "address": {
+                    "$ref": "#/definitions/request.RequestAddress"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "recommend_menus": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "store_phone": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.RequestPutStoreOrder": {
+            "type": "object",
+            "required": [
+                "order_id",
+                "status"
+            ],
+            "properties": {
+                "order_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.RequestUser": {
+            "type": "object",
+            "required": [
+                "name",
+                "nic_name",
+                "password",
+                "phone_number",
+                "role"
+            ],
             "properties": {
                 "name": {
                     "type": "string"

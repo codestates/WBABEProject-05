@@ -124,7 +124,7 @@ func (s *storeMenuService) FindMenusSortedPage(storeID string, pg *request.Reque
 	return page.NewPageData(menus, pgInfo), nil
 }
 
-func (s *storeMenuService) FindRecommendMenus(storeID string) (*response.ResponseStore, error) {
+func (s *storeMenuService) FindRecommendMenus(storeID string) (*response.ResponseStoreRecommendMenus, error) {
 	foundStore, err := s.storeModel.SelectStoreByID(storeID)
 	if err != nil {
 		return nil, err
@@ -136,16 +136,16 @@ func (s *storeMenuService) FindRecommendMenus(storeID string) (*response.Respons
 		return nil, err
 	}
 
-	return response.NewResponseStore(foundStore, menus), nil
+	return response.NewResponseStoreAndMenus(foundStore, menus), nil
 }
 
-func (s *storeMenuService) FindStore(storeID string) (*entity.Store, error) {
+func (s *storeMenuService) FindStore(storeID string) (*response.ResponseStore, error) {
 	foundStore, err := s.storeModel.SelectStoreByID(storeID)
 	if err != nil {
 		return nil, err
 	}
 
-	return foundStore, nil
+	return response.NewResponseStore(foundStore), nil
 }
 
 func (s *storeMenuService) FindStoresSortedPage(pg *request.RequestPage) (*page.PageData[any], error) {

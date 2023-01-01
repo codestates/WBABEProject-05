@@ -27,7 +27,7 @@ func NewInfoControl() *infoControl {
 // @Accept  json
 // @Produce  json
 // @Router /home/info [get]
-// @Success 200 {object} protocol.ApiResponse[info.Info]
+// @Success 200 {object} protocol.ApiResponse[any]
 func (h *infoControl) GetInformation(c *gin.Context) {
 	path := flag.Flags[flag.InformationFlag.Name]
 	inf := info.NewInfo(*path)

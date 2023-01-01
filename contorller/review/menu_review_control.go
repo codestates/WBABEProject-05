@@ -26,6 +26,19 @@ func NewMenuReviewControl(svc customer.MenuReviewServicer) *menuReviewControl {
 	return instance
 }
 
+// GetMenuSortedPagesByCustomerID godoc
+// @Tags 메뉴리뷰
+// @Summary call Get sorted page menu reviews, return sorted page menu reviews by json.
+// @Description 특정 사용자의 리뷰들을 볼 수 있다.
+// @name GetMenuSortedPagesByCustomerID
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/reviews/customer [get]
+// @Param customer-id query string true "customer-id"
+// @Param RequestPage query request.RequestPage true "RequestPage"
+// @Param sort-name query string true "sort-name"
+// @Param description query string true "description"
+// @Success 200 {object} protocol.ApiResponse[any]
 func (m *menuReviewControl) GetMenuSortedPagesByCustomerID(c *gin.Context) {
 	page := &request.RequestPage{}
 	customerID := c.Query("customer-id")
@@ -42,7 +55,20 @@ func (m *menuReviewControl) GetMenuSortedPagesByCustomerID(c *gin.Context) {
 	protocol.SuccessData(reviews).Response(c)
 }
 
-func (m *menuReviewControl) GetMenuSortedPagesByMenuID(c *gin.Context) {
+// GetMenuReviewSortedPagesByMenuID godoc
+// @Tags 메뉴리뷰
+// @Summary call Get sorted page menu reviews, return sorted page menu reviews by json.
+// @Description 특정 메뉴의 리뷰들을 볼 수 있다.
+// @name GetMenuReviewSortedPagesByMenuID
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/reviews/menu [get]
+// @Param menu-id query string true "menu-id"
+// @Param RequestPage query request.RequestPage true "RequestPage"
+// @Param sort-name query string true "sort-name"
+// @Param description query string true "description"
+// @Success 200 {object} protocol.ApiResponse[any]
+func (m *menuReviewControl) GetMenuReviewSortedPagesByMenuID(c *gin.Context) {
 	page := &request.RequestPage{}
 	menuID := c.Query("menu-id")
 	if err := c.ShouldBindQuery(page); err != nil || menuID == "" {
@@ -58,6 +84,16 @@ func (m *menuReviewControl) GetMenuSortedPagesByMenuID(c *gin.Context) {
 	protocol.SuccessData(reviews).Response(c)
 }
 
+// PostMenuReview godoc
+// @Tags 메뉴리뷰
+// @Summary call Post menu review, return saved id by json.
+// @Description 메뉴 리뷰를 작성 할 수 있다.
+// @name PostMenuReview
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/reviews/review [post]
+// @Param RequestPostReview body request.RequestPostReview true "RequestPostReview JSON"
+// @Success 201 {object} protocol.ApiResponse[any]
 func (m *menuReviewControl) PostMenuReview(c *gin.Context) {
 	reqR := &request.RequestPostReview{}
 	if err := c.ShouldBindJSON(reqR); err != nil {

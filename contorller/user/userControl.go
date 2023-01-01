@@ -26,12 +26,13 @@ func NewUserControl(svc login.UserServicer) *userControl {
 }
 
 // GetUser godoc
+// @Tags 사용자정보
 // @Summary call Get user, return user by json.
-// @Description 회원가입을 할 수 있다.
+// @Description 사용자 정보를 보여준다.
 // @name GetUser
 // @Accept  json
 // @Produce  json
-// @Router /app/v1/users/id [get]
+// @Router /app/v1/users/user [get]
 // @Param user-id query string true "user-id"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) GetUser(c *gin.Context) {
@@ -51,14 +52,15 @@ func (u *userControl) GetUser(c *gin.Context) {
 }
 
 // PutUser godoc
+// @Tags 사용자정보
 // @Summary call Put user, return updated count by json.
 // @Description 사용자 정보를 수정 할 수 있다.
 // @name PutUser
 // @Accept  json
 // @Produce  json
-// @Router /app/v1/users [put]
+// @Router /app/v1/users/user [put]
 // @Param user-id query string true "user-id"
-// @Param user body protocol.RequestUser true "RequestUser JSON"
+// @Param user body request.RequestUser true "RequestUser JSON"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) PutUser(c *gin.Context) {
 	reqU := &request.RequestPutUser{}
@@ -80,12 +82,13 @@ func (u *userControl) PutUser(c *gin.Context) {
 }
 
 // DeleteUser godoc
+// @Tags 사용자정보
 // @Summary call Delete user, return delete count by json.
 // @Description 사용자 정보를 삭제 할 수 있다.
 // @name DeleteUser
 // @Accept  json
 // @Produce  json
-// @Router /app/v1/users [delete]
+// @Router /app/v1/users/user [delete]
 // @Param user-id query string true "user-id"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) DeleteUser(c *gin.Context) {
@@ -106,13 +109,14 @@ func (u *userControl) DeleteUser(c *gin.Context) {
 }
 
 // PostUser godoc
+// @Tags 사용자정보
 // @Summary call Post user, return saved id by json.
 // @Description 회원가입을 할 수 있다.
 // @name PostUser
 // @Accept  json
 // @Produce  json
-// @Router /app/v1/users/join [post]
-// @Param menu body protocol.RequestUser true "RequestUser JSON"
+// @Router /app/v1/users/user [post]
+// @Param menu body request.RequestUser true "RequestUser JSON"
 // @Success 201 {object} protocol.ApiResponse[any]
 func (u *userControl) PostUser(c *gin.Context) {
 	reqU := &request.RequestUser{}

@@ -2,26 +2,24 @@ package response
 
 import (
 	"github.com/codestates/WBABEProject-05/model/entity"
-	"github.com/codestates/WBABEProject-05/model/util"
 )
 
-type ResponseStore struct {
+type ResponseStoreRecommendMenus struct {
 	StoreID        string           `json:"store_id"`
 	UserID         string           `json:"user_id"`
 	Name           string           `json:"name"`
 	Address        *ResponseAddress `json:"address"`
 	StorePhone     string           `json:"store_phone"`
-	RecommendMenus []string         `json:"recommend_menus"`
+	RecommendMenus []*ResponseMenu  `json:"recommend_menus"`
 }
 
-func NewResponseStore(store *entity.Store) *ResponseStore {
-	recommendIDs := util.ConvertObjIDsToStrings(store.RecommendMenus)
-	return &ResponseStore{
+func NewResponseStoreAndMenus(store *entity.Store, menus []*entity.Menu) *ResponseStoreRecommendMenus {
+	return &ResponseStoreRecommendMenus{
 		StoreID:        store.ID.Hex(),
 		UserID:         store.UserID.Hex(),
 		Name:           store.Name,
 		Address:        FromAddr(store.Address),
 		StorePhone:     store.StorePhone,
-		RecommendMenus: recommendIDs,
+		RecommendMenus: FromMenus(menus),
 	}
 }

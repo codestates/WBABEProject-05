@@ -1,7 +1,6 @@
 package store
 
 import (
-	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"
@@ -22,8 +21,9 @@ type StoreMenuServicer interface {
 
 	FindMenusSortedPage(storeID string, page *request.RequestPage) (*page.PageData[any], error)
 
-	FindRecommendMenus(storeID string) (*response.ResponseStore, error)
+	FindRecommendMenus(storeID string) (*response.ResponseStoreRecommendMenus, error)
 
-	FindStore(storeId string) (*entity.Store, error)
+	FindStore(storeId string) (*response.ResponseStore, error)
+
 	FindStoresSortedPage(page *request.RequestPage) (*page.PageData[any], error)
 }

@@ -28,11 +28,11 @@ func UsersHandler(usersUrl *gin.RouterGroup) {
 // StoresHandler ("/stores")
 func StoresHandler(storesUrl *gin.RouterGroup) {
 	storesUrl.GET("", store2.StoreControl.GetStoresSortedPage)                // 가게들 정보
+	storesUrl.GET("/store", store2.StoreControl.GetStore)                     // 특정 가게 정보
 	storesUrl.POST("/store", store2.StoreControl.PostStore)                   // 가게 등록
 	storesUrl.PUT("/store", store2.StoreControl.PutSore)                      // 가게 수정
 	storesUrl.GET("/store/recommends", store2.StoreControl.GetRecommendMenus) // 가게 추천메뉴
 	// "/swag/store" sagger 테스트용
-	storesUrl.GET("/swag/store", store2.StoreControl.GetStore)
 }
 
 // MenusHandler ("/stores/store/menus")
@@ -58,6 +58,6 @@ func OrdersHandler(ordersUrl *gin.RouterGroup) {
 // ReviewHandler ("/reviews")
 func ReviewHandler(reviewsUrl *gin.RouterGroup) {
 	reviewsUrl.POST("/review", review.MenuReviewControl.PostMenuReview)                  // 리뷰 등록
-	reviewsUrl.GET("/menu", review.MenuReviewControl.GetMenuSortedPagesByMenuID)         // 메뉴별 리뷰 조회
+	reviewsUrl.GET("/menu", review.MenuReviewControl.GetMenuReviewSortedPagesByMenuID)   // 메뉴별 리뷰 조회
 	reviewsUrl.GET("/customer", review.MenuReviewControl.GetMenuSortedPagesByCustomerID) // 사용자의 리뷰 조회
 }

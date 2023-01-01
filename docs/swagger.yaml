@@ -1,81 +1,9 @@
 definitions:
-  dom.Address:
+  page.Sort:
     properties:
-      detail:
-        type: string
-      street:
-        type: string
-      zipCode:
-        type: string
-    type: object
-  dom.BaseTime:
-    properties:
-      created_at:
-        type: string
-      updated_at:
-        type: string
-    type: object
-  dom.Menu:
-    properties:
-      baseTime:
-        $ref: '#/definitions/dom.BaseTime'
-      description:
-        type: string
-      id:
-        type: string
-      limitCount:
-        description: |-
-          OrderCount 총 주문수 --> 주문내역으로 확인하자
-          LimitCount 한정수량 ex) "non" , "1", "10"
-        type: string
-      name:
-        type: string
-      origin:
-        description: Origin 원산지
-        type: string
-      possible:
-        type: boolean
-      price:
+      direction:
         type: integer
-    type: object
-  entity.Store:
-    properties:
-      address:
-        $ref: '#/definitions/dom.Address'
-      baseTime:
-        $ref: '#/definitions/dom.BaseTime'
-      id:
-        type: string
-      menu:
-        items:
-          $ref: '#/definitions/dom.Menu'
-        type: array
-      name:
-        type: string
-      recommendMenus:
-        items:
-          $ref: '#/definitions/dom.Menu'
-        type: array
-      storePhone:
-        type: string
-      userId:
-        type: string
-    type: object
-  info.Info:
-    properties:
-      author:
-        type: string
-      blog:
-        type: string
-      description:
-        type: string
-      name:
-        type: string
-      spec:
-        items:
-          type: string
-        type: array
-      version:
+      sort_name:
         type: string
     type: object
   protocol.ApiResponse-any:
@@ -88,29 +16,7 @@ definitions:
       message:
         type: string
     type: object
-  protocol.ApiResponse-entity_Store:
-    properties:
-      code:
-        type: integer
-      data:
-        $ref: '#/definitions/entity.Store'
-      error:
-        type: string
-      message:
-        type: string
-    type: object
-  protocol.ApiResponse-info_Info:
-    properties:
-      code:
-        type: integer
-      data:
-        $ref: '#/definitions/info.Info'
-      error:
-        type: string
-      message:
-        type: string
-    type: object
-  protocol.RequestAddress:
+  request.RequestAddress:
     properties:
       detail:
         type: string
@@ -118,26 +24,12 @@ definitions:
         type: string
       zip_code:
         type: string
+    required:
+    - detail
+    - street
+    - zip_code
     type: object
-  protocol.RequestOrder:
-    properties:
-      customer_id:
-        type: string
-      menu_ids:
-        items:
-          type: string
-        type: array
-      ordered_addr:
-        $ref: '#/definitions/protocol.RequestAddress'
-      price:
-        type: integer
-      status:
-        description: Status 접수중/접수취소/추가접수/접수중/조리중/배달중/배달완료
-        type: string
-      store_id:
-        type: string
-    type: object
-  protocol.RequestPostMenu:
+  request.RequestMenu:
     properties:
       description:
         type: string
@@ -154,24 +46,118 @@ definitions:
       store_id:
         type: string
     required:
+    - description
     - name
     - origin
     - possible
     - price
     - store_id
     type: object
-  protocol.RequestPostStore:
+  request.RequestOrder:
+    properties:
+      customer_id:
+        type: string
+      menu_ids:
+        items:
+          type: string
+        type: array
+      ordered_addr:
+        $ref: '#/definitions/request.RequestAddress'
+      store_id:
+        type: string
+    required:
+    - customer_id
+    - menu_ids
+    - ordered_addr
+    - store_id
+    type: object
+  request.RequestPostReview:
+    properties:
+      content:
+        type: string
+      customer_id:
+        type: string
+      menu_id:
+        type: string
+      rating:
+        type: integer
+      store_id:
+        type: string
+    required:
+    - content
+    - customer_id
+    - menu_id
+    - rating
+    - store_id
+    type: object
+  request.RequestPostStore:
     properties:
       address:
-        $ref: '#/definitions/protocol.RequestAddress'
+        $ref: '#/definitions/request.RequestAddress'
       name:
         type: string
       store_phone:
         type: string
       user_id:
         type: string
+    required:
+    - address
+    - name
+    - store_phone
+    - user_id
     type: object
-  protocol.RequestPostUser:
+  request.RequestPutCustomerOrder:
+    properties:
+      customer_id:
+        type: string
+      menu_ids:
+        items:
+          type: string
+        type: array
+      order_id:
+        type: string
+      ordered_addr:
+        $ref: '#/definitions/request.RequestAddress'
+      store_id:
+        type: string
+    required:
+    - customer_id
+    - menu_ids
+    - order_id
+    - ordered_addr
+    - store_id
+    type: object
+  request.RequestPutStore:
+    properties:
+      address:
+        $ref: '#/definitions/request.RequestAddress'
+      name:
+        type: string
+      recommend_menus:
+        items:
+          type: string
+        type: array
+      store_phone:
+        type: string
+      user_id:
+        type: string
+    required:
+    - address
+    - name
+    - store_phone
+    - user_id
+    type: object
+  request.RequestPutStoreOrder:
+    properties:
+      order_id:
+        type: string
+      status:
+        type: string
+    required:
+    - order_id
+    - status
+    type: object
+  request.RequestUser:
     properties:
       name:
         type: string
@@ -183,11 +169,37 @@ definitions:
         type: string
       role:
         type: string
+    required:
+    - name
+    - nic_name
+    - password
+    - phone_number
+    - role
     type: object
 info:
   contact: {}
 paths:
-  /app/v1/orders:
+  /app/v1/orders/order:
+    get:
+      consumes:
+      - application/json
+      description: 특정 주문기록을 볼 수 있다.
+      parameters:
+      - description: order-id
+        in: query
+        name: order-id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get order-record, return order-record by json.
+      tags:
+      - 주문기록
     post:
       consumes:
       - application/json
@@ -198,7 +210,7 @@ paths:
         name: order
         required: true
         schema:
-          $ref: '#/definitions/protocol.RequestOrder'
+          $ref: '#/definitions/request.RequestOrder'
       produces:
       - application/json
       responses:
@@ -207,18 +219,20 @@ paths:
           schema:
             $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call Post Order, return posted id by json.
-  /app/v1/stores:
-    post:
+      tags:
+      - 주문기록
+  /app/v1/orders/order/customer:
+    put:
       consumes:
       - application/json
-      description: 가게정보를 등록 할 수 있다.
+      description: 사용자가 주문을 변경 할 수 있다.
       parameters:
-      - description: RequestPostStore JSON
+      - description: RequestPutCustomerOrder
         in: body
-        name: store
+        name: RequestPutCustomerOrder
         required: true
         schema:
-          $ref: '#/definitions/protocol.RequestPostStore'
+          $ref: '#/definitions/request.RequestPutCustomerOrder'
       produces:
       - application/json
       responses:
@@ -226,18 +240,372 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/protocol.ApiResponse-any'
-      summary: call Post store, return posted id by json.
-  /app/v1/stores/menu:
-    delete:
+      summary: call Put order records in customer, return updated count by json.
+      tags:
+      - 주문기록
+  /app/v1/orders/order/price:
+    get:
       consumes:
       - application/json
-      description: 메뉴를 삭제할 수 있다.
+      description: 선택한 메뉴들의 총 가격을 알 수 있다.
+      parameters:
+      - in: query
+        items:
+          type: string
+        name: menu_ids
+        type: array
+      - in: query
+        name: store_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get selected menus total price, return total price by json.
+      tags:
+      - 주문기록
+  /app/v1/orders/order/store:
+    put:
+      consumes:
+      - application/json
+      description: 가게에서 주문 상태를 변경 할 수 있다.
+      parameters:
+      - description: RequestPutStoreOrder
+        in: body
+        name: RequestPutStoreOrder
+        required: true
+        schema:
+          $ref: '#/definitions/request.RequestPutStoreOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Put order records in store, return updated count by json.
+      tags:
+      - 주문기록
+  /app/v1/orders/pages/customer:
+    get:
+      consumes:
+      - application/json
+      description: 특정 사용자의 주문기록들을 볼 수 있다.
+      parameters:
+      - description: customer-id
+        in: query
+        name: customer-id
+        required: true
+        type: string
+      - in: query
+        name: content_count
+        type: integer
+      - in: query
+        name: current_page
+        type: integer
+      - description: sort-name
+        in: query
+        name: sort-name
+        required: true
+        type: string
+      - description: description
+        in: query
+        name: description
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get sorted pages customer order records, return order records
+        by json.
+      tags:
+      - 주문기록
+  /app/v1/orders/pages/store:
+    get:
+      consumes:
+      - application/json
+      description: 특정 가게의 주문기록들을 볼 수 있다.
       parameters:
       - description: store-id
         in: query
         name: store-id
         required: true
         type: string
+      - in: query
+        name: content_count
+        type: integer
+      - in: query
+        name: current_page
+        type: integer
+      - description: sort-name
+        in: query
+        name: sort-name
+        required: true
+        type: string
+      - description: description
+        in: query
+        name: description
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get sorted pages store order records, return order records by
+        json.
+      tags:
+      - 주문기록
+  /app/v1/reviews/customer:
+    get:
+      consumes:
+      - application/json
+      description: 특정 사용자의 리뷰들을 볼 수 있다.
+      parameters:
+      - description: customer-id
+        in: query
+        name: customer-id
+        required: true
+        type: string
+      - in: query
+        name: content_count
+        type: integer
+      - in: query
+        name: current_page
+        type: integer
+      - description: sort-name
+        in: query
+        name: sort-name
+        required: true
+        type: string
+      - description: description
+        in: query
+        name: description
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get sorted page menu reviews, return sorted page menu reviews
+        by json.
+      tags:
+      - 메뉴리뷰
+  /app/v1/reviews/menu:
+    get:
+      consumes:
+      - application/json
+      description: 특정 메뉴의 리뷰들을 볼 수 있다.
+      parameters:
+      - description: menu-id
+        in: query
+        name: menu-id
+        required: true
+        type: string
+      - in: query
+        name: content_count
+        type: integer
+      - in: query
+        name: current_page
+        type: integer
+      - description: sort-name
+        in: query
+        name: sort-name
+        required: true
+        type: string
+      - description: description
+        in: query
+        name: description
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get sorted page menu reviews, return sorted page menu reviews
+        by json.
+      tags:
+      - 메뉴리뷰
+  /app/v1/reviews/review:
+    post:
+      consumes:
+      - application/json
+      description: 메뉴 리뷰를 작성 할 수 있다.
+      parameters:
+      - description: RequestPostReview JSON
+        in: body
+        name: RequestPostReview
+        required: true
+        schema:
+          $ref: '#/definitions/request.RequestPostReview'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Post menu review, return saved id by json.
+      tags:
+      - 메뉴리뷰
+  /app/v1/stores:
+    get:
+      consumes:
+      - application/json
+      description: 가게들 정보를 보여준다.
+      parameters:
+      - in: query
+        name: content_count
+        type: integer
+      - in: query
+        name: current_page
+        type: integer
+      - description: sort-name
+        in: query
+        name: sort-name
+        required: true
+        type: string
+      - description: description
+        in: query
+        name: description
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get store pages, return store pages data by json.
+      tags:
+      - 가게
+  /app/v1/stores/store:
+    get:
+      consumes:
+      - application/json
+      description: 특정 가게의 정보를 보여준다.
+      parameters:
+      - description: store_id
+        in: query
+        name: store-id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get store, return store by json.
+      tags:
+      - 가게
+    post:
+      consumes:
+      - application/json
+      description: 가게정보를 등록 할 수 있다.
+      parameters:
+      - description: RequestPostStore JSON
+        in: body
+        name: RequestPostStore
+        required: true
+        schema:
+          $ref: '#/definitions/request.RequestPostStore'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Post store, return posted id by json.
+      tags:
+      - 가게
+    put:
+      consumes:
+      - application/json
+      description: 가게를 수정할 수 있다.
+      parameters:
+      - description: store-id
+        in: query
+        name: store-id
+        required: true
+        type: string
+      - description: RequestPutStore JSON
+        in: body
+        name: RequestPutStore
+        required: true
+        schema:
+          $ref: '#/definitions/request.RequestPutStore'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Put store, return modify count by json.
+      tags:
+      - 가게
+  /app/v1/stores/store/menus:
+    get:
+      consumes:
+      - application/json
+      description: 특정 가게 메뉴 리스트를 보여준다.
+      parameters:
+      - description: store-id
+        in: query
+        name: store-id
+        required: true
+        type: string
+      - in: query
+        name: content_count
+        type: integer
+      - in: query
+        name: current_page
+        type: integer
+      - description: sort-name
+        in: query
+        name: sort-name
+        required: true
+        type: string
+      - description: description
+        in: query
+        name: description
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get sorted menu page, return sorted menu pages data by json.
+      tags:
+      - 가게
+  /app/v1/stores/store/menus/menu:
+    delete:
+      consumes:
+      - application/json
+      description: 메뉴를 삭제할 수 있다.
+      parameters:
       - description: menu-id
         in: query
         name: menu-id
@@ -250,26 +618,30 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/protocol.ApiResponse-any'
-      summary: call Delete menu in store, return deleted count by json.
+      summary: call Delete menu, return deleted count by json.
+      tags:
+      - 가게
     post:
       consumes:
       - application/json
       description: 메뉴를 등록할 수 있다.
       parameters:
-      - description: RequestPostMenu JSON
+      - description: RequestMenu JSON
         in: body
-        name: menu
+        name: RequestMenu
         required: true
         schema:
-          $ref: '#/definitions/protocol.RequestPostMenu'
+          $ref: '#/definitions/request.RequestMenu'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/protocol.ApiResponse-any'
-      summary: call Post menu in store, return saved id by json.
+      summary: call Post menu, return saved id by json.
+      tags:
+      - 가게
     put:
       consumes:
       - application/json
@@ -280,12 +652,12 @@ paths:
         name: menu-id
         required: true
         type: string
-      - description: RequestPostMenu JSON
+      - description: RequestMenu JSON
         in: body
-        name: menu
+        name: RequestMenu
         required: true
         schema:
-          $ref: '#/definitions/protocol.RequestPostMenu'
+          $ref: '#/definitions/request.RequestMenu'
       produces:
       - application/json
       responses:
@@ -294,15 +666,17 @@ paths:
           schema:
             $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call Put menu, return updated count by json.
-  /app/v1/stores/swag/store:
+      tags:
+      - 가게
+  /app/v1/stores/store/recommends:
     get:
       consumes:
       - application/json
-      description: 특정 store 의 모든 정보를 스웨거 테스트를 위해 보여준다.
+      description: 특정 가게의 추천 메뉴 상세 정보 보여준다.
       parameters:
-      - description: store_id
+      - description: store-id
         in: query
-        name: store_id
+        name: store-id
         required: true
         type: string
       produces:
@@ -311,20 +685,22 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/protocol.ApiResponse-entity_Store'
-      summary: call Get store, return store by json.
-  /app/v1/users/join:
-    post:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get store and recommend menus, return store and recommend menus
+        data by json.
+      tags:
+      - 가게
+  /app/v1/users/user:
+    delete:
       consumes:
       - application/json
-      description: 회원가입을 할 수 있다.
+      description: 사용자 정보를 삭제 할 수 있다.
       parameters:
-      - description: RequestPostUser JSON
-        in: body
-        name: menu
+      - description: user-id
+        in: query
+        name: user-id
         required: true
-        schema:
-          $ref: '#/definitions/protocol.RequestPostUser'
+        type: string
       produces:
       - application/json
       responses:
@@ -332,7 +708,76 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Delete user, return delete count by json.
+      tags:
+      - 사용자정보
+    get:
+      consumes:
+      - application/json
+      description: 사용자 정보를 보여준다.
+      parameters:
+      - description: user-id
+        in: query
+        name: user-id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get user, return user by json.
+      tags:
+      - 사용자정보
+    post:
+      consumes:
+      - application/json
+      description: 회원가입을 할 수 있다.
+      parameters:
+      - description: RequestUser JSON
+        in: body
+        name: menu
+        required: true
+        schema:
+          $ref: '#/definitions/request.RequestUser'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call Post user, return saved id by json.
+      tags:
+      - 사용자정보
+    put:
+      consumes:
+      - application/json
+      description: 사용자 정보를 수정 할 수 있다.
+      parameters:
+      - description: user-id
+        in: query
+        name: user-id
+        required: true
+        type: string
+      - description: RequestUser JSON
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.RequestUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Put user, return updated count by json.
+      tags:
+      - 사용자정보
   /home/info:
     get:
       consumes:
@@ -344,6 +789,6 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/protocol.ApiResponse-info_Info'
+            $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call App Information, return Info by json.
 swagger: "2.0"
