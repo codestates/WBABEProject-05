@@ -155,32 +155,32 @@ test> rs.initiate()
 
 ### API 
 
-GET    /home/info      
+GET    /home/info       
 
 
-POST   /app/v1/users/user        
-GET    /app/v1/users/user        
-PUT    /app/v1/users/user        
-DELETE /app/v1/users/user   
+POST   /app/v1/users/user         
+GET    /app/v1/users/user         
+PUT    /app/v1/users/user         
+DELETE /app/v1/users/user    
 
 
-GET    /app/v1/stores            
-GET    /app/v1/stores/store      
-POST   /app/v1/stores/store      
+GET    /app/v1/stores             
+GET    /app/v1/stores/store       
+POST   /app/v1/stores/store       
 PUT    /app/v1/stores/store      
-GET    /app/v1/stores/store/recommends
-GET    /app/v1/stores/store/menus
-POST   /app/v1/stores/store/menus/menu
-PUT    /app/v1/stores/store/menus/menu
-DELETE /app/v1/stores/store/menus/menu
+GET    /app/v1/stores/store/recommends   
+GET    /app/v1/stores/store/menus  
+POST   /app/v1/stores/store/menus/menu    
+PUT    /app/v1/stores/store/menus/menu    
+DELETE /app/v1/stores/store/menus/menu   
 
 
-GET    /app/v1/orders/pages/store
-GET    /app/v1/orders/pages/customer
+GET    /app/v1/orders/pages/store   
+GET    /app/v1/orders/pages/customer    
 POST   /app/v1/orders/order      
 GET    /app/v1/orders/order      
-PUT    /app/v1/orders/order/customer
-PUT    /app/v1/orders/order/store
+PUT    /app/v1/orders/order/customer   
+PUT    /app/v1/orders/order/store   
 GET    /app/v1/orders/order/price
 
 
