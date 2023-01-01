@@ -41,7 +41,7 @@ func (r *receiptModel) UpdateReceiptStatus(receipt *entity.Receipt) (int, error)
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	filter := bson.M{"_id": receipt.StoreID}
+	filter := bson.M{"_id": receipt.ID}
 	opt := receipt.NewUpdateStatusOrderBsonSetD()
 	result, err := r.collection.UpdateOne(ctx, filter, opt)
 	if err != nil {
@@ -79,18 +79,23 @@ func (r *receiptModel) SelectReceiptByID(receiptID string) (*entity.Receipt, err
 	}
 	return receipt, nil
 }
-func (r *receiptModel) SelectSortLimitedReceipt(userID string, sort *page.Sort, skip, limit int) ([]*entity.Receipt, error) {
+func (r *receiptModel) SelectSortLimitedReceipt(ID, userRole string, sort *page.Sort, skip, limit int) ([]*entity.Receipt, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := primitive.ObjectIDFromHex(userID)
+	objID, err := primitive.ObjectIDFromHex(ID)
 	if err != nil {
 		return nil, err
 	}
 
-	filter := bson.M{"user_id": ID}
+	filter := bson.M{}
+	switch userRole {
+	case entity.CustomerRole:
+		filter = bson.M{"customer_id": objID}
+	case entity.StoreRole:
+		filter = bson.M{"store_id": objID}
+	}
 	opt := options.Find().SetSort(bson.M{sort.Name: sort.Direction}).SetSkip(int64(skip)).SetLimit(int64(limit))
-
 	receiptCursor, err := r.collection.Find(ctx, filter, opt)
 	if err != nil {
 		return nil, err
@@ -108,8 +113,13 @@ func (r *receiptModel) SelectToDayTotalCount() (int, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	toDay := time.Now().Format("2006-01-02")
-	filter := bson.M{"base_time.created_at": bson.M{"$gte": toDay}}
+	KST, err := time.LoadLocation("Asia/Seoul")
+	if err != nil {
+		return 0, err
+	}
+	now := time.Now()
+	startTime := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, KST).UTC()
+	filter := bson.M{"base_time.created_at": bson.M{"$gte": startTime}}
 	count, err := r.collection.CountDocuments(ctx, filter)
 	if err != nil {
 		return 0, err
@@ -118,16 +128,23 @@ func (r *receiptModel) SelectToDayTotalCount() (int, error) {
 	return int(count), err
 }
 
-func (r *receiptModel) SelectTotalCount(userID string) (int, error) {
+func (r *receiptModel) SelectTotalCount(ID, userRole string) (int, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := primitive.ObjectIDFromHex(userID)
+	objID, err := primitive.ObjectIDFromHex(ID)
 	if err != nil {
 		return 0, err
 	}
 
-	count, err := r.collection.CountDocuments(ctx, bson.M{"user_id": ID})
+	filter := bson.M{}
+	switch userRole {
+	case entity.CustomerRole:
+		filter = bson.M{"customer_id": objID}
+	case entity.StoreRole:
+		filter = bson.M{"store_id": objID}
+	}
+	count, err := r.collection.CountDocuments(ctx, filter)
 	if err != nil {
 		return 0, err
 	}

@@ -1,0 +1,41 @@
+### -> user 생성 - customer => TODO 유저 타입 제한 필요
+POST {{host}}{{v1}}/users/user
+Content-Type: application/json
+
+{
+  "name": "테스트유저1",
+  "nic_name":"테스트유저입니다용1",
+  "password":"1234",
+  "phone_number": "010-2222-3333",
+  "role":"customer"
+}
+### => 63b1364bc261c10ddffa2eb3
+
+### -> user 생성 - store => TODO 유저 타입 제한 필요
+POST {{host}}{{v1}}/users/user
+Content-Type: application/json
+
+{
+  "name": "테스트가게1",
+  "nic_name":"테스트가게입니다용1",
+  "password":"1234",
+  "phone_number": "010-1234-1234",
+  "role":"store"
+}
+### => 63b13650c261c10ddffa2eb4
+###
+GET {{host}}{{v1}}/users/user?user-id=63b13650c261c10ddffa2eb4
+
+###
+PUT {{host}}{{v1}}/users/user?user-id=63b0f7a7e303f470c77b2d1a
+Content-Type: application/json
+
+{
+  "name": "테스트가게1수정",
+  "nic_name":"테스트가게입니다용1수정입니다용",
+  "phone_number": "010-1234-7777",
+  "role":"store"
+}
+
+###
+DELETE {{host}}{{v1}}/users/user?user-id=63b0f7a7e303f470c77b2d1a

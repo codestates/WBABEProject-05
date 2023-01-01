@@ -13,7 +13,8 @@ type OrderRecordController interface {
 	PutOrderRecordFromStore(c *gin.Context)
 
 	// SelectReceipt : 주문내역 조회, 현재 주문내역 리스트 및 상태 조회 - 하기 주문 상태 조회에서도 사용, / ex. 접수중/조리중/배달중 etc 없으면 null 리턴 ; 과거 주문내역 리스트 최신순으로 출력, / 없으면 null 리턴
-	GetOrderRecordsSortedPage(c *gin.Context)
+	GetCustomerOrderRecordsSortedPage(c *gin.Context)
+	GetStoreOrderRecordsSortedPage(c *gin.Context)
 
 	// SelectReceipts : 현재 주문내역 리스트 조회 , 각 메뉴별 상태 변경 , / ex. 상태 : 접수중/접수취소/추가접수/접수-조리중/배달중/배달완료 등을 이용 상태 저장, 각 단계별 사업장에서 상태 업데이트 - 접수중 → 접수 or 접수취소 → 조리중 or 추가주문 → 배달중, /  성공여부 리턴
 	GetOrderRecord(c *gin.Context)

@@ -1,6 +1,0 @@
-GET {{host}}{{v1}}/home/info
-
-###
-GET {{host}}{{v1}}/stores?current-page=1&content-count=2&name=base_time.updated_at&direction=-1
-
-###

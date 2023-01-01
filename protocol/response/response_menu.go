@@ -3,14 +3,15 @@ package response
 import "github.com/codestates/WBABEProject-05/model/entity"
 
 type ResponseMenu struct {
-	Name        string  `json:"name" validate:"required"`
-	LimitCount  string  `bson:"limit_count,omitempty"`
-	Possible    bool    `bson:"possible,omitempty"`
-	Price       int     `bson:"price,omitempty"`
-	Origin      string  `bson:"origin,omitempty"`
-	Description string  `bson:"description,omitempty"`
-	Rating      float64 `bson:"rating,omitempty"`
-	OrderCount  int     `bson:"order_count,omitempty"`
+	ID          string  `json:"menu_id"`
+	Name        string  `json:"name"`
+	LimitCount  string  `json:"limit_count,omitempty"`
+	Possible    bool    `json:"possible,omitempty"`
+	Price       int     `json:"price,omitempty"`
+	Origin      string  `json:"origin,omitempty"`
+	Description string  `json:"description,omitempty"`
+	Rating      float64 `json:"rating,omitempty"`
+	OrderCount  int     `json:"order_count,omitempty"`
 }
 
 func FromMenus(menus []*entity.Menu) []*ResponseMenu {
@@ -23,6 +24,7 @@ func FromMenus(menus []*entity.Menu) []*ResponseMenu {
 
 func FromMenu(menu *entity.Menu) *ResponseMenu {
 	return &ResponseMenu{
+		ID:          menu.ID.Hex(),
 		Name:        menu.Name,
 		LimitCount:  menu.LimitCount,
 		Possible:    menu.Possible,

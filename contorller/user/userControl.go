@@ -61,7 +61,7 @@ func (u *userControl) GetUser(c *gin.Context) {
 // @Param user body protocol.RequestUser true "RequestUser JSON"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) PutUser(c *gin.Context) {
-	reqU := &request.RequestUser{}
+	reqU := &request.RequestPutUser{}
 	usrID := c.Query("user-id")
 	err := c.ShouldBindJSON(reqU)
 	if err != nil || usrID == "" {
@@ -102,7 +102,7 @@ func (u *userControl) DeleteUser(c *gin.Context) {
 	}
 	protocol.SuccessData(gin.H{
 		"deleted_count": cnt,
-	})
+	}).Response(c)
 }
 
 // PostUser godoc

@@ -1,7 +1,6 @@
 package request
 
 type RequestPutStoreOrder struct {
-	ID string `json:"_id,omitempty"`
-	// Status 접수중/접수취소/추가접수/접수중/조리중/배달중/배달완료
-	Status string `json:"status,omitempty"`
+	ID     string `json:"order_id,omitempty"`
+	Status string `json:"status,omitempty" validate:"required, eq=주문대기|eq=주문취소|eq=주문접수완료|eq=조리중|eq=배달중|eq=배달완료"`
 }

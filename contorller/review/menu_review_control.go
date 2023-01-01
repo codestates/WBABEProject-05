@@ -1,6 +1,7 @@
 package review
 
 import (
+	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/protocol"
 	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
@@ -15,7 +16,7 @@ type menuReviewControl struct {
 	menuReviewService customer.MenuReviewServicer
 }
 
-func NeMenuReviewControl(svc customer.MenuReviewServicer) *menuReviewControl {
+func NewMenuReviewControl(svc customer.MenuReviewServicer) *menuReviewControl {
 	if instance != nil {
 		return instance
 	}
@@ -25,15 +26,15 @@ func NeMenuReviewControl(svc customer.MenuReviewServicer) *menuReviewControl {
 	return instance
 }
 
-func (m *menuReviewControl) GetMenuSortedPagesByUserID(c *gin.Context) {
+func (m *menuReviewControl) GetMenuSortedPagesByCustomerID(c *gin.Context) {
 	page := &request.RequestPage{}
-	userID := c.Query("user-id")
-	if err := c.ShouldBindQuery(page); err != nil || userID == "" {
+	customerID := c.Query("customer-id")
+	if err := c.ShouldBindQuery(page); err != nil || customerID == "" {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
 
-	reviews, err := m.menuReviewService.FindReviewSortedPageByUserID(userID, page)
+	reviews, err := m.menuReviewService.FindReviewSortedPageByUserID(customerID, entity.CustomerRole, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return

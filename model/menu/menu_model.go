@@ -185,12 +185,15 @@ func (m *menuModel) UpdateMenusInCOrderCount(menus []string) (int, error) {
 		return 0, err
 	}
 
-	var filters []bson.E
-	for _, ID := range IDs {
-		filters = append(filters, bson.E{"_id", ID})
-	}
-	opt := bson.D{{"$mul", bson.M{"$inc": bson.M{"order_count": 1}}}}
-	result, err := m.collection.UpdateMany(ctx, filters, opt)
+	//var filters []bson.E
+	//for _, ID := range IDs {
+	//	filters = append(filters, bson.E{"_id", ID})
+	//}
+	//    .updateMany({"_id" : {"$in" : [new ObjectId("63b0f93fe303f470c77b2d1f"), new ObjectId("63b0fb17e303f470c77b2d20")]}},
+	//        {"$inc":{"order_count": 1}})
+	filter := bson.M{"_id": bson.M{"$in": IDs}}
+	opt := bson.M{"$inc": bson.M{"order_count": 1}}
+	result, err := m.collection.UpdateMany(ctx, filter, opt)
 	if err != nil {
 		return 0, err
 	}

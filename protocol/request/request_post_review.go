@@ -8,11 +8,11 @@ import (
 )
 
 type RequestPostReview struct {
-	StoreID string `json:"store_id,omitempty"`
-	UserID  string `json:"user_id,omitempty"`
-	Menu    string `json:"menu_ids,omitempty"`
-	Content string `json:"content,omitempty"`
-	Rating  int    `json:"rating"`
+	StoreID    string `json:"store_id,omitempty"`
+	CustomerId string `json:"customer_id,omitempty"`
+	Menu       string `json:"menu_id,omitempty"`
+	Content    string `json:"content,omitempty"`
+	Rating     int    `json:"rating" validate:"required, min=0, max=5"`
 }
 
 func (r *RequestPostReview) NewReview() (*entity.Review, error) {
@@ -21,7 +21,7 @@ func (r *RequestPostReview) NewReview() (*entity.Review, error) {
 		return nil, err
 	}
 
-	uID, err := primitive.ObjectIDFromHex(r.UserID)
+	cID, err := primitive.ObjectIDFromHex(r.CustomerId)
 	if err != nil {
 		return nil, err
 	}
@@ -33,12 +33,12 @@ func (r *RequestPostReview) NewReview() (*entity.Review, error) {
 	}
 
 	return &entity.Review{
-		ID:      primitive.NewObjectID(),
-		StoreID: sID,
-		UserID:  uID,
-		Menu:    mID,
-		Content: r.Content,
-		Rating:  r.Rating,
+		ID:         primitive.NewObjectID(),
+		StoreID:    sID,
+		CustomerID: cID,
+		Menu:       mID,
+		Content:    r.Content,
+		Rating:     r.Rating,
 		BaseTime: &dom.BaseTime{
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),

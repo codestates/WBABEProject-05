@@ -38,19 +38,26 @@ func (r *GinRoute) Handle() http.Handler {
 
 	v1 := gr.Group("app/v1")
 	{
-		user := v1.Group("/users")
+		users := v1.Group("/users")
 		{
-			UsersHandler(user)
+			UsersHandler(users)
 		}
 
-		store := v1.Group("/stores")
+		stores := v1.Group("/stores")
 		{
-			StoresHandler(store)
+			StoresHandler(stores)
+			menus := stores.Group("/store/menus")
+			MenusHandler(menus)
 		}
 
-		order := v1.Group("/orders")
+		orders := v1.Group("/orders")
 		{
-			OrdersHandler(order)
+			OrdersHandler(orders)
+		}
+
+		reviews := v1.Group("/reviews")
+		{
+			ReviewHandler(reviews)
 		}
 	}
 

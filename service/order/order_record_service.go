@@ -57,12 +57,14 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 		return "", err
 	}
 
-	// OrderCount 의 증가는 비즈니스상 중요하지않아 로그로만 관리
-	count, err := o.menuModel.UpdateMenusInCOrderCount(order.Menus)
-	if err != nil || count == 0 {
-		msg := fmt.Sprintf("does not update order count Menu IDs %v", order.Menus)
-		logger.AppLog.Error(errors.New(msg))
-	}
+	// OrderCount 의 증가는 비즈니스상 중요하지않아 채널을 활용
+	go func() {
+		count, err := o.menuModel.UpdateMenusInCOrderCount(order.Menus)
+		if err != nil || count == 0 {
+			msg := fmt.Sprintf("does not update order count Menu IDs %v", order.Menus)
+			logger.AppLog.Error(errors.New(msg))
+		}
+	}()
 
 	return insertedId, nil
 }
@@ -78,7 +80,6 @@ func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.Reques
 		return "", error2.BadAccessOrderError.New()
 	}
 
-	// TODO 취소시키고 새로접수하는게 맞는것 같다.
 	if _, err := o.receiptModel.UpdateCancelReceipt(foundOrder); err != nil {
 		return "", err
 	}
@@ -104,15 +105,15 @@ func (o *orderRecordService) ModifyOrderRecordFromStore(order *request.RequestPu
 	return updatedCnt, nil
 }
 
-func (o *orderRecordService) FindOrderRecordsSortedPage(userID string, pg *request.RequestPage) (*page.PageData[any], error) {
+func (o *orderRecordService) FindOrderRecordsSortedPage(ID, userRole string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := pg.CurrentPage * pg.ContentCount
 
-	receipts, err := o.receiptModel.SelectSortLimitedReceipt(userID, pg.Sort, skip, pg.ContentCount)
+	receipts, err := o.receiptModel.SelectSortLimitedReceipt(ID, userRole, pg.Sort, skip, pg.ContentCount)
 	if err != nil {
 		return nil, err
 	}
 
-	totalCount, err := o.receiptModel.SelectTotalCount(userID)
+	totalCount, err := o.receiptModel.SelectTotalCount(ID, userRole)
 	if err != nil {
 		return nil, err
 	}

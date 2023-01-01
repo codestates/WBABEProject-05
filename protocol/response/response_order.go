@@ -5,12 +5,11 @@ import (
 )
 
 type ResponseOrder struct {
-	ID         string          `json:"_id,omitempty"`
-	StoreID    string          `json:"store_id,omitempty"`
-	CustomerID string          `json:"customer_id,omitempty"`
-	Menu       []*ResponseMenu `json:"menu,omitempty"`
-	Price      int             `json:"price,omitempty"`
-	// Status 접수중/접수취소/추가접수/접수중/조리중/배달중/배달완료
+	ID           string            `json:"_id,omitempty"`
+	StoreID      string            `json:"store_id,omitempty"`
+	CustomerID   string            `json:"customer_id,omitempty"`
+	Menu         []*ResponseMenu   `json:"menu,omitempty"`
+	Price        int               `json:"price,omitempty"`
 	Status       string            `json:"status,omitempty"`
 	CustomerAddr *ResponseAddress  `json:"ordered_addr"`
 	Numbering    string            `json:"numbering"`

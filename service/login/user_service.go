@@ -1,9 +1,9 @@
 package login
 
 import (
-	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/user"
 	"github.com/codestates/WBABEProject-05/protocol/request"
+	"github.com/codestates/WBABEProject-05/protocol/response"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 )
@@ -33,8 +33,8 @@ func (u *userService) RegisterUser(usr *request.RequestUser) (string, error) {
 	}
 	return savedId, err
 }
-func (u *userService) ModifyUser(ID string, usr *request.RequestUser) (int, error) {
-	updateUser, err := usr.NewUpdateUser(ID)
+func (u *userService) ModifyUser(ID string, usr *request.RequestPutUser) (int, error) {
+	updateUser, err := usr.NewUpdatePutUser(ID)
 	if err != nil {
 		return 0, err
 	}
@@ -45,15 +45,16 @@ func (u *userService) ModifyUser(ID string, usr *request.RequestUser) (int, erro
 	}
 	return updateCount, nil
 }
-func (u *userService) FindUser(id string) (*entity.User, error) {
+func (u *userService) FindUser(id string) (*response.ResponseUser, error) {
 	findUser, err := u.userModel.SelectUser(id)
 	if err != nil {
 		return nil, err
 	}
-	return findUser, nil
+	resUser := response.NewResponseUserFromUser(findUser)
+	return resUser, nil
 }
 func (u *userService) DeleteUser(id string) (int, error) {
-	deleteUser, err := u.DeleteUser(id)
+	deleteUser, err := u.userModel.DeleteUser(id)
 	if err != nil {
 		return 0, err
 	}

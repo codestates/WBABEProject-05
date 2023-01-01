@@ -47,15 +47,15 @@ func (m *menuReviewService) FindReviewSortedPageByMenuID(menuID string, pg *requ
 
 	return page.NewPageData(reviews, pgInfo), nil
 }
-func (m *menuReviewService) FindReviewSortedPageByUserID(userID string, pg *request.RequestPage) (*page.PageData[any], error) {
+func (m *menuReviewService) FindReviewSortedPageByUserID(ID, userRole string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := pg.CurrentPage * pg.ContentCount
 
-	reviews, err := m.reviewModel.SelectSortLimitedReviewsByUserID(userID, pg.Sort, skip, pg.ContentCount)
+	reviews, err := m.reviewModel.SelectSortLimitedReviewsByUserID(ID, userRole, pg.Sort, skip, pg.ContentCount)
 	if err != nil {
 		return nil, err
 	}
 
-	totalCount, err := m.reviewModel.SelectTotalCountByUserID(userID)
+	totalCount, err := m.reviewModel.SelectTotalCountByUserID(ID, userRole)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +86,7 @@ func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview
 	menu.ReviewCount++
 	menu.Rating = math.Round((float64(menu.TotalReviewScore)/float64(menu.ReviewCount))*10) / 10
 
-	// Rating 은 비즈니스상 중요하지않아 로그로만 관리
+	// Rating 은 비즈니스상 중요하지않아 채널을 활용
 	rating, err := m.menuModel.UpdateAboutRating(menu)
 	if err != nil || rating == 0 {
 		msg := fmt.Sprintf("does not update rating Menu ID %v", menu.ID)

@@ -9,7 +9,7 @@ import (
 
 type Menu struct {
 	ID               primitive.ObjectID `bson:"_id,omitempty"`
-	StoreID          primitive.ObjectID `bson:"store_id"`
+	StoreID          primitive.ObjectID `bson:"store_id,omitempty"`
 	Name             string             `bson:"name,omitempty"`
 	LimitCount       string             `bson:"limit_count,omitempty"`
 	Possible         bool               `bson:"possible,omitempty"`
@@ -18,8 +18,8 @@ type Menu struct {
 	Description      string             `bson:"description,omitempty"`
 	Rating           float64            `bson:"rating,omitempty"`
 	OrderCount       int                `bson:"order_count,omitempty"`
-	ReviewCount      int                `bson:"review_count"`
-	TotalReviewScore int                `bson:"total_review_score"`
+	ReviewCount      int                `bson:"review_count,omitempty"`
+	TotalReviewScore int                `bson:"total_review_score,omitempty"`
 	BaseTime         *dom.BaseTime      `bson:"base_time"`
 }
 
@@ -43,9 +43,9 @@ func (m *Menu) NewUpdateMenuBsonSetDAboutReview() bson.D {
 	return bson.D{
 		{"$set",
 			bson.D{
-				{"Rating", m.Rating},
-				{"ReviewCount", m.ReviewCount},
-				{"TotalReviewScore", m.TotalReviewScore},
+				{"rating", m.Rating},
+				{"review_count", m.ReviewCount},
+				{"total_review_score", m.TotalReviewScore},
 				{"base_time.updated_at", time.Now()},
 			},
 		},
