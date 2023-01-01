@@ -21,6 +21,7 @@ func NewInfoControl() *infoControl {
 }
 
 // GetInformation godoc
+// @Tags App
 // @Summary call App Information, return Info by json.
 // @Description App 에 대해 간략적인 정보를(소개) 제공해 준다.
 // @name GetInformation
