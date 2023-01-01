@@ -65,7 +65,6 @@ func (m *menuReviewService) FindReviewSortedPageByUserID(ID, userRole string, pg
 	return page.NewPageData(reviews, pgInfo), nil
 }
 
-// InsertReview 메뉴별 평점 작성 : 과거 주문 내역 중, 평점 및 리뷰 작성, 해당 주문내역을 기준, 평점 정보, 리뷰 스트링을 입력받아 과거 주문내역 업데이트 저장, / 성공 여부 리턴
 func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview) (string, error) {
 	r, err := review.NewReview()
 	if err != nil {
@@ -77,20 +76,20 @@ func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview
 		return "", err
 	}
 
-	menu, err := m.menuModel.SelectMenuByID(review.MenuID)
+	foundM, err := m.menuModel.SelectMenuByID(review.MenuID)
 	if err != nil {
 		return "", err
 	}
 
-	menu.TotalReviewScore += review.Rating
-	menu.ReviewCount++
-	menu.Rating = math.Round((float64(menu.TotalReviewScore)/float64(menu.ReviewCount))*10) / 10
+	foundM.TotalReviewScore += review.Rating
+	foundM.ReviewCount++
+	foundM.Rating = math.Round((float64(foundM.TotalReviewScore)/float64(foundM.ReviewCount))*10) / 10
 
-	// Rating 은 비즈니스상 중요하지않아 채널을 활용
+	// Rating 은 비즈니스상 중요하지않아 고루틴 활용
 	go func() {
-		rating, err := m.menuModel.UpdateAboutRating(menu)
+		rating, err := m.menuModel.UpdateAboutRating(foundM)
 		if err != nil || rating == 0 {
-			msg := fmt.Sprintf("does not update rating Menu ID %v", menu.ID)
+			msg := fmt.Sprintf("does not update rating Menu ID %v", foundM.ID)
 			logger.AppLog.Error(errors.New(msg))
 		}
 	}()

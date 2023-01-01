@@ -55,7 +55,7 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 		return "", err
 	}
 
-	// OrderCount 의 증가는 비즈니스상 중요하지않아 채널을 활용
+	// OrderCount 의 증가는 비즈니스상 중요하지않아 고루틴 활용
 	go func() {
 		count, err := o.menuModel.UpdateMenusInCOrderCount(order.Menus)
 		if err != nil || count == 0 {
