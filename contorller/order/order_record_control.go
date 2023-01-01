@@ -1,7 +1,7 @@
 package order
 
 import (
-	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/model/util"
 	"github.com/codestates/WBABEProject-05/protocol"
 	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
@@ -99,7 +99,7 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 		return
 	}
 
-	receipts, err := o.orderService.FindOrderRecordsSortedPage(customerID, entity.CustomerRole, page)
+	receipts, err := o.orderService.FindOrderRecordsSortedPage(customerID, util.CustomerRole, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
@@ -115,7 +115,7 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 		return
 	}
 
-	receipts, err := o.orderService.FindOrderRecordsSortedPage(storeID, entity.StoreRole, page)
+	receipts, err := o.orderService.FindOrderRecordsSortedPage(storeID, util.StoreRole, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return

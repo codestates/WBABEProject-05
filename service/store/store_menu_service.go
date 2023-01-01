@@ -3,12 +3,12 @@ package store
 import (
 	"encoding/json"
 	"github.com/codestates/WBABEProject-05/common/flag"
-	"github.com/codestates/WBABEProject-05/common/util"
 	"github.com/codestates/WBABEProject-05/config/db"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/store"
+	"github.com/codestates/WBABEProject-05/model/util"
 	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
@@ -42,8 +42,7 @@ func (s *storeMenuService) RegisterStore(store *request.RequestPostStore) (strin
 		return "", err
 	}
 
-	_, err = s.storeModel.SelectStoreByPhone(postStore.StorePhone)
-	if err == nil {
+	if _, err = s.storeModel.SelectStoreByPhone(postStore.StorePhone); err == nil {
 		return "", &error2.DuplicatedDataError
 	}
 
@@ -51,6 +50,7 @@ func (s *storeMenuService) RegisterStore(store *request.RequestPostStore) (strin
 	if err != nil {
 		return "", err
 	}
+
 	return savedId, nil
 }
 
@@ -59,11 +59,13 @@ func (s *storeMenuService) ModifyStore(storeID string, store *request.RequestPut
 	if err != nil {
 		return 0, err
 	}
+
 	updateStore, err := s.storeModel.UpdateStore(putStore)
 	if err != nil {
 		return 0, err
 	}
-	return updateStore, err
+
+	return int(updateStore), err
 }
 
 func (s *storeMenuService) RegisterMenu(menu *request.RequestMenu) (string, error) {
@@ -76,6 +78,7 @@ func (s *storeMenuService) RegisterMenu(menu *request.RequestMenu) (string, erro
 	if err != nil {
 		return "", err
 	}
+
 	return savedID, nil
 }
 func (s *storeMenuService) ModifyMenu(menuId string, menu *request.RequestMenu) (int, error) {
@@ -88,7 +91,8 @@ func (s *storeMenuService) ModifyMenu(menuId string, menu *request.RequestMenu) 
 	if err != nil {
 		return 0, err
 	}
-	return cnt, nil
+
+	return int(cnt), nil
 }
 
 func (s *storeMenuService) DeleteMenuAndBackup(menuId string) (int, error) {
@@ -97,16 +101,7 @@ func (s *storeMenuService) DeleteMenuAndBackup(menuId string) (int, error) {
 		return 0, err
 	}
 
-	path := flag.Flags[flag.DatabaseFlag.Name]
-	dbcfg := db.NewDbConfig(*path)
-	err = db.WriteBackup(dbcfg.BackupPath, &deletedM)
-	if err != nil {
-		logger.AppLog.Error(err.Error())
-		if m, err := json.Marshal(deletedM); err == nil {
-			logger.AppLog.Error(string(m))
-		}
-		return 0, err
-	}
+	go s.saveDeletedMenuBackupData(deletedM)
 
 	return 1, nil
 }
@@ -124,7 +119,7 @@ func (s *storeMenuService) FindMenusSortedPage(storeID string, pg *request.Reque
 		return nil, err
 	}
 
-	pgInfo := pg.NewPageInfo(totalCount)
+	pgInfo := pg.NewPageInfo(int(totalCount))
 
 	return page.NewPageData(menus, pgInfo), nil
 }
@@ -141,8 +136,7 @@ func (s *storeMenuService) FindRecommendMenus(storeID string) (*response.Respons
 		return nil, err
 	}
 
-	responseStore := response.NewResponseStore(foundStore, menus)
-	return responseStore, nil
+	return response.NewResponseStore(foundStore, menus), nil
 }
 
 func (s *storeMenuService) FindStore(storeID string) (*entity.Store, error) {
@@ -150,6 +144,7 @@ func (s *storeMenuService) FindStore(storeID string) (*entity.Store, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return foundStore, nil
 }
 
@@ -166,7 +161,20 @@ func (s *storeMenuService) FindStoresSortedPage(pg *request.RequestPage) (*page.
 		return nil, err
 	}
 
-	pgInfo := pg.NewPageInfo(totalCount)
+	pgInfo := pg.NewPageInfo(int(totalCount))
 
 	return page.NewPageData(receipts, pgInfo), nil
+}
+
+// saveDeletedMenuBackupData 파일에 데이터를 쓰는데, 에러발생시 데이터를 로그로 남긴다
+func (s *storeMenuService) saveDeletedMenuBackupData(deletedM *entity.Menu) {
+	path := flag.Flags[flag.DatabaseFlag.Name]
+	dbcfg := db.NewDbConfig(*path)
+	err := db.WriteBackup(dbcfg.BackupPath, &deletedM)
+	if err != nil {
+		logger.AppLog.Error(err.Error())
+		if m, err := json.Marshal(deletedM); err == nil {
+			logger.AppLog.Error(string(m))
+		}
+	}
 }

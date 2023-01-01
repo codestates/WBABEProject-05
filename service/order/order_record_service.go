@@ -3,11 +3,11 @@ package order
 import (
 	"errors"
 	"fmt"
-	"github.com/codestates/WBABEProject-05/common/util"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/receipt"
+	"github.com/codestates/WBABEProject-05/model/util"
 	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
@@ -42,15 +42,13 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 		return "", err
 	}
 
-	totalPrice := o.sumMenusPrice(menus)
-	rct.Price = totalPrice
+	rct.Price = o.sumMenusPrice(menus)
 
 	toDayCnt, err := o.receiptModel.SelectToDayTotalCount()
 	if err != nil {
 		return "", err
 	}
-	numbering := fmt.Sprintf("%d-%d", time.Now().UnixNano(), toDayCnt)
-	rct.Numbering = numbering
+	rct.Numbering = o.newNumbering(toDayCnt)
 
 	insertedId, err := o.receiptModel.InsertReceipt(rct)
 	if err != nil {
@@ -68,6 +66,7 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 
 	return insertedId, nil
 }
+
 func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.RequestPutCustomerOrder) (string, error) {
 	foundOrder, err := o.receiptModel.SelectReceiptByID(order.ID)
 	if err != nil {
@@ -76,7 +75,8 @@ func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.Reques
 	if foundOrder.Status != entity.Waiting {
 		return "", error2.AlreadyReceivedOrderError.New()
 	}
-	if foundOrder.CustomerID.Hex() != order.CustomerID {
+
+	if util.ConvertObjIDToString(foundOrder.CustomerID) != order.CustomerID {
 		return "", error2.BadAccessOrderError.New()
 	}
 
@@ -91,18 +91,20 @@ func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.Reques
 
 	return savedID, nil
 }
-
 func (o *orderRecordService) ModifyOrderRecordFromStore(order *request.RequestPutStoreOrder) (int, error) {
 	foundOrder, err := o.receiptModel.SelectReceiptByID(order.ID)
 	if err != nil {
 		return 0, err
 	}
+
 	foundOrder.Status = order.Status
+
 	updatedCnt, err := o.receiptModel.UpdateReceiptStatus(foundOrder)
 	if err != nil {
 		return 0, err
 	}
-	return updatedCnt, nil
+
+	return int(updatedCnt), nil
 }
 
 func (o *orderRecordService) FindOrderRecordsSortedPage(ID, userRole string, pg *request.RequestPage) (*page.PageData[any], error) {
@@ -118,13 +120,9 @@ func (o *orderRecordService) FindOrderRecordsSortedPage(ID, userRole string, pg 
 		return nil, err
 	}
 
-	pgInfo := pg.NewPageInfo(totalCount)
+	pgInfo := pg.NewPageInfo(int(totalCount))
 
 	return page.NewPageData(receipts, pgInfo), nil
-}
-
-func (o *orderRecordService) SelectReceipts() {
-
 }
 
 func (o *orderRecordService) FindOrderRecord(orderID string) (*response.ResponseOrder, error) {
@@ -132,12 +130,16 @@ func (o *orderRecordService) FindOrderRecord(orderID string) (*response.Response
 	if err != nil {
 		return nil, err
 	}
+
 	menuIDs := util.ConvertObjIDsToStrings(foundReceipt.Menus)
+
 	menus, err := o.menuModel.SelectMenusByIDs(foundReceipt.StoreID.Hex(), menuIDs)
 	if err != nil {
 		return nil, err
 	}
+
 	resOrder := response.FromReceiptAndMenus(foundReceipt, menus)
+
 	return resOrder, nil
 }
 
@@ -146,15 +148,22 @@ func (o *orderRecordService) FiendSelectedMenusTotalPrice(storeID string, menuID
 	if err != nil {
 		return nil, err
 	}
+
 	totalPrice := o.sumMenusPrice(menus)
+
 	resCheckPrice := response.NewResponseCheckPrice(menus, totalPrice)
+
 	return resCheckPrice, nil
 }
 
 func (o *orderRecordService) sumMenusPrice(menus []*entity.Menu) int {
 	var totalPrice int
-	for _, menu := range menus {
-		totalPrice += menu.Price
+	for _, m := range menus {
+		totalPrice += m.Price
 	}
 	return totalPrice
+}
+
+func (o *orderRecordService) newNumbering(toDayCnt int64) string {
+	return fmt.Sprintf("%d-%d", time.Now().UnixNano(), toDayCnt)
 }

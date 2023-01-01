@@ -34,18 +34,18 @@ func (u *userModel) PostUser(user *entity.User) (string, error) {
 
 	return user.ID.Hex(), nil
 }
-func (u *userModel) PutUser(user *entity.User) (int, error) {
+func (u *userModel) PutUser(user *entity.User) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
 	filter := bson.M{"_id": user.ID}
-	setField := user.NewUpdateUserBsonSetD()
+	setField := user.NewBsonSetDForUpdateUser()
 	updateRes, err := u.collection.UpdateOne(ctx, filter, setField)
 	if err != nil {
 		return 0, err
 	}
 
-	return int(updateRes.ModifiedCount), nil
+	return updateRes.ModifiedCount, nil
 }
 func (u *userModel) SelectUser(id string) (*entity.User, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
@@ -63,7 +63,7 @@ func (u *userModel) SelectUser(id string) (*entity.User, error) {
 	}
 	return user, nil
 }
-func (u *userModel) DeleteUser(id string) (int, error) {
+func (u *userModel) DeleteUser(id string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -77,5 +77,5 @@ func (u *userModel) DeleteUser(id string) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	return int(delRes.DeletedCount), nil
+	return delRes.DeletedCount, nil
 }

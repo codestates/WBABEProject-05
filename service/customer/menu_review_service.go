@@ -43,7 +43,7 @@ func (m *menuReviewService) FindReviewSortedPageByMenuID(menuID string, pg *requ
 		return nil, err
 	}
 
-	pgInfo := pg.NewPageInfo(totalCount)
+	pgInfo := pg.NewPageInfo(int(totalCount))
 
 	return page.NewPageData(reviews, pgInfo), nil
 }
@@ -60,7 +60,7 @@ func (m *menuReviewService) FindReviewSortedPageByUserID(ID, userRole string, pg
 		return nil, err
 	}
 
-	pgInfo := pg.NewPageInfo(totalCount)
+	pgInfo := pg.NewPageInfo(int(totalCount))
 
 	return page.NewPageData(reviews, pgInfo), nil
 }
@@ -77,7 +77,7 @@ func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview
 		return "", err
 	}
 
-	menu, err := m.menuModel.SelectMenuByID(review.Menu)
+	menu, err := m.menuModel.SelectMenuByID(review.MenuID)
 	if err != nil {
 		return "", err
 	}
@@ -87,11 +87,13 @@ func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview
 	menu.Rating = math.Round((float64(menu.TotalReviewScore)/float64(menu.ReviewCount))*10) / 10
 
 	// Rating 은 비즈니스상 중요하지않아 채널을 활용
-	rating, err := m.menuModel.UpdateAboutRating(menu)
-	if err != nil || rating == 0 {
-		msg := fmt.Sprintf("does not update rating Menu ID %v", menu.ID)
-		logger.AppLog.Error(errors.New(msg))
-	}
+	go func() {
+		rating, err := m.menuModel.UpdateAboutRating(menu)
+		if err != nil || rating == 0 {
+			msg := fmt.Sprintf("does not update rating Menu ID %v", menu.ID)
+			logger.AppLog.Error(errors.New(msg))
+		}
+	}()
 
 	return savedID, nil
 }

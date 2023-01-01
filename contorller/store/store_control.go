@@ -201,7 +201,7 @@ func (s *storeControl) GetStoresSortedPage(c *gin.Context) {
 // @Router /app/v1/stores/swag/store [get]
 // @Param store-id query string true "store_id"
 // @Success 200 {object} protocol.ApiResponse[entity.Store]
-func (s *storeControl) GetStoreInSwagForTest(c *gin.Context) {
+func (s *storeControl) GetStore(c *gin.Context) {
 	strId := c.Query("store-id")
 	str, err := s.storeMenuService.FindStore(strId)
 	if err != nil {

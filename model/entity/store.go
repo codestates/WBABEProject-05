@@ -8,11 +8,11 @@ import (
 )
 
 type Store struct {
-	ID             primitive.ObjectID   `bson:"_id"`
-	UserID         primitive.ObjectID   `bson:"user_id"`
-	Name           string               `bson:"name"`
+	ID             primitive.ObjectID   `bson:"_id,omitempty"`
+	UserID         primitive.ObjectID   `bson:"user_id,omitempty"`
+	Name           string               `bson:"name,omitempty"`
 	Address        *dom.Address         `bson:"address"`
-	StorePhone     string               `bson:"store_phone"`
+	StorePhone     string               `bson:"store_phone,omitempty"`
 	RecommendMenus []primitive.ObjectID `bson:"recommend_menus,omitempty"`
 	BaseTime       *dom.BaseTime        `bson:"base_time"`
 }

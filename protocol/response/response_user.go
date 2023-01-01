@@ -5,11 +5,11 @@ import (
 )
 
 type ResponseUser struct {
-	ID          string `json:"user_id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	NicName     string `json:"nic_name,omitempty"`
-	PhoneNumber string `json:"phone_number,omitempty"`
-	Role        string `json:"role,omitempty"`
+	ID          string `json:"user_id"`
+	Name        string `json:"name"`
+	NicName     string `json:"nic_name"`
+	PhoneNumber string `json:"phone_number"`
+	Role        string `json:"role"`
 }
 
 func NewResponseUserFromUser(user *entity.User) *ResponseUser {

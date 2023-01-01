@@ -5,13 +5,13 @@ import "github.com/codestates/WBABEProject-05/model/entity"
 type ResponseMenu struct {
 	ID          string  `json:"menu_id"`
 	Name        string  `json:"name"`
-	LimitCount  string  `json:"limit_count,omitempty"`
-	Possible    bool    `json:"possible,omitempty"`
-	Price       int     `json:"price,omitempty"`
-	Origin      string  `json:"origin,omitempty"`
-	Description string  `json:"description,omitempty"`
-	Rating      float64 `json:"rating,omitempty"`
-	OrderCount  int     `json:"order_count,omitempty"`
+	LimitCount  string  `json:"limit_count"`
+	Possible    bool    `json:"possible"`
+	Price       int     `json:"price"`
+	Origin      string  `json:"origin"`
+	Description string  `json:"description"`
+	Rating      float64 `json:"rating"`
+	OrderCount  int     `json:"order_count"`
 }
 
 func FromMenus(menus []*entity.Menu) []*ResponseMenu {

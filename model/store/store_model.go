@@ -3,11 +3,10 @@ package store
 import (
 	"github.com/codestates/WBABEProject-05/common"
 	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/model/util"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // TODO 싱글톤을 메서드보다 변수로 갖다쓰는게 낫지않나? init 과 함께 사용하면 될것같은데 나중에 해보자
@@ -31,7 +30,7 @@ func (s *storeModel) SelectStoreByID(storeId string) (*entity.Store, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := primitive.ObjectIDFromHex(storeId)
+	ID, err := util.ConvertStringToObjID(storeId)
 	if err != nil {
 		return nil, err
 	}
@@ -41,6 +40,7 @@ func (s *storeModel) SelectStoreByID(storeId string) (*entity.Store, error) {
 	if err := s.collection.FindOne(ctx, filter).Decode(&store); err != nil {
 		return nil, err
 	}
+
 	return store, nil
 }
 
@@ -53,6 +53,7 @@ func (s *storeModel) SelectStoreByPhone(storePhone string) (*entity.Store, error
 	if err := s.collection.FindOne(ctx, filter).Decode(&store); err != nil {
 		return nil, err
 	}
+
 	return store, nil
 }
 
@@ -60,14 +61,14 @@ func (s *storeModel) InsertStore(store *entity.Store) (string, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	_, err := s.collection.InsertOne(ctx, store)
-	if err != nil {
+	if _, err := s.collection.InsertOne(ctx, store); err != nil {
 		return "", err
 	}
+
 	return store.ID.Hex(), nil
 }
 
-func (s *storeModel) UpdateStore(store *entity.Store) (int, error) {
+func (s *storeModel) UpdateStore(store *entity.Store) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -78,7 +79,7 @@ func (s *storeModel) UpdateStore(store *entity.Store) (int, error) {
 		return 0, err
 	}
 
-	return int(updateResult.ModifiedCount), nil
+	return updateResult.ModifiedCount, nil
 }
 
 func (s *storeModel) SelectSortLimitedStore(sort *page.Sort, skip int, limit int) ([]*entity.Store, error) {
@@ -86,8 +87,7 @@ func (s *storeModel) SelectSortLimitedStore(sort *page.Sort, skip int, limit int
 	defer cancel()
 
 	filter := bson.M{}
-	opt := options.Find().SetSort(bson.M{sort.Name: sort.Direction}).SetSkip(int64(skip)).SetLimit(int64(limit))
-
+	opt := util.NewSortFindOptions(sort, skip, limit)
 	receiptCursor, err := s.collection.Find(ctx, filter, opt)
 	if err != nil {
 		return nil, err
@@ -101,7 +101,7 @@ func (s *storeModel) SelectSortLimitedStore(sort *page.Sort, skip int, limit int
 	return stores, nil
 }
 
-func (s *storeModel) SelectTotalCount() (int, error) {
+func (s *storeModel) SelectTotalCount() (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -110,5 +110,5 @@ func (s *storeModel) SelectTotalCount() (int, error) {
 		return 0, err
 	}
 
-	return int(count), nil
+	return count, nil
 }

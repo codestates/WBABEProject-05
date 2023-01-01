@@ -32,7 +32,7 @@ func StoresHandler(storesUrl *gin.RouterGroup) {
 	storesUrl.PUT("/store", store2.StoreControl.PutSore)                      // 가게 수정
 	storesUrl.GET("/store/recommends", store2.StoreControl.GetRecommendMenus) // 가게 추천메뉴
 	// "/swag/store" sagger 테스트용
-	storesUrl.GET("/swag/store", store2.StoreControl.GetStoreInSwagForTest)
+	storesUrl.GET("/swag/store", store2.StoreControl.GetStore)
 }
 
 // MenusHandler ("/stores/store/menus")
@@ -45,19 +45,19 @@ func MenusHandler(menusUrl *gin.RouterGroup) {
 
 // OrdersHandler ("/orders")
 func OrdersHandler(ordersUrl *gin.RouterGroup) {
-	ordersUrl.GET("/pages/store", order2.OrderRecordControl.GetStoreOrderRecordsSortedPage)
-	ordersUrl.GET("/pages/customer", order2.OrderRecordControl.GetCustomerOrderRecordsSortedPage)
-	ordersUrl.POST("/order", order2.OrderRecordControl.PostOrderRecord)
-	ordersUrl.GET("/order", order2.OrderRecordControl.GetOrderRecord)
-	ordersUrl.PUT("/order/customer", order2.OrderRecordControl.PutOrderRecordFromCustomer)
-	ordersUrl.PUT("/order/store", order2.OrderRecordControl.PutOrderRecordFromStore)
-	ordersUrl.GET("/order/price", order2.OrderRecordControl.GetSelectedMenusTotalPrice)
+	ordersUrl.GET("/pages/store", order2.OrderRecordControl.GetStoreOrderRecordsSortedPage)       // 가게내 주문 기록들
+	ordersUrl.GET("/pages/customer", order2.OrderRecordControl.GetCustomerOrderRecordsSortedPage) // 사용자의 주문 기록들
+	ordersUrl.POST("/order", order2.OrderRecordControl.PostOrderRecord)                           // 주문 등록
+	ordersUrl.GET("/order", order2.OrderRecordControl.GetOrderRecord)                             // 특정 주문 조회
+	ordersUrl.PUT("/order/customer", order2.OrderRecordControl.PutOrderRecordFromCustomer)        // 사용자의 주문 수정
+	ordersUrl.PUT("/order/store", order2.OrderRecordControl.PutOrderRecordFromStore)              // 가게의 주문 수정
+	ordersUrl.GET("/order/price", order2.OrderRecordControl.GetSelectedMenusTotalPrice)           // 주문 메뉴들 총 가격
 
 }
 
 // ReviewHandler ("/reviews")
 func ReviewHandler(reviewsUrl *gin.RouterGroup) {
-	reviewsUrl.POST("/review", review.MenuReviewControl.PostMenuReview)
-	reviewsUrl.GET("/menu", review.MenuReviewControl.GetMenuSortedPagesByMenuID)
-	reviewsUrl.GET("/customer", review.MenuReviewControl.GetMenuSortedPagesByCustomerID)
+	reviewsUrl.POST("/review", review.MenuReviewControl.PostMenuReview)                  // 리뷰 등록
+	reviewsUrl.GET("/menu", review.MenuReviewControl.GetMenuSortedPagesByMenuID)         // 메뉴별 리뷰 조회
+	reviewsUrl.GET("/customer", review.MenuReviewControl.GetMenuSortedPagesByCustomerID) // 사용자의 리뷰 조회
 }

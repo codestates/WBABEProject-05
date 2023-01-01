@@ -5,7 +5,7 @@ import (
 )
 
 type RequestPage struct {
-	CurrentPage  int        `json:"current_page,omitempty" form:"current-page,default=0"`
+	CurrentPage  int        `json:"current_page" form:"current-page,default=0"`
 	ContentCount int        `json:"content_count" form:"content-count,default=5"`
 	Sort         *page.Sort `json:"sorting"`
 }

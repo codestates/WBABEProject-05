@@ -8,7 +8,7 @@ var UserModel UserModeler
 
 type UserModeler interface {
 	PostUser(user *entity.User) (string, error)
-	PutUser(user *entity.User) (int, error)
+	PutUser(user *entity.User) (int64, error)
 	SelectUser(id string) (*entity.User, error)
-	DeleteUser(id string) (int, error)
+	DeleteUser(id string) (int64, error)
 }

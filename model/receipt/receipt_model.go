@@ -3,12 +3,11 @@ package receipt
 import (
 	"github.com/codestates/WBABEProject-05/common"
 	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/model/util"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"time"
 )
 
 var instance ReceiptModeler
@@ -37,43 +36,28 @@ func (r *receiptModel) InsertReceipt(receipt *entity.Receipt) (string, error) {
 
 	return receipt.ID.Hex(), nil
 }
-func (r *receiptModel) UpdateReceiptStatus(receipt *entity.Receipt) (int, error) {
-	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
-	defer cancel()
 
-	filter := bson.M{"_id": receipt.ID}
-	opt := receipt.NewUpdateStatusOrderBsonSetD()
-	result, err := r.collection.UpdateOne(ctx, filter, opt)
-	if err != nil {
-		return 0, err
-	}
-	return int(result.ModifiedCount), nil
+func (r *receiptModel) UpdateReceiptStatus(receipt *entity.Receipt) (int64, error) {
+	opt := receipt.NewUpdateStatusBsonSetD()
+	return r.updateStatusByBsonSetD(receipt, opt)
 }
 
-func (r *receiptModel) UpdateCancelReceipt(receipt *entity.Receipt) (int, error) {
-	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
-	defer cancel()
-
-	filter := bson.M{"_id": receipt.ID}
-	opt := receipt.NewUpdateOrderCancelBsonSetD()
-	result, err := r.collection.UpdateOne(ctx, filter, opt)
-	if err != nil {
-		return 0, err
-	}
-	return int(result.ModifiedCount), nil
+func (r *receiptModel) UpdateCancelReceipt(receipt *entity.Receipt) (int64, error) {
+	opt := receipt.NewUpdateStatusCancelBsonSetD()
+	return r.updateStatusByBsonSetD(receipt, opt)
 }
 
 func (r *receiptModel) SelectReceiptByID(receiptID string) (*entity.Receipt, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	id, err := primitive.ObjectIDFromHex(receiptID)
+	ID, err := util.ConvertStringToObjID(receiptID)
 	if err != nil {
 		return nil, err
 	}
 
 	var receipt *entity.Receipt
-	filter := bson.M{"_id": id}
+	filter := bson.M{"_id": ID}
 	if err := r.collection.FindOne(ctx, filter).Decode(&receipt); err != nil {
 		return nil, err
 	}
@@ -83,19 +67,17 @@ func (r *receiptModel) SelectSortLimitedReceipt(ID, userRole string, sort *page.
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	objID, err := primitive.ObjectIDFromHex(ID)
+	objID, err := util.ConvertStringToObjID(ID)
 	if err != nil {
 		return nil, err
 	}
 
-	filter := bson.M{}
-	switch userRole {
-	case entity.CustomerRole:
-		filter = bson.M{"customer_id": objID}
-	case entity.StoreRole:
-		filter = bson.M{"store_id": objID}
+	filter, err := util.NewFilterCheckedUserRole(objID, userRole)
+	if err != nil {
+		return nil, err
 	}
-	opt := options.Find().SetSort(bson.M{sort.Name: sort.Direction}).SetSkip(int64(skip)).SetLimit(int64(limit))
+
+	opt := util.NewSortFindOptions(sort, skip, limit)
 	receiptCursor, err := r.collection.Find(ctx, filter, opt)
 	if err != nil {
 		return nil, err
@@ -109,26 +91,24 @@ func (r *receiptModel) SelectSortLimitedReceipt(ID, userRole string, sort *page.
 	return receipts, nil
 }
 
-func (r *receiptModel) SelectToDayTotalCount() (int, error) {
+func (r *receiptModel) SelectToDayTotalCount() (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	KST, err := time.LoadLocation("Asia/Seoul")
+	filter, err := util.NewToDayGteFilter()
 	if err != nil {
 		return 0, err
 	}
-	now := time.Now()
-	startTime := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, KST).UTC()
-	filter := bson.M{"base_time.created_at": bson.M{"$gte": startTime}}
+
 	count, err := r.collection.CountDocuments(ctx, filter)
 	if err != nil {
 		return 0, err
 	}
 
-	return int(count), err
+	return count, err
 }
 
-func (r *receiptModel) SelectTotalCount(ID, userRole string) (int, error) {
+func (r *receiptModel) SelectTotalCount(ID, userRole string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -137,17 +117,27 @@ func (r *receiptModel) SelectTotalCount(ID, userRole string) (int, error) {
 		return 0, err
 	}
 
-	filter := bson.M{}
-	switch userRole {
-	case entity.CustomerRole:
-		filter = bson.M{"customer_id": objID}
-	case entity.StoreRole:
-		filter = bson.M{"store_id": objID}
+	filter, err := util.NewFilterCheckedUserRole(objID, userRole)
+	if err != nil {
+		return 0, err
 	}
+
 	count, err := r.collection.CountDocuments(ctx, filter)
 	if err != nil {
 		return 0, err
 	}
 
-	return int(count), nil
+	return count, nil
+}
+
+func (r *receiptModel) updateStatusByBsonSetD(receipt *entity.Receipt, bsonSet bson.D) (int64, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	filter := bson.M{"_id": receipt.ID}
+	result, err := r.collection.UpdateOne(ctx, filter, bsonSet)
+	if err != nil {
+		return 0, err
+	}
+	return result.ModifiedCount, nil
 }

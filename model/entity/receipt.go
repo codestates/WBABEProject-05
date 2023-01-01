@@ -24,11 +24,11 @@ type Receipt struct {
 	Price        int                  `bson:"price,omitempty"`
 	Status       string               `bson:"status,omitempty"`
 	CustomerAddr *dom.Address         `bson:"ordered_addr"`
-	Numbering    string               `bson:"numbering"`
+	Numbering    string               `bson:"numbering,omitempty"`
 	BaseTime     *dom.BaseTime        `bson:"base_time"`
 }
 
-func (s *Receipt) NewUpdateStatusOrderBsonSetD() bson.D {
+func (s *Receipt) NewUpdateStatusBsonSetD() bson.D {
 	return bson.D{
 		{"$set",
 			bson.D{
@@ -39,7 +39,7 @@ func (s *Receipt) NewUpdateStatusOrderBsonSetD() bson.D {
 	}
 }
 
-func (s *Receipt) NewUpdateOrderCancelBsonSetD() bson.D {
+func (s *Receipt) NewUpdateStatusCancelBsonSetD() bson.D {
 	return bson.D{
 		{"$set",
 			bson.D{
