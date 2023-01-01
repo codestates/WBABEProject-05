@@ -15,7 +15,7 @@ type RequestPutStore struct {
 }
 
 func (r *RequestPutStore) NewPutStore(storeID string) (*entity.Store, error) {
-	sObjID, err := primitive.ObjectIDFromHex(storeID)
+	sOBJID, err := primitive.ObjectIDFromHex(storeID)
 	if err != nil {
 		return nil, err
 	}
@@ -25,13 +25,13 @@ func (r *RequestPutStore) NewPutStore(storeID string) (*entity.Store, error) {
 		return nil, err
 	}
 
-	rsMIDS, err := util.ConvertStringsToObjIDs(r.RecommendMenus)
+	rsMIDS, err := util.ConvertStringsToOBJIDs(r.RecommendMenus)
 	if err != nil {
 		return nil, err
 	}
 
 	return &entity.Store{
-		ID:             sObjID,
+		ID:             sOBJID,
 		UserID:         uObjID,
 		Name:           r.Name,
 		Address:        r.Address.ToAddress(),

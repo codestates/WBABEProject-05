@@ -15,7 +15,7 @@ type ResponseStore struct {
 }
 
 func NewResponseStore(store *entity.Store) *ResponseStore {
-	recommendIDs := util.ConvertObjIDsToStrings(store.RecommendMenus)
+	recommendIDs := util.ConvertOBJIDsToStrings(store.RecommendMenus)
 	return &ResponseStore{
 		StoreID:        store.ID.Hex(),
 		UserID:         store.UserID.Hex(),

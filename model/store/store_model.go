@@ -30,7 +30,7 @@ func (s *storeModel) SelectStoreByID(storeId string) (*entity.Store, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := util.ConvertStringToObjID(storeId)
+	ID, err := util.ConvertStringToOBJID(storeId)
 	if err != nil {
 		return nil, err
 	}

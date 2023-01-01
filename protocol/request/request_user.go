@@ -31,12 +31,12 @@ func (r *RequestUser) NewPostUser() *entity.User {
 }
 
 func (r *RequestUser) NewUpdateUser(ID string) (*entity.User, error) {
-	objID, err := primitive.ObjectIDFromHex(ID)
+	OBJID, err := primitive.ObjectIDFromHex(ID)
 	if err != nil {
 		return nil, err
 	}
 	return &entity.User{
-		ID:          objID,
+		ID:          OBJID,
 		Name:        r.Name,
 		NicName:     r.NicName,
 		Password:    r.Password,

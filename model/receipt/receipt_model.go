@@ -51,7 +51,7 @@ func (r *receiptModel) SelectReceiptByID(receiptID string) (*entity.Receipt, err
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := util.ConvertStringToObjID(receiptID)
+	ID, err := util.ConvertStringToOBJID(receiptID)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (r *receiptModel) SelectSortLimitedReceipt(ID, userRole string, sort *page.
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	objID, err := util.ConvertStringToObjID(ID)
+	objID, err := util.ConvertStringToOBJID(ID)
 	if err != nil {
 		return nil, err
 	}

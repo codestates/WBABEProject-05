@@ -41,7 +41,7 @@ func (r *reviewModel) SelectSortLimitedReviewsByMenuID(menuID string, sort *page
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := util.ConvertStringToObjID(menuID)
+	ID, err := util.ConvertStringToOBJID(menuID)
 	if err != nil {
 		return nil, err
 	}
@@ -60,12 +60,12 @@ func (r *reviewModel) SelectSortLimitedReviewsByUserID(ID, userRole string, sort
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	objID, err := util.ConvertStringToObjID(ID)
+	OBJID, err := util.ConvertStringToOBJID(ID)
 	if err != nil {
 		return nil, err
 	}
 
-	filter, err := util.NewFilterCheckedUserRole(objID, userRole)
+	filter, err := util.NewFilterCheckedUserRole(OBJID, userRole)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +83,7 @@ func (r *reviewModel) SelectTotalCountByMenuID(menuID string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := util.ConvertStringToObjID(menuID)
+	ID, err := util.ConvertStringToOBJID(menuID)
 	if err != nil {
 		return 0, err
 	}
@@ -100,12 +100,12 @@ func (r *reviewModel) SelectTotalCountByUserID(ID, userRole string) (int64, erro
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	objID, err := util.ConvertStringToObjID(ID)
+	OBJID, err := util.ConvertStringToOBJID(ID)
 	if err != nil {
 		return 0, err
 	}
 
-	filter, err := util.NewFilterCheckedUserRole(objID, userRole)
+	filter, err := util.NewFilterCheckedUserRole(OBJID, userRole)
 	if err != nil {
 		return 0, err
 	}

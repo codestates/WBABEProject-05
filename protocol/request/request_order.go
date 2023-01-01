@@ -25,7 +25,7 @@ func (r *RequestOrder) ToNewReceipt() (*entity.Receipt, error) {
 		return nil, err
 	}
 
-	objMIDs, err := util.ConvertStringsToObjIDs(r.Menus)
+	OBJMIDs, err := util.ConvertStringsToOBJIDs(r.Menus)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (r *RequestOrder) ToNewReceipt() (*entity.Receipt, error) {
 		ID:           primitive.NewObjectID(),
 		StoreID:      sid,
 		CustomerID:   cid,
-		Menus:        objMIDs,
+		Menus:        OBJMIDs,
 		Status:       entity.Waiting,
 		CustomerAddr: r.CustomerAddr.ToAddress(),
 		BaseTime: &dom.BaseTime{

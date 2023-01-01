@@ -76,7 +76,7 @@ func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.Reques
 		return "", error2.AlreadyReceivedOrderError.New()
 	}
 
-	if util.ConvertObjIDToString(foundOrder.CustomerID) != order.CustomerID {
+	if util.ConvertOBJIDToString(foundOrder.CustomerID) != order.CustomerID {
 		return "", error2.BadAccessOrderError.New()
 	}
 
@@ -131,7 +131,7 @@ func (o *orderRecordService) FindOrderRecord(orderID string) (*response.Response
 		return nil, err
 	}
 
-	menuIDs := util.ConvertObjIDsToStrings(foundReceipt.Menus)
+	menuIDs := util.ConvertOBJIDsToStrings(foundReceipt.Menus)
 
 	menus, err := o.menuModel.SelectMenusByIDs(foundReceipt.StoreID.Hex(), menuIDs)
 	if err != nil {

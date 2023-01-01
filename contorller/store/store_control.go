@@ -250,12 +250,12 @@ func (s *storeControl) GetStoresSortedPage(c *gin.Context) {
 // @Param store-id query string true "store_id"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) GetStore(c *gin.Context) {
-	strId := c.Query("store-id")
-	str, err := s.storeMenuService.FindStore(strId)
+	STRID := c.Query("store-id")
+	STR, err := s.storeMenuService.FindStore(STRID)
 	if err != nil {
 		logger.AppLog.Info(err)
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
-	protocol.SuccessData(str).Response(c)
+	protocol.SuccessData(STR).Response(c)
 }

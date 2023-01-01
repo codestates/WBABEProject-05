@@ -14,12 +14,12 @@ const (
 	StoreRole    = "store"
 )
 
-func NewFilterCheckedUserRole(objID primitive.ObjectID, userRole string) (bson.M, error) {
+func NewFilterCheckedUserRole(OBJID primitive.ObjectID, userRole string) (bson.M, error) {
 	switch userRole {
 	case CustomerRole:
-		return bson.M{"customer_id": objID}, nil
+		return bson.M{"customer_id": OBJID}, nil
 	case StoreRole:
-		return bson.M{"store_id": objID}, nil
+		return bson.M{"store_id": OBJID}, nil
 	}
 	return nil, error2.BadRequestError.New()
 }

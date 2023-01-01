@@ -130,7 +130,7 @@ func (s *storeMenuService) FindRecommendMenus(storeID string) (*response.Respons
 		return nil, err
 	}
 
-	strMIDs := util.ConvertObjIDsToStrings(foundStore.RecommendMenus)
+	strMIDs := util.ConvertOBJIDsToStrings(foundStore.RecommendMenus)
 	menus, err := s.menuModel.SelectMenusByIDs(storeID, strMIDs)
 	if err != nil {
 		return nil, err

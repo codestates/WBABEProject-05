@@ -13,12 +13,12 @@ type RequestPutUser struct {
 }
 
 func (r *RequestPutUser) NewUpdatePutUser(ID string) (*entity.User, error) {
-	objID, err := primitive.ObjectIDFromHex(ID)
+	OBJID, err := primitive.ObjectIDFromHex(ID)
 	if err != nil {
 		return nil, err
 	}
 	return &entity.User{
-		ID:          objID,
+		ID:          OBJID,
 		Name:        r.Name,
 		NicName:     r.NicName,
 		PhoneNumber: r.PhoneNumber,

@@ -70,7 +70,7 @@ func (m *menuModel) SelectSortLimitedMenus(storeID string, sort *page.Sort, skip
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := mongo2.ConvertStringToObjID(storeID)
+	ID, err := mongo2.ConvertStringToOBJID(storeID)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (m *menuModel) SelectTotalCount(storeID string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := mongo2.ConvertStringToObjID(storeID)
+	ID, err := mongo2.ConvertStringToOBJID(storeID)
 	if err != nil {
 		return 0, err
 	}
@@ -111,12 +111,12 @@ func (m *menuModel) SelectMenusByIDs(storeID string, menuIDs []string) ([]*entit
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	sID, err := mongo2.ConvertStringToObjID(storeID)
+	sID, err := mongo2.ConvertStringToOBJID(storeID)
 	if err != nil {
 		return nil, err
 	}
 
-	inID, err := mongo2.ConvertStringsToObjIDs(menuIDs)
+	inID, err := mongo2.ConvertStringsToOBJIDs(menuIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func (m *menuModel) SelectMenuByID(menuID string) (*entity.Menu, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	mID, err := mongo2.ConvertStringToObjID(menuID)
+	mID, err := mongo2.ConvertStringToOBJID(menuID)
 	if err != nil {
 		return nil, err
 	}
@@ -161,7 +161,7 @@ func (m *menuModel) SelectMenuByIdsAndDelete(menuID string) (*entity.Menu, error
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	mID, err := mongo2.ConvertStringToObjID(menuID)
+	mID, err := mongo2.ConvertStringToOBJID(menuID)
 	if err != nil {
 		return nil, err
 	}
@@ -178,7 +178,7 @@ func (m *menuModel) UpdateMenusInCOrderCount(menus []string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	IDs, err := mongo2.ConvertStringsToObjIDs(menus)
+	IDs, err := mongo2.ConvertStringsToOBJIDs(menus)
 	if err != nil {
 		return 0, err
 	}
