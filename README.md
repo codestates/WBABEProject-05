@@ -149,30 +149,59 @@ $ docker exec -it mongo-singlers /bin/bash
 $ mongosh 127.0.0.1:27017/
 test> rs.initiate()
 ```
+- 몽고DB 접속 URI : 
+`mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.6.1`
 
 
-### API 구현 중..
-- 현재 구현된 API
+### API 
+
+GET    /home/info      
 
 
-GET    /home/                    
-GET    /home/info               
-POST   /app/v1/users/join     
-POST   /app/v1/stores            
-POST   /app/v1/stores/menu     
-DELETE /app/v1/stores/menu    
-PUT    /app/v1/stores/menu      
-GET    /app/v1/stores/swag/store    
-POST   /app/v1/orders
+POST   /app/v1/users/user        
+GET    /app/v1/users/user        
+PUT    /app/v1/users/user        
+DELETE /app/v1/users/user   
+
+
+GET    /app/v1/stores            
+GET    /app/v1/stores/store      
+POST   /app/v1/stores/store      
+PUT    /app/v1/stores/store      
+GET    /app/v1/stores/store/recommends
+GET    /app/v1/stores/store/menus
+POST   /app/v1/stores/store/menus/menu
+PUT    /app/v1/stores/store/menus/menu
+DELETE /app/v1/stores/store/menus/menu
+
+
+GET    /app/v1/orders/pages/store
+GET    /app/v1/orders/pages/customer
+POST   /app/v1/orders/order      
+GET    /app/v1/orders/order      
+PUT    /app/v1/orders/order/customer
+PUT    /app/v1/orders/order/store
+GET    /app/v1/orders/order/price
+
+
+POST   /app/v1/reviews/review    
+GET    /app/v1/reviews/menu      
+GET    /app/v1/reviews/customer
+
 
 ## 느낀점
 
 #### 아쉬운점
-- 몽고DB로 원하는 데이터를 뽑고 가공하는게 쉽지않다... 생각보다 더 쉽지 않아서 시간이 많이 소요되었다.
-- entity 설계만 끝나면 전체적인 도메인 구성과 쿼리는 어렵지 않을것이라 생각했는데..
-- 정규화와 트랜젝션을 지양한다는 점에서 설계에 고민을 많이하기도 했고, 오히려 고민을 하다보니 더 복잡해진것 같기도하고, 무엇보다 mongo 쿼리가 처음 써보는거다보니 상당히 쉽지 않다.
-- 익숙하지 않아 오래걸리다보니, 확장성이 뛰어난 몽고DB 이니까 처음엔 그냥 RDBMS 와 비슷한 구조로 가져가고 필요하다면 그냥 트랜잭션을 사용했어야 했나 싶다.
-- jwt, 단위 test, 프로젝트에 대한 이미지 작업, 기술 정리 등 적용하고 싶은게 많았지만.. 조금 아쉽다..
+
+- ~~몽고DB로 원하는 데이터를 뽑고 가공하는게 쉽지않다... 생각보다 더 쉽지 않아서 시간이 많이 소요되었다.~~
+- ~~entity 설계만 끝나면 전체적인 도메인 구성과 쿼리는 어렵지 않을것이라 생각했는데..~~
+- ~~정규화와 트랜젝션을 지양한다는 점에서 설계에 고민을 많이하기도 했고, 오히려 고민을 하다보니 더 복잡해진것 같기도하고, 무엇보다 mongo 쿼리가 처음 써보는거다보니 상당히 쉽지 않다.~~
+- ~~익숙하지 않아 오래걸리다보니, 확장성이 뛰어난 몽고DB 이니까 처음엔 그냥 RDBMS 와 비슷한 구조로 가져가고 필요하다면 그냥 트랜잭션을 사용했어야 했나 싶다.~~
+- ~~jwt, 단위 test, 프로젝트에 대한 이미지 작업, 기술 정리 등 적용하고 싶은게 많았지만.. 조금 아쉽다..~~
+- 어찌저찌 기능 구현을 다 해냈다.
+- 처음에 Document 지향으로 최대한 해보려고 하였으나, MongoDB의 Document 데이터를 가공해서 가져오기가 쉽지않았다. 떄문에 RDBMS 방식처럼 _id 를 활용하였다. 
+- 참고 : [리모델링](https://github.com/codestates/WBABEProject-05/issues/23)
+
 
 #### 좋았던점
 - 그래도 이번 프로젝트로 그동안 커리큘럼을 진행하면서 `Golang 에서는 어떻게 객체지향적으로 코드를 작성할 수 있을까?` 를 수 없이 고민했었는데 이번에 나름 만족할만한 구조로 개발을 했다.
@@ -188,112 +217,64 @@ POST   /app/v1/orders
 ### Swagger 전체
 - http://localhost:8080/swagger/index.html#/
 
-![Swagger_전체](./readme_images/swagger-total.png)
+![전체1](./readme_images/swagger/usecase/1주문기록_전체.png)
+
+![전체1](./readme_images/swagger/usecase/2메뉴리뷰_전체.png)
+
+![전체1](./readme_images/swagger/usecase/3가게_전체.png)
+
+![전체1](./readme_images/swagger/usecase/4사용자정보_및_App_전체.png)
 
 
-### Post User
-request json :
-{
-"name": "hoon",
-"nic_name":"우와아앙",
-"password":"1234",
-"phone_number": "010-4231-1234",
-"role":"store"
-}
+## UseCase 로 보는 Swagger 
 
-![Post_User](./readme_images/swagger-post-user1.png)
+![전체1](./readme_images/swagger/usecase/5사용자가입_요청.png)
 
-![Post_User](./readme_images/swagger-post-user-return.png)
+![전체1](./readme_images/swagger/usecase/6사용자가입_응답.png)
 
+![전체1](./readme_images/swagger/usecase/7사용자정보_요청.png)
 
-### Post Store
-request json :
-{
-"user_id":"63a70d7708ff1911c06bdc9b",
-"name":"제발",
-"address":{
-"street":"테스트거리",
-"detail":"오른쪽",
-"zip_code":"1241-21"
-},
-"recommend_menues":[],
-"store_phone":"010-2222-3333"
-}
+![전체1](./readme_images/swagger/usecase/8사용자정보_응답.png)
 
-![Post_Store](./readme_images/swagger-post-store.png)
+![전체1](./readme_images/swagger/usecase/9가게생성_요청.png)
 
-![Post_Store](./readme_images/swagger-post-store-return.png)
+![전체1](./readme_images/swagger/usecase/10가게생성_응답.png)
 
+![전체1](./readme_images/swagger/usecase/11가게메뉴등록_요청.png)
 
-### Post Menu
-request json :
-{
-"store_id":"63a75a75ffc54d798e52d633",
-"name": "불고기피자1",
-"price": 20000,
-"origin": "국내산",
-"possible": true,
-"description":"맛있어용짱!"
-}
+![전체1](./readme_images/swagger/usecase/12가게메뉴등록_응답.png)
 
-![Post_Menu](./readme_images/swagger-post-menu.png)
+![전체1](./readme_images/swagger/usecase/13특정가게메뉴들_요청.png)
 
-![Post_Menu](./readme_images/swagger-post-menu-return.png)
+![전체1](./readme_images/swagger/usecase/14특정가게메뉴들_응답.png)
 
+![전체1](./readme_images/swagger/usecase/15특정가게메뉴추천및정보수정_요청.png)
 
-### Put Menu
-request query : store_id=63a7b610b18f4976a484427f
-request json :
-{
-"store_id":"63a75a75ffc54d798e52d633",
-"name": "불고기피자1",
-"price": 20000,
-"origin": "국내산",
-"possible": true,
-"description":"맛있어용짱!"
-}
+![전체1](./readme_images/swagger/usecase/16특정가게메뉴추천및정보수정_응답.png)
 
-![Put_Menu](./readme_images/swagger-put-menu.png)
+![전체1](./readme_images/swagger/usecase/17특정가게추천메뉴_요청.png)
 
-![Put_Menu](./readme_images/swagger-put-menu-return.png)
+![전체1](./readme_images/swagger/usecase/18특정가게추천메뉴_응답.png)
 
+![전체1](./readme_images/swagger/usecase/19메뉴주문_요청.png)
 
-### Delete Menu
-request query : 
-store_id="63a75a75ffc54d798e52d633"&menu_id="63a7b610b18f4976a484427f"
+![전체1](./readme_images/swagger/usecase/20메뉴주문_응답.png)
 
+![전체1](./readme_images/swagger/usecase/21가게에온주문정보_요청.png)
 
-![Delete_Menu](./readme_images/swagger-delete-menu.png)
+![전체1](./readme_images/swagger/usecase/22가게에서주문처리_요청.png)
 
-![Delete_Menu](./readme_images/swagger-delete-menu-return.png)
+![전체1](./readme_images/swagger/usecase/23가게에서주문처리_응답.png)
 
+![전체1](./readme_images/swagger/usecase/24사용자가주문조회_요청.png)
 
-### Post Order
-ex)
-request json
-{
-"store_id": "63a75a75ffc54d798e52d633",
-"customer_id": "63a70d7708ff1911c06bdc9b",
-"price":9999,
-"menu_ids":["63a7b610b18f4976a484427f"],
-"status":"접수중",
-"ordered_addr":{
-"street":"테스트거리",
-"detail":"오른쪽",
-"zip_code":"1241-21"
-}
-}
+![전체1](./readme_images/swagger/usecase/25사용자가주문조회_응답.png)
 
-![Post_Order](./readme_images/swagger-post-order.png)
+![전체1](./readme_images/swagger/usecase/26사용자의리뷰작성_요청.png)
 
-![Post_Order](./readme_images/swagger-post-order-return.png)
+![전체1](./readme_images/swagger/usecase/27사용자의리뷰작성_응답.png)
 
+![전체1](./readme_images/swagger/usecase/28특정메뉴리뷰보기_요청.png)
 
+![전체1](./readme_images/swagger/usecase/29특정메뉴리뷰보기_응답.png)
 
-### Get Store
-ex)
-request query store_id=63a7b610b18f4976a484427f
-
-![Get_Store](./readme_images/swagger-get-store-one.png)
-
-![Get_Store](./readme_images/swagger-get-store-one-return.png)
