@@ -791,4 +791,6 @@ paths:
           schema:
             $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call App Information, return Info by json.
+      tags:
+      - App
 swagger: "2.0"

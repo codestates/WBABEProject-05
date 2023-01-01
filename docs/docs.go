@@ -929,6 +929,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "App"
+                ],
                 "summary": "call App Information, return Info by json.",
                 "responses": {
                     "200": {
