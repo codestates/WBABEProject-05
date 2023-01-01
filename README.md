@@ -202,6 +202,9 @@ GET    /app/v1/reviews/customer
 - 어찌저찌 기능 구현을 다 해냈다. 물론 아직 validation 처리를 해야하고, 추가적으로 하고싶은것들이 남았지만 일단 필요한 API 는 다 만들었다.
 - 처음에 Document 지향으로 최대한 해보려고 하였으나, MongoDB의 Document 데이터를 가공해서 가져오기가 쉽지않았다. 떄문에 RDBMS 방식처럼 _id 를 활용하였다. 
 - 참고 : [리모델링](https://github.com/codestates/WBABEProject-05/issues/23)
+- 남은것 :   
+[validation](https://github.com/codestates/WBABEProject-05/issues/26)     
+[인증인가](https://github.com/codestates/WBABEProject-05/issues/27)
 
 
 #### 좋았던점
