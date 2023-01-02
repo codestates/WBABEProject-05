@@ -138,20 +138,32 @@
 
 # Docker 를 이용한 MongoDB 설치
 
-- docker-compose-singlersdb.yml 파일을 이용해 mongoDB를 설치하자.
-- 여기서 우선 mongoDB의 replication 옵션을 이용할 것이다.
-- replication 옵션을 이용하는 이유는 트랜젝션을 이용하게될지도 모르기 떄문이다.
-- 트랜젝션은 mongoDB 를 standalone 상태로 구동하면 실행되지 않는다.
-- 우선 트랜젝션을 mongoDB 에서는 권장하지 않기에 최대한 트랜젝션을 사용하지 않는 구조로 설계하겠지만 개발은 항상 유연해야하기에 가능성을 열어두는 측면에서 replication 옵션을 사용한다.
-  다음의 명령어들을 실행시키자.
+- ~~docker-compose-singlersdb.yml 파일을 이용해 mongoDB를 설치하자.~~
+- ~~여기서 우선 mongoDB의 replication 옵션을 이용할 것이다.~~
+- ~~replication 옵션을 이용하는 이유는 트랜젝션을 이용하게될지도 모르기 떄문이다.~~
+- ~~트랜젝션은 mongoDB 를 standalone 상태로 구동하면 실행되지 않는다.~~
+- ~~우선 트랜젝션을 mongoDB 에서는 권장하지 않기에 최대한 트랜젝션을 사용하지 않는 구조로 설계하겠지만 개발은 항상 유연해야하기에 가능성을 열어두는 측면에서 replication 옵션을 사용한다.
+  다음의 명령어들을 실행시키자.~~
 ```bash
 $ docker-compose -f docker-compose-singlersdb.yml up -d
 $ docker exec -it mongo-singlers /bin/bash
 $ mongosh 127.0.0.1:27017/
 test> rs.initiate()
 ```
-- 몽고DB 접속 URI : 
-`mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.6.1`
+- ~~몽고DB 접속 URI :
+  `mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.6.1`~~
+
+
+## 실행환경의 편의를 위해 replica 를 사용한 MongoDB 가 아닌 standalone 형태의 일반적인 MongoDB로 전환했다.
+- MongoDB 에 지향점에 맞춰 트랜잭션을 사용하지 않았다.
+- 다음과 같이 docker-compose 파일을 실행하자
+```bash
+$ docker-compose up -d 
+```
+- 몽고DB 접속 URI :
+  `mongodb://127.0.0.1:27017`
+
+
 
 
 ### API 
