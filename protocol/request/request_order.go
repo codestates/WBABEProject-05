@@ -3,8 +3,8 @@ package request
 import (
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/entity/dom"
+	"github.com/codestates/WBABEProject-05/model/enum"
 	"github.com/codestates/WBABEProject-05/model/util"
-	"github.com/codestates/WBABEProject-05/model/util/enum"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )

@@ -3,10 +3,10 @@ POST {{host}}{{v1}}/users/user
 Content-Type: application/json
 
 {
-  "name": "검증테스트유저1a",
-  "nic_name":"검증테스트유저입니다용1",
+  "name": "테스트유저4",
+  "nic_name":"테스트유저입니다용4",
   "password":"1234",
-  "phone_number": "010-1111-3333",
+  "phone_number": "010-4444-3333",
   "role":"customer"
 }
 ### => 63b1364bc261c10ddffa2eb3

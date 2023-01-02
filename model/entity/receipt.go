@@ -2,7 +2,7 @@ package entity
 
 import (
 	"github.com/codestates/WBABEProject-05/model/entity/dom"
-	"github.com/codestates/WBABEProject-05/model/util/enum"
+	"github.com/codestates/WBABEProject-05/model/enum"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"

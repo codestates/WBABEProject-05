@@ -1,7 +1,7 @@
 package util
 
 import (
-	"github.com/codestates/WBABEProject-05/model/util/enum"
+	"github.com/codestates/WBABEProject-05/model/enum"
 	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"go.mongodb.org/mongo-driver/bson"

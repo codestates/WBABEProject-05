@@ -1,7 +1,7 @@
 package review
 
 import (
-	"github.com/codestates/WBABEProject-05/model/util/enum"
+	"github.com/codestates/WBABEProject-05/model/enum"
 	"github.com/codestates/WBABEProject-05/protocol"
 	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
