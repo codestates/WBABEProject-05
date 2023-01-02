@@ -18,7 +18,7 @@ func LoadConfigs(pathMap map[string]*string) {
 	AppInfo = info.NewInfo(*ipath)
 
 	dpath := pathMap[flag.DatabaseFlag.Name]
-	DBConfig = db.NewDbConfig(*dpath)
+	DBConfig = db.NewDBConfig(*dpath)
 
 	lpath := pathMap[flag.LogConfigFlag.Name]
 	LogConfig = log.NewLogConfig(*lpath)

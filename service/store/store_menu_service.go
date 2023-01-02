@@ -169,7 +169,7 @@ func (s *storeMenuService) FindStoresSortedPage(pg *request.RequestPage) (*page.
 // saveDeletedMenuBackupData 파일에 데이터를 쓰는데, 에러발생시 데이터를 로그로 남긴다
 func (s *storeMenuService) saveDeletedMenuBackupData(deletedM *entity.Menu) {
 	path := flag.Flags[flag.DatabaseFlag.Name]
-	dbcfg := db.NewDbConfig(*path)
+	dbcfg := db.NewDBConfig(*path)
 	err := db.WriteBackup(dbcfg.BackupPath, &deletedM)
 	if err != nil {
 		logger.AppLog.Error(err.Error())

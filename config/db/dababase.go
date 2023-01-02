@@ -18,7 +18,7 @@ type DB struct {
 	BackupPath string
 }
 
-func NewDbConfig(fPath string) *DB {
+func NewDBConfig(fPath string) *DB {
 	cfg := new(DB)
 
 	file, err := os.Open(fPath)
