@@ -4,6 +4,7 @@ import (
 	"github.com/codestates/WBABEProject-05/protocol"
 	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
+	"github.com/codestates/WBABEProject-05/service"
 	"github.com/codestates/WBABEProject-05/service/login"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -42,6 +43,11 @@ func (u *userControl) GetUser(c *gin.Context) {
 		return
 	}
 
+	if err := service.Validator.EmtyString(userID); err != nil {
+		protocol.Fail(error2.NewApiError(err)).Response(c)
+		return
+	}
+
 	user, err := u.userService.FindUser(userID)
 	if err != nil {
 		protocol.Fail(error2.DataNotFoundError).Response(c)
@@ -64,14 +70,24 @@ func (u *userControl) GetUser(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) PutUser(c *gin.Context) {
 	reqU := &request.RequestPutUser{}
-	usrID := c.Query("user-id")
+	userID := c.Query("user-id")
 	err := c.ShouldBindJSON(reqU)
-	if err != nil || usrID == "" {
+	if err != nil || userID == "" {
 		protocol.Fail(error2.BadRequestError).Response(c)
 		return
 	}
 
-	cnt, err := u.userService.ModifyUser(usrID, reqU)
+	if err := service.Validator.Struct(reqU); err != nil {
+		protocol.Fail(error2.NewApiError(err)).Response(c)
+		return
+	}
+
+	if err := service.Validator.EmtyString(userID); err != nil {
+		protocol.Fail(error2.NewApiError(err)).Response(c)
+		return
+	}
+
+	cnt, err := u.userService.ModifyUser(userID, reqU)
 	if err != nil {
 		protocol.Fail(error2.NewApiError(err)).Response(c)
 		return
@@ -95,6 +111,11 @@ func (u *userControl) DeleteUser(c *gin.Context) {
 	userID := c.Query("user-id")
 	if userID == "" {
 		protocol.Fail(error2.BadRequestError).Response(c)
+		return
+	}
+
+	if err := service.Validator.EmtyString(userID); err != nil {
+		protocol.Fail(error2.NewApiError(err)).Response(c)
 		return
 	}
 
@@ -122,6 +143,11 @@ func (u *userControl) PostUser(c *gin.Context) {
 	reqU := &request.RequestUser{}
 	if err := c.ShouldBindJSON(reqU); err != nil {
 		protocol.Fail(error2.BadRequestError).Response(c)
+		return
+	}
+
+	if err := service.Validator.Struct(reqU); err != nil {
+		protocol.Fail(error2.NewApiError(err)).Response(c)
 		return
 	}
 

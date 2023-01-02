@@ -1,10 +1,11 @@
 package order
 
 import (
-	"github.com/codestates/WBABEProject-05/model/util"
+	"github.com/codestates/WBABEProject-05/model/util/enum"
 	"github.com/codestates/WBABEProject-05/protocol"
 	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
+	"github.com/codestates/WBABEProject-05/service"
 	"github.com/codestates/WBABEProject-05/service/order"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -132,7 +133,7 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 		return
 	}
 
-	receipts, err := o.orderService.FindOrderRecordsSortedPage(customerID, util.CustomerRole, page)
+	receipts, err := o.orderService.FindOrderRecordsSortedPage(customerID, enum.CustomerRole, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
@@ -160,7 +161,17 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 		return
 	}
 
-	receipts, err := o.orderService.FindOrderRecordsSortedPage(storeID, util.StoreRole, page)
+	if err := service.Validator.Struct(page); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+
+	if err := service.Validator.EmtyString(storeID); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+
+	receipts, err := o.orderService.FindOrderRecordsSortedPage(storeID, enum.StoreRole, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
@@ -180,11 +191,17 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetOrderRecord(c *gin.Context) {
 	ordrID := c.Query("order-id")
+	if err := service.Validator.EmtyString(ordrID); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+
 	resOrder, err := o.orderService.FindOrderRecord(ordrID)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
+
 	protocol.SuccessData(resOrder).Response(c)
 }
 
@@ -205,6 +222,11 @@ func (o *orderRecordControl) GetSelectedMenusTotalPrice(c *gin.Context) {
 		return
 	}
 	reqCheckP.Menus = strings.Split(reqCheckP.Menus[0], ",")
+
+	if err := service.Validator.Struct(reqCheckP); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
 
 	resCheckP, err := o.orderService.FiendSelectedMenusTotalPrice(reqCheckP.StoreID, reqCheckP.Menus)
 	if err != nil {

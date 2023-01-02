@@ -1,7 +1,8 @@
 package service
 
-var Service Servicer
+var Validator ValidateServicer
 
-type Servicer interface {
-	ValidateStruct(s interface{}) error
+type ValidateServicer interface {
+	Struct(s interface{}) error
+	EmtyString(s string) error
 }

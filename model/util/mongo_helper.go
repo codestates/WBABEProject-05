@@ -1,6 +1,7 @@
 package util
 
 import (
+	"github.com/codestates/WBABEProject-05/model/util/enum"
 	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"go.mongodb.org/mongo-driver/bson"
@@ -9,16 +10,11 @@ import (
 	"time"
 )
 
-const (
-	CustomerRole = "customer"
-	StoreRole    = "store"
-)
-
 func NewFilterCheckedUserRole(OBJID primitive.ObjectID, userRole string) (bson.M, error) {
 	switch userRole {
-	case CustomerRole:
+	case enum.CustomerRole:
 		return bson.M{"customer_id": OBJID}, nil
-	case StoreRole:
+	case enum.StoreRole:
 		return bson.M{"store_id": OBJID}, nil
 	}
 	return nil, error2.BadRequestError.New()

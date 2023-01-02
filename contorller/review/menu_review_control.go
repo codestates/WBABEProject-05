@@ -1,7 +1,7 @@
 package review
 
 import (
-	"github.com/codestates/WBABEProject-05/model/util"
+	"github.com/codestates/WBABEProject-05/model/util/enum"
 	"github.com/codestates/WBABEProject-05/protocol"
 	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
@@ -46,7 +46,7 @@ func (m *menuReviewControl) GetMenuSortedPagesByCustomerID(c *gin.Context) {
 		return
 	}
 
-	reviews, err := m.menuReviewService.FindReviewSortedPageByUserID(customerID, util.CustomerRole, page)
+	reviews, err := m.menuReviewService.FindReviewSortedPageByUserID(customerID, enum.CustomerRole, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return

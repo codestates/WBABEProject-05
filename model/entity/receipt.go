@@ -2,18 +2,10 @@ package entity
 
 import (
 	"github.com/codestates/WBABEProject-05/model/entity/dom"
+	"github.com/codestates/WBABEProject-05/model/util/enum"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
-)
-
-const (
-	Waiting       = "주문대기"
-	Cancel        = "주문취소"
-	OrderReceived = "주문접수완료"
-	Cooking       = "조리중"
-	Delivering    = "배달중"
-	Completion    = "배달완료"
 )
 
 type Receipt struct {
@@ -43,7 +35,7 @@ func (s *Receipt) NewUpdateStatusCancelBsonSetD() bson.D {
 	return bson.D{
 		{"$set",
 			bson.D{
-				{"Status", Cancel},
+				{"Status", enum.Cancel},
 				{"base_time.updated_at", time.Now()},
 			},
 		},

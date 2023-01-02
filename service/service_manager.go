@@ -20,5 +20,5 @@ func InjectServicesDependency() {
 }
 
 func SetServicer() {
-	Service = NewService()
+	Validator = NewService()
 }

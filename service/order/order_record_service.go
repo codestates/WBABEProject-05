@@ -8,6 +8,7 @@ import (
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/receipt"
 	"github.com/codestates/WBABEProject-05/model/util"
+	"github.com/codestates/WBABEProject-05/model/util/enum"
 	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
@@ -72,7 +73,7 @@ func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.Reques
 	if err != nil {
 		return "", err
 	}
-	if foundOrder.Status != entity.Waiting {
+	if foundOrder.Status != enum.Waiting {
 		return "", error2.AlreadyReceivedOrderError.New()
 	}
 

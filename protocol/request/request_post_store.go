@@ -9,7 +9,7 @@ import (
 
 type RequestPostStore struct {
 	UserID     string          `json:"user_id" validate:"required"`
-	Name       string          `json:"name" validate:"required"`
+	Name       string          `json:"name" validate:"required, min=2, max=15"`
 	Address    *RequestAddress `json:"address" validate:"required"`
 	StorePhone string          `json:"store_phone" validate:"required"`
 }

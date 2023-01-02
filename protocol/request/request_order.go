@@ -4,6 +4,7 @@ import (
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/entity/dom"
 	"github.com/codestates/WBABEProject-05/model/util"
+	"github.com/codestates/WBABEProject-05/model/util/enum"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
@@ -35,7 +36,7 @@ func (r *RequestOrder) ToNewReceipt() (*entity.Receipt, error) {
 		StoreID:      sid,
 		CustomerID:   cid,
 		Menus:        OBJMIDs,
-		Status:       entity.Waiting,
+		Status:       enum.Waiting,
 		CustomerAddr: r.CustomerAddr.ToAddress(),
 		BaseTime: &dom.BaseTime{
 			CreatedAt: time.Now(),

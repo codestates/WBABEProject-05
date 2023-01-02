@@ -9,12 +9,12 @@ import (
 
 type RequestMenu struct {
 	StoreId     string `json:"store_id" validate:"required"`
-	Name        string `json:"name" validate:"required"`
+	Name        string `json:"name" validate:"required, min=2, max=15"`
 	Possible    bool   `json:"possible" validate:"required"`
 	Price       int    `json:"price" validate:"required"`
 	Origin      string `json:"origin" validate:"required"`
-	Description string `json:"description" validate:"required"`
-	LimitCount  string `json:"limit_count"`
+	Description string `json:"description" validate:"required, min=1, max=50"`
+	LimitCount  string `json:"limit_count,omitempty"`
 }
 
 func (r *RequestMenu) NewMenu() (*entity.Menu, error) {

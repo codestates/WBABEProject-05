@@ -3,9 +3,9 @@ package request
 import "github.com/codestates/WBABEProject-05/model/entity/dom"
 
 type RequestAddress struct {
-	Street  string `json:"street" validate:"required"`
-	Detail  string `json:"detail" validate:"required"`
-	ZipCode string `json:"zip_code" validate:"required"`
+	Street  string `json:"street" validate:"required, min=2, max=50"`
+	Detail  string `json:"detail" validate:"required, min=2, max=50"`
+	ZipCode string `json:"zip_code" validate:"required, min=2, max=15"`
 }
 
 func (r *RequestAddress) ToAddress() *dom.Address {
