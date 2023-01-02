@@ -6,10 +6,10 @@ import (
 )
 
 type RequestPutUser struct {
-	Name        string `json:"name" validate:"required, min=2, max=15"`
-	NicName     string `json:"nic_name" validate:"required, min=2, max=15"`
-	PhoneNumber string `json:"phone_number" validate:"required"`
-	Role        string `json:"role"  validate:"required, eq=store|eq=customer"`
+	Name        string `json:"name" binding:"required,min=2,max=15"`
+	NicName     string `json:"nic_name" binding:"required,min=2,max=15"`
+	PhoneNumber string `json:"phone_number" binding:"required"`
+	Role        string `json:"role"  binding:"required,eq=store|eq=customer"`
 }
 
 func (r *RequestPutUser) NewUpdatePutUser(ID string) (*entity.User, error) {

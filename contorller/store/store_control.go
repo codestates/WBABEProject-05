@@ -6,6 +6,7 @@ import (
 	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/store"
+	"github.com/codestates/WBABEProject-05/service/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -67,11 +68,17 @@ func (s *storeControl) PostStore(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) PutSore(c *gin.Context) {
 	var store *request.RequestPutStore
-	storeID := c.Query("store-id")
 	if err := c.ShouldBind(&store); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
+
+	storeID := c.Query("store-id")
+	if err := validator.EmtyString(storeID); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+
 	cnt, err := s.storeMenuService.ModifyStore(storeID, store)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
@@ -123,12 +130,18 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) PutMenu(c *gin.Context) {
 	reqM := &request.RequestMenu{}
-	mid := c.Query("menu-id")
-	if err := c.ShouldBindJSON(reqM); err != nil || mid == "" {
+	if err := c.ShouldBindJSON(reqM); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
-	cnt, err := s.storeMenuService.ModifyMenu(mid, reqM)
+
+	menuId := c.Query("menu-id")
+	if err := validator.EmtyString(menuId); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+
+	cnt, err := s.storeMenuService.ModifyMenu(menuId, reqM)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
@@ -151,10 +164,11 @@ func (s *storeControl) PutMenu(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) DeleteMenu(c *gin.Context) {
 	menuId := c.Query("menu-id")
-	if menuId == "" {
-		protocol.Fail(utilErr.BadRequestError).Response(c)
+	if err := validator.EmtyString(menuId); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
+
 	count, err := s.storeMenuService.DeleteMenuAndBackup(menuId)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
@@ -179,11 +193,17 @@ func (s *storeControl) DeleteMenu(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) GetMenuSortedPages(c *gin.Context) {
 	page := &request.RequestPage{}
-	srtID := c.Query("store-id")
-	if err := c.ShouldBindQuery(page); err != nil || srtID == "" {
+	if err := c.ShouldBindQuery(page); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
+
+	srtID := c.Query("store-id")
+	if err := validator.EmtyString(srtID); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+
 	menus, err := s.storeMenuService.FindMenusSortedPage(srtID, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
@@ -204,6 +224,11 @@ func (s *storeControl) GetMenuSortedPages(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) GetRecommendMenus(c *gin.Context) {
 	storeID := c.Query("store-id")
+	if err := validator.EmtyString(storeID); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+
 	resStore, err := s.storeMenuService.FindRecommendMenus(storeID)
 	if err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
@@ -251,6 +276,11 @@ func (s *storeControl) GetStoresSortedPage(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) GetStore(c *gin.Context) {
 	STRID := c.Query("store-id")
+	if err := validator.EmtyString(STRID); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		return
+	}
+
 	STR, err := s.storeMenuService.FindStore(STRID)
 	if err != nil {
 		logger.AppLog.Info(err)

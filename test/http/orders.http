@@ -34,8 +34,8 @@ PUT {{host}}{{v1}}/orders/order/store
 Content-Type: application/json
 
 {
-  "order_id": "63b1384aa6a0036664b843e6",
-  "status": "주문접수완료"
+  "order_id": "63b17dce1773f27c5c3f2905",
+  "status": "주문완료"
 }
 ### => TODO status enum 처럼 특정 값들로 제약 필요
 ###

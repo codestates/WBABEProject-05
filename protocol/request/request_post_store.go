@@ -8,10 +8,10 @@ import (
 )
 
 type RequestPostStore struct {
-	UserID     string          `json:"user_id" validate:"required"`
-	Name       string          `json:"name" validate:"required, min=2, max=15"`
-	Address    *RequestAddress `json:"address" validate:"required"`
-	StorePhone string          `json:"store_phone" validate:"required"`
+	UserID     string          `json:"user_id" binding:"required"`
+	Name       string          `json:"name" binding:"required,min=2,max=15"`
+	Address    *RequestAddress `json:"address" binding:"required"`
+	StorePhone string          `json:"store_phone" binding:"required"`
 }
 
 func (r *RequestPostStore) NewPostStore() (*entity.Store, error) {

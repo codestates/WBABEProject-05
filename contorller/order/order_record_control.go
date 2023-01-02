@@ -5,8 +5,8 @@ import (
 	"github.com/codestates/WBABEProject-05/protocol"
 	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
-	"github.com/codestates/WBABEProject-05/service"
 	"github.com/codestates/WBABEProject-05/service/order"
+	"github.com/codestates/WBABEProject-05/service/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -69,8 +69,7 @@ func (o *orderRecordControl) PostOrderRecord(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) PutOrderRecordFromCustomer(c *gin.Context) {
 	reqO := &request.RequestPutCustomerOrder{}
-	err := c.ShouldBindJSON(reqO)
-	if err != nil {
+	if err := c.ShouldBindJSON(reqO); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
@@ -97,8 +96,7 @@ func (o *orderRecordControl) PutOrderRecordFromCustomer(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) PutOrderRecordFromStore(c *gin.Context) {
 	reqO := &request.RequestPutStoreOrder{}
-	err := c.ShouldBindJSON(reqO)
-	if err != nil {
+	if err := c.ShouldBindJSON(reqO); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
@@ -127,9 +125,14 @@ func (o *orderRecordControl) PutOrderRecordFromStore(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 	page := &request.RequestPage{}
-	customerID := c.Query("customer-id")
-	if err := c.ShouldBindQuery(page); err != nil || customerID == "" {
+	if err := c.ShouldBindQuery(page); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	customerID := c.Query("customer-id")
+	if err := validator.EmtyString(customerID); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 
@@ -155,18 +158,13 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 	page := &request.RequestPage{}
-	storeID := c.Query("store-id")
-	if err := c.ShouldBindQuery(page); err != nil || storeID == "" {
+	if err := c.ShouldBindQuery(page); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
 
-	if err := service.Validator.Struct(page); err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
-		return
-	}
-
-	if err := service.Validator.EmtyString(storeID); err != nil {
+	storeID := c.Query("store-id")
+	if err := validator.EmtyString(storeID); err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
@@ -191,7 +189,7 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetOrderRecord(c *gin.Context) {
 	ordrID := c.Query("order-id")
-	if err := service.Validator.EmtyString(ordrID); err != nil {
+	if err := validator.EmtyString(ordrID); err != nil {
 		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
@@ -222,11 +220,6 @@ func (o *orderRecordControl) GetSelectedMenusTotalPrice(c *gin.Context) {
 		return
 	}
 	reqCheckP.Menus = strings.Split(reqCheckP.Menus[0], ",")
-
-	if err := service.Validator.Struct(reqCheckP); err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
-		return
-	}
 
 	resCheckP, err := o.orderService.FiendSelectedMenusTotalPrice(reqCheckP.StoreID, reqCheckP.Menus)
 	if err != nil {

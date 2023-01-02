@@ -8,12 +8,12 @@ import (
 )
 
 type RequestMenu struct {
-	StoreId     string `json:"store_id" validate:"required"`
-	Name        string `json:"name" validate:"required, min=2, max=15"`
-	Possible    bool   `json:"possible" validate:"required"`
-	Price       int    `json:"price" validate:"required"`
-	Origin      string `json:"origin" validate:"required"`
-	Description string `json:"description" validate:"required, min=1, max=50"`
+	StoreId     string `json:"store_id" binding:"required"`
+	Name        string `json:"name" binding:"required,min=2,max=15"`
+	Possible    bool   `json:"possible" binding:"required"`
+	Price       int    `json:"price" binding:"required"`
+	Origin      string `json:"origin" binding:"required"`
+	Description string `json:"description" binding:"required,min=1,max=50"`
 	LimitCount  string `json:"limit_count,omitempty"`
 }
 

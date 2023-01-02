@@ -6,6 +6,7 @@ import (
 	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/customer"
+	"github.com/codestates/WBABEProject-05/service/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -40,9 +41,14 @@ func NewMenuReviewControl(svc customer.MenuReviewServicer) *menuReviewControl {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (m *menuReviewControl) GetMenuSortedPagesByCustomerID(c *gin.Context) {
 	page := &request.RequestPage{}
-	customerID := c.Query("customer-id")
-	if err := c.ShouldBindQuery(page); err != nil || customerID == "" {
+	if err := c.ShouldBindQuery(page); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	customerID := c.Query("customer-id")
+	if err := validator.EmtyString(customerID); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 
@@ -68,9 +74,14 @@ func (m *menuReviewControl) GetMenuSortedPagesByCustomerID(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (m *menuReviewControl) GetMenuReviewSortedPagesByMenuID(c *gin.Context) {
 	page := &request.RequestPage{}
-	menuID := c.Query("menu-id")
-	if err := c.ShouldBindQuery(page); err != nil || menuID == "" {
+	if err := c.ShouldBindQuery(page); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	menuID := c.Query("menu-id")
+	if err := validator.EmtyString(menuID); err != nil {
+		protocol.Fail(utilErr.NewApiError(err)).Response(c)
 		return
 	}
 

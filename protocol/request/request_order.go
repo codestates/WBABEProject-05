@@ -10,10 +10,10 @@ import (
 )
 
 type RequestOrder struct {
-	StoreId      string          `json:"store_id" validate:"required"`
-	CustomerId   string          `json:"customer_id" validate:"required"`
-	Menus        []string        `json:"menu_ids" validate:"required"`
-	CustomerAddr *RequestAddress `json:"ordered_addr" validate:"required"`
+	StoreId      string          `json:"store_id" binding:"required"`
+	CustomerId   string          `json:"customer_id" binding:"required"`
+	Menus        []string        `json:"menu_ids" binding:"required"`
+	CustomerAddr *RequestAddress `json:"ordered_addr" binding:"required"`
 }
 
 func (r *RequestOrder) ToNewReceipt() (*entity.Receipt, error) {

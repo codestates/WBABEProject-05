@@ -18,7 +18,3 @@ func InjectServicesDependency() {
 	customer.MenuReviewService = customer.NewMenuReviewService(review.ReviewModel, menu.MenuModel)
 	login.UserService = login.NewUserService(user2.UserModel)
 }
-
-func SetServicer() {
-	Validator = NewService()
-}

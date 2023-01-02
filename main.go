@@ -50,7 +50,6 @@ func init() {
 	mongo.InjectModelsMongoDependency(mongo.MongoCollection)
 
 	// service
-	service.SetServicer()
 	service.InjectServicesDependency()
 
 	// controller

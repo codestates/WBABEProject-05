@@ -4,8 +4,8 @@ import (
 	"github.com/codestates/WBABEProject-05/protocol"
 	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
-	"github.com/codestates/WBABEProject-05/service"
 	"github.com/codestates/WBABEProject-05/service/login"
+	"github.com/codestates/WBABEProject-05/service/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -38,12 +38,7 @@ func NewUserControl(svc login.UserServicer) *userControl {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) GetUser(c *gin.Context) {
 	userID := c.Query("user-id")
-	if userID == "" {
-		protocol.Fail(error2.BadRequestError).Response(c)
-		return
-	}
-
-	if err := service.Validator.EmtyString(userID); err != nil {
+	if err := validator.EmtyString(userID); err != nil {
 		protocol.Fail(error2.NewApiError(err)).Response(c)
 		return
 	}
@@ -70,19 +65,13 @@ func (u *userControl) GetUser(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) PutUser(c *gin.Context) {
 	reqU := &request.RequestPutUser{}
-	userID := c.Query("user-id")
-	err := c.ShouldBindJSON(reqU)
-	if err != nil || userID == "" {
+	if err := c.ShouldBindJSON(reqU); err != nil {
 		protocol.Fail(error2.BadRequestError).Response(c)
 		return
 	}
 
-	if err := service.Validator.Struct(reqU); err != nil {
-		protocol.Fail(error2.NewApiError(err)).Response(c)
-		return
-	}
-
-	if err := service.Validator.EmtyString(userID); err != nil {
+	userID := c.Query("user-id")
+	if err := validator.EmtyString(userID); err != nil {
 		protocol.Fail(error2.NewApiError(err)).Response(c)
 		return
 	}
@@ -109,12 +98,7 @@ func (u *userControl) PutUser(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) DeleteUser(c *gin.Context) {
 	userID := c.Query("user-id")
-	if userID == "" {
-		protocol.Fail(error2.BadRequestError).Response(c)
-		return
-	}
-
-	if err := service.Validator.EmtyString(userID); err != nil {
+	if err := validator.EmtyString(userID); err != nil {
 		protocol.Fail(error2.NewApiError(err)).Response(c)
 		return
 	}
@@ -143,11 +127,6 @@ func (u *userControl) PostUser(c *gin.Context) {
 	reqU := &request.RequestUser{}
 	if err := c.ShouldBindJSON(reqU); err != nil {
 		protocol.Fail(error2.BadRequestError).Response(c)
-		return
-	}
-
-	if err := service.Validator.Struct(reqU); err != nil {
-		protocol.Fail(error2.NewApiError(err)).Response(c)
 		return
 	}
 
