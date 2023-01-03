@@ -70,6 +70,10 @@ func (s *storeMenuService) ModifyStore(storeID string, store *request.RequestPut
 }
 
 func (s *storeMenuService) RegisterMenu(menu *request.RequestMenu) (string, error) {
+	if foundMenu, _ := s.menuModel.SelectMenuByStoreIDAndName(menu.StoreID, menu.Name); foundMenu != nil {
+		return "", error2.DuplicatedDataError.New()
+	}
+
 	newM, err := menu.NewMenu()
 	if err != nil {
 		return "", err
@@ -97,7 +101,7 @@ func (s *storeMenuService) ModifyMenu(menuId string, menu *request.RequestMenu) 
 }
 
 func (s *storeMenuService) DeleteMenuAndBackup(menuId string) (int, error) {
-	deletedM, err := s.menuModel.SelectMenuByIdsAndDelete(menuId)
+	deletedM, err := s.menuModel.SelectMenuByIDsAndDelete(menuId)
 	if err != nil || deletedM == nil {
 		return 0, err
 	}

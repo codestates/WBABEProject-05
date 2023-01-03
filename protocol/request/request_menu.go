@@ -8,7 +8,7 @@ import (
 )
 
 type RequestMenu struct {
-	StoreId     string `json:"store_id" binding:"required"`
+	StoreID     string `json:"store_id" binding:"required"`
 	Name        string `json:"name" binding:"required,min=2,max=15"`
 	Possible    bool   `json:"possible" binding:"required"`
 	Price       int    `json:"price" binding:"required"`
@@ -18,7 +18,7 @@ type RequestMenu struct {
 }
 
 func (r *RequestMenu) NewMenu() (*entity.Menu, error) {
-	sID, err := primitive.ObjectIDFromHex(r.StoreId)
+	sID, err := primitive.ObjectIDFromHex(r.StoreID)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (r *RequestMenu) NewUpdateMenu(ID string) (*entity.Menu, error) {
 	if err != nil {
 		return nil, err
 	}
-	sID, err := primitive.ObjectIDFromHex(r.StoreId)
+	sID, err := primitive.ObjectIDFromHex(r.StoreID)
 	if err != nil {
 		return nil, err
 	}

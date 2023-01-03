@@ -157,7 +157,25 @@ func (m *menuModel) SelectMenuByID(menuID string) (*entity.Menu, error) {
 	return menu, nil
 }
 
-func (m *menuModel) SelectMenuByIdsAndDelete(menuID string) (*entity.Menu, error) {
+func (m *menuModel) SelectMenuByStoreIDAndName(storeID, name string) (*entity.Menu, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	sID, err := mongo2.ConvertStringToOBJID(storeID)
+	if err != nil {
+		return nil, err
+	}
+
+	var menu *entity.Menu
+	filter := bson.D{{"store_id", sID}, {"name", name}}
+	if err := m.collection.FindOne(ctx, filter).Decode(&menu); err != nil {
+		return nil, err
+	}
+
+	return menu, nil
+}
+
+func (m *menuModel) SelectMenuByIDsAndDelete(menuID string) (*entity.Menu, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 

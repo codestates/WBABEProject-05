@@ -7,7 +7,6 @@ import (
 
 var MenuModel MenuModeler
 
-// TODO 디테일한 점이 많아 서비스 만들어야할듯하다
 type MenuModeler interface {
 	InsertMenu(menu *entity.Menu) (string, error)
 
@@ -23,7 +22,9 @@ type MenuModeler interface {
 
 	SelectMenuByID(menuID string) (*entity.Menu, error)
 
-	SelectMenuByIdsAndDelete(menuId string) (*entity.Menu, error)
+	SelectMenuByStoreIDAndName(storeID, name string) (*entity.Menu, error)
+
+	SelectMenuByIDsAndDelete(menuID string) (*entity.Menu, error)
 
 	UpdateMenusInCOrderCount(menus []string) (int64, error)
 }
