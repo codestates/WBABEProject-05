@@ -13,6 +13,7 @@ import (
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"
+	util2 "github.com/codestates/WBABEProject-05/service/util"
 )
 
 type storeMenuService struct {
@@ -107,7 +108,7 @@ func (s *storeMenuService) DeleteMenuAndBackup(menuId string) (int, error) {
 }
 
 func (s *storeMenuService) FindMenusSortedPage(storeID string, pg *request.RequestPage) (*page.PageData[any], error) {
-	skip := pg.CurrentPage * pg.ContentCount
+	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
 	menus, err := s.menuModel.SelectSortLimitedMenus(storeID, pg.Sort, skip, pg.ContentCount)
 	if err != nil {
@@ -149,7 +150,7 @@ func (s *storeMenuService) FindStore(storeID string) (*response.ResponseStore, e
 }
 
 func (s *storeMenuService) FindStoresSortedPage(pg *request.RequestPage) (*page.PageData[any], error) {
-	skip := pg.CurrentPage * pg.ContentCount
+	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
 	receipts, err := s.storeModel.SelectSortLimitedStore(pg.Sort, skip, pg.ContentCount)
 	if err != nil {

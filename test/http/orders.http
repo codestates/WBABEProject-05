@@ -4,7 +4,7 @@ Content-Type: application/json
 {
   "store_id": "63b4419c8571e6d2b86e8ef7",
   "customer_id": "63b36290d8c372b476efe407",
-  "menu_ids":["63b441a58571e6d2b86e8ef8", "63b441a98571e6d2b86e8ef9"],
+  "menu_ids":["63b441a58571e6d2b86e8ef8"],
   "ordered_addr":{
     "street":"테스트거리",
     "detail":"오른쪽",

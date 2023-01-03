@@ -23,7 +23,7 @@ var mongoM *model
 func LoadMongoModel(uri string) error {
 	m := newModel()
 	if err := m.Connect(uri); err != nil {
-		logger.AppLog.Error(err)
+		logger.AppLog.Error(err.Error())
 		return err
 	}
 
@@ -42,7 +42,7 @@ func (m *model) Connect(uri string) error {
 	opt := options.Client().SetMaxPoolSize(100).SetTimeout(common.DatabaseClientTimeOut)
 	client, err := mongo.Connect(ctx, opt.ApplyURI(uri))
 	if err != nil {
-		logger.AppLog.Error(err)
+		logger.AppLog.Error(err.Error())
 		return err
 	}
 
@@ -64,7 +64,7 @@ func (m *model) CreateIndexes(colName string, unique bool, indexName ...string) 
 	}
 
 	if _, err := MongoCollection[colName].Indexes().CreateMany(ctx, indexModels); err != nil {
-		logger.AppLog.Error(err)
+		logger.AppLog.Error(err.Error())
 		return
 	}
 }
@@ -85,7 +85,7 @@ func (m *model) CreateCompoundIndex(colName string, unique bool, indexName ...st
 	}
 
 	if _, err := MongoCollection[colName].Indexes().CreateOne(ctx, IDXModel); err != nil {
-		logger.AppLog.Error(err)
+		logger.AppLog.Error(err.Error())
 		return
 	}
 }
@@ -126,7 +126,7 @@ func (m *model) checkClient() error {
 	defer cancel()
 
 	if err := m.client.Ping(ctx, nil); err != nil {
-		logger.AppLog.Error(err)
+		logger.AppLog.Error(err.Error())
 		return err
 	}
 	return nil

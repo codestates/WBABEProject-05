@@ -3,11 +3,11 @@ POST {{host}}{{v1}}/reviews/review
 Content-Type: application/json
 
 {
-  "store_id": "63b13667c261c10ddffa2eb5",
-  "customer_id": "63b1364bc261c10ddffa2eb3",
-  "menu_id": "63b1370fc261c10ddffa2eb8",
+  "store_id": "63b4419c8571e6d2b86e8ef7",
+  "customer_id": "63b36290d8c372b476efe407",
+  "menu_id": "63b441a58571e6d2b86e8ef8",
   "content": "진짜?정말?맛있어용!ㅎㅎㅎ",
-  "rating": 5
+  "rating": 4
 }
 ### => rating 상한선 뿐만아닌 전체적으로 validate 기능들 필요할듯
 

@@ -7,6 +7,7 @@ import (
 	"github.com/codestates/WBABEProject-05/model/review"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
+	util2 "github.com/codestates/WBABEProject-05/service/util"
 	"math"
 )
 
@@ -29,7 +30,7 @@ func NewMenuReviewService(rMod review.ReviewModeler, mMod menu.MenuModeler) *men
 }
 
 func (m *menuReviewService) FindReviewSortedPageByMenuID(menuID string, pg *request.RequestPage) (*page.PageData[any], error) {
-	skip := pg.CurrentPage * pg.ContentCount
+	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
 	reviews, err := m.reviewModel.SelectSortLimitedReviewsByMenuID(menuID, pg.Sort, skip, pg.ContentCount)
 	if err != nil {
@@ -47,7 +48,7 @@ func (m *menuReviewService) FindReviewSortedPageByMenuID(menuID string, pg *requ
 }
 
 func (m *menuReviewService) FindReviewSortedPageByUserID(ID, userRole string, pg *request.RequestPage) (*page.PageData[any], error) {
-	skip := pg.CurrentPage * pg.ContentCount
+	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
 	reviews, err := m.reviewModel.SelectSortLimitedReviewsByUserID(ID, userRole, pg.Sort, skip, pg.ContentCount)
 	if err != nil {
@@ -65,33 +66,35 @@ func (m *menuReviewService) FindReviewSortedPageByUserID(ID, userRole string, pg
 }
 
 func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview) (string, error) {
-	r, err := review.NewReview()
+	newR, err := review.NewReview()
 	if err != nil {
 		return "", err
 	}
 
-	savedID, err := m.reviewModel.InsertReview(r)
+	savedID, err := m.reviewModel.InsertReview(newR)
 	if err != nil {
 		return "", err
 	}
 
+	// Rating 은 비즈니스상 중요하지않아보여 따로 컨틀롤하지 않는 고루틴 활용
+	go m.updateMenuScores(review)
+
+	return savedID, nil
+}
+
+func (m *menuReviewService) updateMenuScores(review *request.RequestPostReview) {
 	foundM, err := m.menuModel.SelectMenuByID(review.MenuID)
 	if err != nil {
-		return "", err
+		logger.AppLog.Error(err.Error())
 	}
 
 	foundM.TotalReviewScore += review.Rating
 	foundM.ReviewCount++
 	foundM.Rating = math.Round((float64(foundM.TotalReviewScore)/float64(foundM.ReviewCount))*10) / 10
 
-	// Rating 은 비즈니스상 중요하지않아 고루틴 활용
-	go func() {
-		rating, err := m.menuModel.UpdateAboutRating(foundM)
-		if err != nil || rating == 0 {
-			MSG := fmt.Sprintf("does not update rating Menu ID %v", foundM.ID)
-			logger.AppLog.Error(MSG)
-		}
-	}()
-
-	return savedID, nil
+	rating, err := m.menuModel.UpdateAboutRating(foundM)
+	if err != nil || rating == 0 {
+		MSG := fmt.Sprintf("does not update rating Menu ID %v", foundM.ID)
+		logger.AppLog.Error(MSG)
+	}
 }

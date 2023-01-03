@@ -12,6 +12,7 @@ import (
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"
+	util2 "github.com/codestates/WBABEProject-05/service/util"
 	"time"
 )
 
@@ -46,14 +47,8 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 		return "", err
 	}
 
-	// OrderCount 의 증가는 중요하지않아 비즈니스상 채널로 따로 컨트롤하지않는 고루틴 활용
-	go func() {
-		count, err := o.menuModel.UpdateMenusInCOrderCount(order.Menus)
-		if err != nil || count == 0 {
-			MSG := fmt.Sprintf("does not update order count Menu IDs %v", order.Menus)
-			logger.AppLog.Error(MSG)
-		}
-	}()
+	// OrderCount 의 증가는 비즈니스상 중요하지않아보여 따로 컨틀롤하지 않는 고루틴 활용
+	go o.updateOrderCount(order)
 
 	return insertedId, nil
 }
@@ -98,8 +93,9 @@ func (o *orderRecordService) ModifyOrderRecordFromStore(order *request.RequestPu
 
 	return int(updatedCnt), nil
 }
+
 func (o *orderRecordService) FindOrderRecordsSortedPage(ID, userRole string, pg *request.RequestPage) (*page.PageData[any], error) {
-	skip := pg.CurrentPage * pg.ContentCount
+	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
 	receipts, err := o.receiptModel.SelectSortLimitedReceipt(ID, userRole, pg.Sort, skip, pg.ContentCount)
 	if err != nil {
@@ -115,7 +111,6 @@ func (o *orderRecordService) FindOrderRecordsSortedPage(ID, userRole string, pg 
 
 	return page.NewPageData(receipts, pgInfo), nil
 }
-
 func (o *orderRecordService) FindOrderRecord(orderID string) (*response.ResponseOrder, error) {
 	foundReceipt, err := o.receiptModel.SelectReceiptByID(orderID)
 	if err != nil {
@@ -145,6 +140,14 @@ func (o *orderRecordService) FiendSelectedMenusTotalPrice(storeID string, menuID
 	resCheckPrice := response.NewResponseCheckPrice(menus, totalPrice)
 
 	return resCheckPrice, nil
+}
+
+func (o *orderRecordService) updateOrderCount(order *request.RequestOrder) {
+	count, err := o.menuModel.UpdateMenusInCOrderCount(order.Menus)
+	if err != nil || count == 0 {
+		MSG := fmt.Sprintf("does not update order count Menu IDs %v", order.Menus)
+		logger.AppLog.Error(MSG)
+	}
 }
 
 func (o *orderRecordService) sumMenusPrice(menus []*entity.Menu) int {
