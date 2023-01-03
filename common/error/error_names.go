@@ -1,6 +1,5 @@
 package error
 
-/* 4001 ~ 4999 error status */
 const (
 	Unauthorized       = "인증 오류"
 	RestAccessFail     = "로그인 필요"
