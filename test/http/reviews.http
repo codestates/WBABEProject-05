@@ -12,9 +12,9 @@ Content-Type: application/json
 ### => rating 상한선 뿐만아닌 전체적으로 validate 기능들 필요할듯
 
 ### -> 메뉴별 리뷰보기
-GET {{host}}{{v1}}/reviews/menu?menu-id=63b1370fc261c10ddffa2eb8&current-page=0&content-count=6&name=base_time.updated_at&direction=-1
+GET {{host}}{{v1}}/reviews/menu?menu-id=63b1370fc261c10ddffa2eb8&current-page=0&content-count=6&sort-name=base_time.updated_at&direction=-1
 
 ### -> 고객이 자신의 리뷰 보기
-GET {{host}}{{v1}}/reviews/customer?customer-id=63b1364bc261c10ddffa2eb3&current-page=0&content-count=6&name=base_time.updated_at&direction=-1
+GET {{host}}{{v1}}/reviews/customer?customer-id=63b1364bc261c10ddffa2eb3&current-page=0&content-count=6&sort-name=base_time.updated_at&direction=-1
 
 ###

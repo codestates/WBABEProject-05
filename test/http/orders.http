@@ -42,8 +42,8 @@ Content-Type: application/json
 GET {{host}}{{v1}}/orders/order/price?store-id=63b13667c261c10ddffa2eb5&menu-ids=63b1370fc261c10ddffa2eb8,63b1370cc261c10ddffa2eb7
 
 ###
-GET {{host}}{{v1}}/orders/pages/customer?customer-id=63b1364bc261c10ddffa2eb3&current-page=0&content-count=5&name=base_time.updated_at&direction=-1
+GET {{host}}{{v1}}/orders/pages/customer?customer-id=63b1364bc261c10ddffa2eb3&current-page=0&content-count=5&sort-name=base_time.updated_at&direction=-1
 
 ###
-GET {{host}}{{v1}}/orders/pages/store?store-id=63b13667c261c10ddffa2eb5&current-page=0&content-count=5&name=base_time.updated_at&direction=-1
+GET {{host}}{{v1}}/orders/pages/store?store-id=63b13667c261c10ddffa2eb5&current-page=0&content-count=5&sort-name=base_time.updated_at&direction=-1
 

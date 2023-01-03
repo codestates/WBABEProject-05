@@ -14,7 +14,7 @@ Content-Type: application/json
 ### => 63b13667c261c10ddffa2eb5
 
 ###
-GET {{host}}{{v1}}/stores?current-page=0&content-count=6&name=base_time.updated_at&direction=-1
+GET {{host}}{{v1}}/stores?current-page=0&content-count=6&sort-name=base_time.updated_at&direction=-1
 ### => TODO 메뉴가 삭제되면 store 의 recommend 여기서도 빠지는 CASE CADE 기능이 필요
 
 ###

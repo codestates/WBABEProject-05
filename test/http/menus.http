@@ -1,4 +1,4 @@
-GET {{host}}{{v1}}/stores/store/menus?store-id=63b13667c261c10ddffa2eb5&current-page=0&content-count=5&name=base_time.updated_at&direction=-1
+GET {{host}}{{v1}}/stores/store/menus?store-id=63b4419c8571e6d2b86e8ef7&current-page=0&content-count=5&sort-name=order_count&direction=-1
 
 ###
 POST {{host}}{{v1}}/stores/store/menus/menu
