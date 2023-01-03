@@ -1,9 +1,9 @@
 package order
 
 import (
+	utilErr "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/model/enum"
 	"github.com/codestates/WBABEProject-05/protocol"
-	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/order"
 	"github.com/codestates/WBABEProject-05/service/validator"
@@ -47,7 +47,7 @@ func (o *orderRecordControl) PostOrderRecord(c *gin.Context) {
 
 	recordedID, err := o.orderService.RegisterOrderRecord(reqO)
 	if err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 
@@ -76,7 +76,7 @@ func (o *orderRecordControl) PutOrderRecordFromCustomer(c *gin.Context) {
 
 	newOrderID, err := o.orderService.ModifyOrderRecordFromCustomer(reqO)
 	if err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -103,7 +103,7 @@ func (o *orderRecordControl) PutOrderRecordFromStore(c *gin.Context) {
 
 	updatedCnt, err := o.orderService.ModifyOrderRecordFromStore(reqO)
 	if err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -131,14 +131,14 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 	}
 
 	customerID := c.Query("customer-id")
-	if err := validator.EmtyString(customerID); err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+	if err := validator.IsBlank(customerID); err != nil {
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 
 	receipts, err := o.orderService.FindOrderRecordsSortedPage(customerID, enum.CustomerRole, page)
 	if err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(receipts).Response(c)
@@ -164,14 +164,14 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 	}
 
 	storeID := c.Query("store-id")
-	if err := validator.EmtyString(storeID); err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+	if err := validator.IsBlank(storeID); err != nil {
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 
 	receipts, err := o.orderService.FindOrderRecordsSortedPage(storeID, enum.StoreRole, page)
 	if err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(receipts).Response(c)
@@ -188,15 +188,15 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 // @Param order-id query string true "order-id"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetOrderRecord(c *gin.Context) {
-	ordrID := c.Query("order-id")
-	if err := validator.EmtyString(ordrID); err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+	orderID := c.Query("order-id")
+	if err := validator.IsBlank(orderID); err != nil {
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 
-	resOrder, err := o.orderService.FindOrderRecord(ordrID)
+	resOrder, err := o.orderService.FindOrderRecord(orderID)
 	if err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 
@@ -223,7 +223,7 @@ func (o *orderRecordControl) GetSelectedMenusTotalPrice(c *gin.Context) {
 
 	resCheckP, err := o.orderService.FiendSelectedMenusTotalPrice(reqCheckP.StoreID, reqCheckP.Menus)
 	if err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(resCheckP).Response(c)

@@ -24,15 +24,16 @@ func NewUserService(modeler user.UserModeler) *userService {
 	return instance
 }
 
-func (u *userService) RegisterUser(usr *request.RequestUser) (string, error) {
-	postUser := usr.NewPostUser()
-	postUser.Password = u.hashPassword(usr.Password)
-	savedId, err := u.userModel.PostUser(postUser)
+func (u *userService) RegisterUser(user *request.RequestUser) (string, error) {
+	postUser := user.NewPostUser()
+	postUser.Password = u.hashPassword(user.Password)
+	savedID, err := u.userModel.PostUser(postUser)
 	if err != nil {
 		return "", err
 	}
-	return savedId, err
+	return savedID, err
 }
+
 func (u *userService) ModifyUser(ID string, usr *request.RequestPutUser) (int, error) {
 	updateUser, err := usr.NewUpdatePutUser(ID)
 	if err != nil {
@@ -45,20 +46,22 @@ func (u *userService) ModifyUser(ID string, usr *request.RequestPutUser) (int, e
 	}
 	return int(updateCount), nil
 }
-func (u *userService) FindUser(id string) (*response.ResponseUser, error) {
-	findUser, err := u.userModel.SelectUser(id)
+
+func (u *userService) FindUser(ID string) (*response.ResponseUser, error) {
+	foundUser, err := u.userModel.SelectUser(ID)
 	if err != nil {
 		return nil, err
 	}
-	resUser := response.NewResponseUserFromUser(findUser)
+	resUser := response.NewResponseUserFromUser(foundUser)
 	return resUser, nil
 }
-func (u *userService) DeleteUser(id string) (int, error) {
-	deleteUser, err := u.userModel.DeleteUser(id)
+
+func (u *userService) DeleteUser(ID string) (int, error) {
+	deletedCount, err := u.userModel.DeleteUser(ID)
 	if err != nil {
 		return 0, err
 	}
-	return int(deleteUser), nil
+	return int(deletedCount), nil
 }
 
 func (u *userService) hashPassword(password string) string {
@@ -70,11 +73,11 @@ func (u *userService) hashPassword(password string) string {
 }
 
 func (u *userService) verifyPassword(userPassword string, providedPassword string) (bool, error) {
-	err := bcrypt.CompareHashAndPassword([]byte(providedPassword), []byte(userPassword))
-	check := true
-	if err != nil {
-		check = false
+	var check bool
+	if err := bcrypt.CompareHashAndPassword([]byte(providedPassword), []byte(userPassword)); err != nil {
 		return check, err
 	}
+
+	check = true
 	return check, nil
 }

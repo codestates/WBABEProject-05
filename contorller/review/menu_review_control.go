@@ -1,9 +1,9 @@
 package review
 
 import (
+	utilErr "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/model/enum"
 	"github.com/codestates/WBABEProject-05/protocol"
-	utilErr "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/customer"
 	"github.com/codestates/WBABEProject-05/service/validator"
@@ -47,14 +47,14 @@ func (m *menuReviewControl) GetMenuSortedPagesByCustomerID(c *gin.Context) {
 	}
 
 	customerID := c.Query("customer-id")
-	if err := validator.EmtyString(customerID); err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+	if err := validator.IsBlank(customerID); err != nil {
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 
 	reviews, err := m.menuReviewService.FindReviewSortedPageByUserID(customerID, enum.CustomerRole, page)
 	if err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(reviews).Response(c)
@@ -80,14 +80,14 @@ func (m *menuReviewControl) GetMenuReviewSortedPagesByMenuID(c *gin.Context) {
 	}
 
 	menuID := c.Query("menu-id")
-	if err := validator.EmtyString(menuID); err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+	if err := validator.IsBlank(menuID); err != nil {
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 
 	reviews, err := m.menuReviewService.FindReviewSortedPageByMenuID(menuID, page)
 	if err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(reviews).Response(c)
@@ -112,7 +112,7 @@ func (m *menuReviewControl) PostMenuReview(c *gin.Context) {
 
 	savedID, err := m.menuReviewService.RegisterMenuReview(reqR)
 	if err != nil {
-		protocol.Fail(utilErr.NewApiError(err)).Response(c)
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 	protocol.SuccessCodeAndData(

@@ -2,8 +2,8 @@ package protocol
 
 import (
 	"fmt"
+	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/logger"
-	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -42,11 +42,11 @@ func SuccessCustom[T any](c int, d T, MSG string) *ApiResponse[any] {
 	}
 }
 
-func Fail(e error2.ApiError) *ApiResponse[any] {
+func Fail(e error2.AppError) *ApiResponse[any] {
 	return FailCustomMessage(e, e.MSG)
 }
 
-func FailCustomMessage(e error2.ApiError, MSG string) *ApiResponse[any] {
+func FailCustomMessage(e error2.AppError, MSG string) *ApiResponse[any] {
 	errLogMSG := fmt.Sprintf("Error is %s, Code %d, Message : %s By %s", e.Name, e.Code, MSG, e.MSG)
 	logger.AppLog.Error(errLogMSG)
 	return &ApiResponse[any]{

@@ -2,7 +2,7 @@ POST {{host}}{{v1}}/stores/store
 Content-Type: application/json
 
 {
-  "user_id": "63b13650c261c10ddffa2eb4",
+  "user_id": "63b441868571e6d2b86e8ef6",
   "name": "가게1이예요.",
   "address": {
     "street": "테스트거리",

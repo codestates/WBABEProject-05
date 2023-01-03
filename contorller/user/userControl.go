@@ -1,8 +1,8 @@
 package user
 
 import (
+	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/protocol"
-	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/login"
 	"github.com/codestates/WBABEProject-05/service/validator"
@@ -38,8 +38,8 @@ func NewUserControl(svc login.UserServicer) *userControl {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) GetUser(c *gin.Context) {
 	userID := c.Query("user-id")
-	if err := validator.EmtyString(userID); err != nil {
-		protocol.Fail(error2.NewApiError(err)).Response(c)
+	if err := validator.IsBlank(userID); err != nil {
+		protocol.Fail(error2.NewAppError(err)).Response(c)
 		return
 	}
 
@@ -71,14 +71,14 @@ func (u *userControl) PutUser(c *gin.Context) {
 	}
 
 	userID := c.Query("user-id")
-	if err := validator.EmtyString(userID); err != nil {
-		protocol.Fail(error2.NewApiError(err)).Response(c)
+	if err := validator.IsBlank(userID); err != nil {
+		protocol.Fail(error2.NewAppError(err)).Response(c)
 		return
 	}
 
 	cnt, err := u.userService.ModifyUser(userID, reqU)
 	if err != nil {
-		protocol.Fail(error2.NewApiError(err)).Response(c)
+		protocol.Fail(error2.NewAppError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -98,14 +98,14 @@ func (u *userControl) PutUser(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) DeleteUser(c *gin.Context) {
 	userID := c.Query("user-id")
-	if err := validator.EmtyString(userID); err != nil {
-		protocol.Fail(error2.NewApiError(err)).Response(c)
+	if err := validator.IsBlank(userID); err != nil {
+		protocol.Fail(error2.NewAppError(err)).Response(c)
 		return
 	}
 
 	cnt, err := u.userService.DeleteUser(userID)
 	if err != nil {
-		protocol.Fail(error2.NewApiError(err)).Response(c)
+		protocol.Fail(error2.NewAppError(err)).Response(c)
 		return
 	}
 	protocol.SuccessData(gin.H{
@@ -130,11 +130,11 @@ func (u *userControl) PostUser(c *gin.Context) {
 		return
 	}
 
-	savedId, err := u.userService.RegisterUser(reqU)
+	savedID, err := u.userService.RegisterUser(reqU)
 	if err != nil {
-		protocol.Fail(error2.NewApiError(err)).Response(c)
+		protocol.Fail(error2.NewAppError(err)).Response(c)
 		return
 	}
 
-	protocol.SuccessCodeAndData(http.StatusCreated, gin.H{"user_id": savedId}).Response(c)
+	protocol.SuccessCodeAndData(http.StatusCreated, gin.H{"saved_id": savedID}).Response(c)
 }

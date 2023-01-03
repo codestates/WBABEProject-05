@@ -1,7 +1,6 @@
 package customer
 
 import (
-	"errors"
 	"fmt"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/model/menu"
@@ -29,7 +28,6 @@ func NewMenuReviewService(rMod review.ReviewModeler, mMod menu.MenuModeler) *men
 	return instance
 }
 
-// FindReviewsSortedPage 메뉴 조회 : 개별 메뉴별 평점 및 리뷰 보기, / 해당 메뉴 선택시 메뉴에 따른 평점 및 리뷰 데이터 리턴
 func (m *menuReviewService) FindReviewSortedPageByMenuID(menuID string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := pg.CurrentPage * pg.ContentCount
 
@@ -47,6 +45,7 @@ func (m *menuReviewService) FindReviewSortedPageByMenuID(menuID string, pg *requ
 
 	return page.NewPageData(reviews, pgInfo), nil
 }
+
 func (m *menuReviewService) FindReviewSortedPageByUserID(ID, userRole string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := pg.CurrentPage * pg.ContentCount
 
@@ -89,8 +88,8 @@ func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview
 	go func() {
 		rating, err := m.menuModel.UpdateAboutRating(foundM)
 		if err != nil || rating == 0 {
-			msg := fmt.Sprintf("does not update rating Menu ID %v", foundM.ID)
-			logger.AppLog.Error(errors.New(msg))
+			MSG := fmt.Sprintf("does not update rating Menu ID %v", foundM.ID)
+			logger.AppLog.Error(MSG)
 		}
 	}()
 

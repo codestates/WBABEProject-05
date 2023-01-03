@@ -1,15 +1,14 @@
 package order
 
 import (
-	"errors"
 	"fmt"
+	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/enum"
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/receipt"
 	"github.com/codestates/WBABEProject-05/model/util"
-	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"
@@ -38,30 +37,21 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 		return "", err
 	}
 
-	menus, err := o.menuModel.SelectMenusByIDs(order.StoreId, order.Menus)
-	if err != nil {
+	if err := o.setTotalPriceAndNumbering(rct, order); err != nil {
 		return "", err
 	}
-
-	rct.Price = o.sumMenusPrice(menus)
-
-	toDayCnt, err := o.receiptModel.SelectToDayTotalCount()
-	if err != nil {
-		return "", err
-	}
-	rct.Numbering = o.newNumbering(toDayCnt)
 
 	insertedId, err := o.receiptModel.InsertReceipt(rct)
 	if err != nil {
 		return "", err
 	}
 
-	// OrderCount 의 증가는 비즈니스상 중요하지않아 고루틴 활용
+	// OrderCount 의 증가는 중요하지않아 비즈니스상 채널로 따로 컨트롤하지않는 고루틴 활용
 	go func() {
 		count, err := o.menuModel.UpdateMenusInCOrderCount(order.Menus)
 		if err != nil || count == 0 {
-			msg := fmt.Sprintf("does not update order count Menu IDs %v", order.Menus)
-			logger.AppLog.Error(errors.New(msg))
+			MSG := fmt.Sprintf("does not update order count Menu IDs %v", order.Menus)
+			logger.AppLog.Error(MSG)
 		}
 	}()
 
@@ -92,6 +82,7 @@ func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.Reques
 
 	return savedID, nil
 }
+
 func (o *orderRecordService) ModifyOrderRecordFromStore(order *request.RequestPutStoreOrder) (int, error) {
 	foundOrder, err := o.receiptModel.SelectReceiptByID(order.ID)
 	if err != nil {
@@ -107,7 +98,6 @@ func (o *orderRecordService) ModifyOrderRecordFromStore(order *request.RequestPu
 
 	return int(updatedCnt), nil
 }
-
 func (o *orderRecordService) FindOrderRecordsSortedPage(ID, userRole string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := pg.CurrentPage * pg.ContentCount
 

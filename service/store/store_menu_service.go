@@ -2,6 +2,7 @@ package store
 
 import (
 	"encoding/json"
+	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/common/flag"
 	"github.com/codestates/WBABEProject-05/config/db"
 	"github.com/codestates/WBABEProject-05/logger"
@@ -9,7 +10,6 @@ import (
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/store"
 	"github.com/codestates/WBABEProject-05/model/util"
-	error2 "github.com/codestates/WBABEProject-05/protocol/error"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"

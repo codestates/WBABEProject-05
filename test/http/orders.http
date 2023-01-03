@@ -2,9 +2,9 @@ POST {{host}}{{v1}}/orders/order
 Content-Type: application/json
 
 {
-  "store_id": "63b13667c261c10ddffa2eb5",
-  "customer_id": "63b1364bc261c10ddffa2eb3",
-  "menu_ids":["63b1370fc261c10ddffa2eb8", "63b1370cc261c10ddffa2eb7"],
+  "store_id": "63b4419c8571e6d2b86e8ef7",
+  "customer_id": "63b36290d8c372b476efe407",
+  "menu_ids":["63b441a58571e6d2b86e8ef8", "63b441a98571e6d2b86e8ef9"],
   "ordered_addr":{
     "street":"테스트거리",
     "detail":"오른쪽",
