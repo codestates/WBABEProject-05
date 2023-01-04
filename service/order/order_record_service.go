@@ -63,8 +63,10 @@ func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.Reques
 	if err != nil {
 		return "", err
 	}
-	if foundOrder.Status != enum.Waiting {
-		return "", error2.AlreadyReceivedOrderError.New()
+
+	// 메뉴 추가의 경우 배달중은 실패 , 메뉴 변경의 경우 조리중,배달중인경우 실패 -> 즉, 기본으로 배달중은 실패, 추가적으로 완료도 실패시키자
+	if err := o.checkOrderStatus(order, foundOrder); err != nil {
+		return "", err
 	}
 
 	if util.ConvertOBJIDToString(foundOrder.CustomerID) != order.CustomerID {
@@ -123,7 +125,7 @@ func (o *orderRecordService) FindOrderRecord(orderID string) (*response.Response
 		return nil, err
 	}
 
-	menuIDs := util.ConvertOBJIDsToStrings(foundReceipt.Menus)
+	menuIDs := util.ConvertOBJIDsToStrings(foundReceipt.MenuIDs)
 
 	menus, err := o.menuModel.SelectMenusByIDs(foundReceipt.StoreID.Hex(), menuIDs)
 	if err != nil {
@@ -134,6 +136,7 @@ func (o *orderRecordService) FindOrderRecord(orderID string) (*response.Response
 
 	return resOrder, nil
 }
+
 func (o *orderRecordService) FiendSelectedMenusTotalPrice(storeID string, menuIDs []string) (*response.ResponseCheckPrice, error) {
 	menus, err := o.menuModel.SelectMenusByIDs(storeID, menuIDs)
 	if err != nil {
@@ -145,6 +148,30 @@ func (o *orderRecordService) FiendSelectedMenusTotalPrice(storeID string, menuID
 	resCheckPrice := response.NewResponseCheckPrice(menus, totalPrice)
 
 	return resCheckPrice, nil
+}
+
+func (o *orderRecordService) checkOrderStatus(order *request.RequestPutCustomerOrder, foundOrder *entity.Receipt) error {
+	reqMIDs := util2.ConvertSliceToExistMap(order.MenuIDs)
+	isChange := o.isChangeOrderMenus(foundOrder, reqMIDs)
+	switch {
+	case isChange:
+		if foundOrder.Status == enum.Cooking {
+			return error2.DoseNotModifyOrderError.New()
+		}
+	case foundOrder.Status == enum.Completion || foundOrder.Status == enum.Delivering:
+		return error2.DoseNotModifyOrderError.New()
+	}
+	return nil
+}
+
+func (o *orderRecordService) isChangeOrderMenus(foundOrder *entity.Receipt, reqMIDs map[string]int) bool {
+	for _, ID := range foundOrder.MenuIDs {
+		// false -> 변경으로 볼 수 있다.
+		if _, exist := reqMIDs[ID.Hex()]; !exist {
+			return true
+		}
+	}
+	return false
 }
 
 func (o *orderRecordService) updateUserPreOrderInfo(order *request.RequestOrder) {

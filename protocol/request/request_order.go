@@ -36,7 +36,7 @@ func (r *RequestOrder) ToNewReceipt() (*entity.Receipt, error) {
 		ID:            primitive.NewObjectID(),
 		StoreID:       sid,
 		CustomerID:    cid,
-		Menus:         OBJMIDs,
+		MenuIDs:       OBJMIDs,
 		Status:        enum.Waiting,
 		CustomerAddr:  r.CustomerAddr.ToAddress(),
 		CustomerPhone: r.PhoneNumber,
