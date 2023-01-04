@@ -56,8 +56,7 @@ func (s *storeMenuService) RegisterStore(store *request.RequestPostStore) (strin
 }
 
 func (s *storeMenuService) ModifyStore(storeID string, store *request.RequestPutStore) (int, error) {
-	foundMenus, err := s.menuModel.SelectMenusByIDs(storeID, store.RecommendMenus)
-	if err != nil || len(foundMenus) == len(store.RecommendMenus) {
+	if foundMenus, err := s.menuModel.SelectMenusByIDs(storeID, store.RecommendMenus); err != nil || len(foundMenus) == len(store.RecommendMenus) {
 		return 0, error2.AddNotRecommendMenusError.New()
 	}
 
