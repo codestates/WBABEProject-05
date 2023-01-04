@@ -41,7 +41,7 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 	}
 
 	// 이전 주문 정보 저장도 비즈니스상 중요하지 않아보여 따로 컨트롤하지 않는 고루틴 처리
-	go o.putUserPreOrderInfo(order)
+	go o.updateUserPreOrderInfo(order)
 
 	if err := o.setTotalPriceAndNumbering(rct, order); err != nil {
 		return "", err
@@ -56,17 +56,6 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 	go o.updateOrderCount(order)
 
 	return savedNumbering, nil
-}
-
-func (o *orderRecordService) putUserPreOrderInfo(order *request.RequestOrder) {
-	preOrderInfo, err := order.ToUserPreOrderInfo()
-	if err != nil {
-		logger.AppLog.Error(err)
-	}
-	_, err = o.userModel.UpdateUserPreOrder(preOrderInfo)
-	if err != nil {
-		logger.AppLog.Error(err)
-	}
 }
 
 func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.RequestPutCustomerOrder) (string, error) {
@@ -127,6 +116,7 @@ func (o *orderRecordService) FindOrderRecordsSortedPage(ID, userRole string, pg 
 
 	return page.NewPageData(receipts, pgInfo), nil
 }
+
 func (o *orderRecordService) FindOrderRecord(orderID string) (*response.ResponseOrder, error) {
 	foundReceipt, err := o.receiptModel.SelectReceiptByID(orderID)
 	if err != nil {
@@ -144,7 +134,6 @@ func (o *orderRecordService) FindOrderRecord(orderID string) (*response.Response
 
 	return resOrder, nil
 }
-
 func (o *orderRecordService) FiendSelectedMenusTotalPrice(storeID string, menuIDs []string) (*response.ResponseCheckPrice, error) {
 	menus, err := o.menuModel.SelectMenusByIDs(storeID, menuIDs)
 	if err != nil {
@@ -156,6 +145,17 @@ func (o *orderRecordService) FiendSelectedMenusTotalPrice(storeID string, menuID
 	resCheckPrice := response.NewResponseCheckPrice(menus, totalPrice)
 
 	return resCheckPrice, nil
+}
+
+func (o *orderRecordService) updateUserPreOrderInfo(order *request.RequestOrder) {
+	preOrderInfo, err := order.ToUserPreOrderInfo()
+	if err != nil {
+		logger.AppLog.Error(err)
+	}
+	_, err = o.userModel.UpdateUserPreOrder(preOrderInfo)
+	if err != nil {
+		logger.AppLog.Error(err)
+	}
 }
 
 func (o *orderRecordService) updateOrderCount(order *request.RequestOrder) {
