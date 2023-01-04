@@ -86,6 +86,7 @@ func (s *storeMenuService) RegisterMenu(menu *request.RequestMenu) (string, erro
 
 	return savedID, nil
 }
+
 func (s *storeMenuService) ModifyMenu(menuId string, menu *request.RequestMenu) (int, error) {
 	updateMenu, err := menu.NewUpdateMenu(menuId)
 	if err != nil {
@@ -120,6 +121,24 @@ func (s *storeMenuService) FindMenusSortedPage(storeID string, pg *request.Reque
 	}
 
 	totalCount, err := s.menuModel.SelectTotalCount(storeID)
+	if err != nil {
+		return nil, err
+	}
+
+	pgInfo := pg.NewPageInfo(int(totalCount))
+
+	return page.NewPageData(menus, pgInfo), nil
+}
+
+func (s *storeMenuService) FindMenusSortedPageByName(name string, pg *request.RequestPage) (*page.PageData[any], error) {
+	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
+
+	menus, err := s.menuModel.SelectSortLimitedMenusByName(name, pg.Sort, skip, pg.ContentCount)
+	if err != nil {
+		return nil, err
+	}
+
+	totalCount, err := s.menuModel.SelectTotalCountByName(name)
 	if err != nil {
 		return nil, err
 	}

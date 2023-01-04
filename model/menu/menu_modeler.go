@@ -12,11 +12,15 @@ type MenuModeler interface {
 
 	UpdateMenu(menu *entity.Menu) (int64, error)
 
-	UpdateAboutRating(menu *entity.Menu) (int64, error)
+	UpdateMenuRating(menu *entity.Menu) (int64, error)
 
 	SelectSortLimitedMenus(storeID string, sort *page.Sort, skip, limit int) ([]*entity.Menu, error)
 
+	SelectSortLimitedMenusByName(name string, sort *page.Sort, skip, limit int) ([]*entity.Menu, error)
+
 	SelectTotalCount(storeID string) (int64, error)
+
+	SelectTotalCountByName(name string) (int64, error)
 
 	SelectMenusByIDs(storeID string, menuIDs []string) ([]*entity.Menu, error)
 

@@ -21,6 +21,8 @@ type StoreMenuServicer interface {
 
 	FindMenusSortedPage(storeID string, page *request.RequestPage) (*page.PageData[any], error)
 
+	FindMenusSortedPageByName(name string, page *request.RequestPage) (*page.PageData[any], error)
+
 	FindRecommendMenus(storeID string) (*response.ResponseStoreRecommendMenus, error)
 
 	FindStore(storeId string) (*response.ResponseStore, error)

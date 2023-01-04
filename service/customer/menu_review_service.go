@@ -92,7 +92,7 @@ func (m *menuReviewService) updateMenuScores(review *request.RequestPostReview) 
 	foundM.ReviewCount++
 	foundM.Rating = math.Round((float64(foundM.TotalReviewScore)/float64(foundM.ReviewCount))*10) / 10
 
-	rating, err := m.menuModel.UpdateAboutRating(foundM)
+	rating, err := m.menuModel.UpdateMenuRating(foundM)
 	if err != nil || rating == 0 {
 		MSG := fmt.Sprintf("does not update rating Menu ID %v", foundM.ID)
 		logger.AppLog.Error(MSG)

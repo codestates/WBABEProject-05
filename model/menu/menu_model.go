@@ -52,7 +52,7 @@ func (m *menuModel) UpdateMenu(menu *entity.Menu) (int64, error) {
 	return result.ModifiedCount, nil
 }
 
-func (m *menuModel) UpdateAboutRating(menu *entity.Menu) (int64, error) {
+func (m *menuModel) UpdateMenuRating(menu *entity.Menu) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -90,6 +90,26 @@ func (m *menuModel) SelectSortLimitedMenus(storeID string, sort *page.Sort, skip
 	return menus, nil
 }
 
+func (m *menuModel) SelectSortLimitedMenusByName(name string, sort *page.Sort, skip, limit int) ([]*entity.Menu, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	filter := bson.M{"name": bson.M{"$regex": name}}
+	opt := mongo2.NewSortFindOptions(sort, skip, limit)
+	menusCursor, err := m.collection.Find(ctx, filter, opt)
+	if err != nil {
+		return nil, err
+	}
+
+	var menus []*entity.Menu
+	if err = menusCursor.All(ctx, &menus); err != nil {
+		return nil, err
+	}
+
+	return menus, nil
+
+}
+
 func (m *menuModel) SelectTotalCount(storeID string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
@@ -99,7 +119,21 @@ func (m *menuModel) SelectTotalCount(storeID string) (int64, error) {
 		return 0, err
 	}
 
-	count, err := m.collection.CountDocuments(ctx, bson.M{"store_id": ID})
+	filter := bson.M{"store_id": ID}
+	count, err := m.collection.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
+func (m *menuModel) SelectTotalCountByName(name string) (int64, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	filter := bson.M{"name": bson.M{"$regex": name}}
+	count, err := m.collection.CountDocuments(ctx, filter)
 	if err != nil {
 		return 0, err
 	}

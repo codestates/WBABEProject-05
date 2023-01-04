@@ -179,11 +179,11 @@ func (s *storeControl) DeleteMenu(c *gin.Context) {
 	}).Response(c)
 }
 
-// GetMenuSortedPages godoc
+// GetMenuSortedPagesByStoreID godoc
 // @Tags 가게
 // @Summary call Get sorted menu page, return sorted menu pages data by json.
 // @Description 특정 가게 메뉴 리스트를 보여준다.
-// @name GetMenuSortedPages
+// @name GetMenuSortedPagesByStoreID
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/stores/store/menus [get]
@@ -191,7 +191,7 @@ func (s *storeControl) DeleteMenu(c *gin.Context) {
 // @Param RequestPage query request.RequestPage true "RequestPage"
 // @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
-func (s *storeControl) GetMenuSortedPages(c *gin.Context) {
+func (s *storeControl) GetMenuSortedPagesByStoreID(c *gin.Context) {
 	page := &request.RequestPage{}
 	if err := c.ShouldBindQuery(page); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
@@ -205,6 +205,39 @@ func (s *storeControl) GetMenuSortedPages(c *gin.Context) {
 	}
 
 	menus, err := s.storeMenuService.FindMenusSortedPage(storeID, page)
+	if err != nil {
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
+		return
+	}
+	protocol.SuccessData(menus).Response(c)
+}
+
+// GetMenuSortedPagesByName godoc
+// @Tags 가게
+// @Summary call Get store menus page, return sorted menus page data by json.
+// @Description 메뉴 이름으로 검색해 특정 가게 메뉴 리스트를 보여준다.
+// @name GetMenuSortedPagesByName
+// @Accept  json
+// @Produce  json
+// @Router /app/v1/stores/store/menus/menu [get]
+// @Param name query string true "name"
+// @Param RequestPage query request.RequestPage true "RequestPage"
+// @Param Sort query page.Sort true "Sort"
+// @Success 200 {object} protocol.ApiResponse[any]
+func (s *storeControl) GetMenuSortedPagesByName(c *gin.Context) {
+	page := &request.RequestPage{}
+	if err := c.ShouldBindQuery(page); err != nil {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	name := c.Query("name")
+	if err := validator.IsBlank(name); err != nil {
+		protocol.Fail(utilErr.NewAppError(err)).Response(c)
+		return
+	}
+
+	menus, err := s.storeMenuService.FindMenusSortedPageByName(name, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return

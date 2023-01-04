@@ -15,7 +15,9 @@ type StoreContoller interface {
 
 	DeleteMenu(c *gin.Context)
 
-	GetMenuSortedPages(c *gin.Context)
+	GetMenuSortedPagesByStoreID(c *gin.Context)
+
+	GetMenuSortedPagesByName(c *gin.Context)
 
 	GetRecommendMenus(c *gin.Context)
 
