@@ -63,7 +63,7 @@ func (r *receiptModel) SelectReceiptByID(receiptID string) (*entity.Receipt, err
 	}
 	return receipt, nil
 }
-func (r *receiptModel) SelectSortLimitedReceipt(ID, userRole string, sort *page.Sort, skip, limit int) ([]*entity.Receipt, error) {
+func (r *receiptModel) SelectSortLimitedReceipt(ID, status, userRole string, sort *page.Sort, skip, limit int) ([]*entity.Receipt, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -72,7 +72,7 @@ func (r *receiptModel) SelectSortLimitedReceipt(ID, userRole string, sort *page.
 		return nil, err
 	}
 
-	filter, err := util.NewFilterCheckedUserRole(objID, userRole)
+	filter, err := util.NewFilterCheckedUserRole(objID, status, userRole)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (r *receiptModel) SelectToDayTotalCount() (int64, error) {
 	return count, err
 }
 
-func (r *receiptModel) SelectTotalCount(ID, userRole string) (int64, error) {
+func (r *receiptModel) SelectTotalCount(ID, status, userRole string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
@@ -117,7 +117,7 @@ func (r *receiptModel) SelectTotalCount(ID, userRole string) (int64, error) {
 		return 0, err
 	}
 
-	filter, err := util.NewFilterCheckedUserRole(objID, userRole)
+	filter, err := util.NewFilterCheckedUserRole(objID, status, userRole)
 	if err != nil {
 		return 0, err
 	}

@@ -1,7 +1,6 @@
 package util
 
 import (
-	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/model/enum"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"go.mongodb.org/mongo-driver/bson"
@@ -10,14 +9,20 @@ import (
 	"time"
 )
 
-func NewFilterCheckedUserRole(OBJID primitive.ObjectID, userRole string) (bson.M, error) {
+func NewFilterCheckedUserRole(OBJID primitive.ObjectID, status, userRole string) (bson.D, error) {
+	var filter []bson.E
 	switch userRole {
 	case enum.CustomerRole:
-		return bson.M{"customer_id": OBJID}, nil
+		filter = append(filter, bson.E{"customer_id", OBJID})
+		//return bson.M{"customer_id": OBJID}, nil
 	case enum.StoreRole:
-		return bson.M{"store_id": OBJID}, nil
+		filter = append(filter, bson.E{"store_id", OBJID})
+		//return bson.M{"store_id": OBJID}, nil
 	}
-	return nil, error2.BadRequestError.New()
+	if status != "" {
+		filter = append(filter, bson.E{"status", status})
+	}
+	return filter, nil
 }
 
 func NewToDayGteFilter() (bson.M, error) {

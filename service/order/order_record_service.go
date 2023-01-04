@@ -101,15 +101,15 @@ func (o *orderRecordService) ModifyOrderRecordFromStore(order *request.RequestPu
 	return int(updatedCnt), nil
 }
 
-func (o *orderRecordService) FindOrderRecordsSortedPage(ID, userRole string, pg *request.RequestPage) (*page.PageData[any], error) {
+func (o *orderRecordService) FindOrderRecordsSortedPage(ID, status, userRole string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
-	receipts, err := o.receiptModel.SelectSortLimitedReceipt(ID, userRole, pg.Sort, skip, pg.ContentCount)
+	receipts, err := o.receiptModel.SelectSortLimitedReceipt(ID, status, userRole, pg.Sort, skip, pg.ContentCount)
 	if err != nil {
 		return nil, err
 	}
 
-	totalCount, err := o.receiptModel.SelectTotalCount(ID, userRole)
+	totalCount, err := o.receiptModel.SelectTotalCount(ID, status, userRole)
 	if err != nil {
 		return nil, err
 	}

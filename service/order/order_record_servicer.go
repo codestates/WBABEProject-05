@@ -15,7 +15,7 @@ type OrderRecordServicer interface {
 
 	ModifyOrderRecordFromStore(order *request.RequestPutStoreOrder) (int, error)
 
-	FindOrderRecordsSortedPage(ID, userRole string, page *request.RequestPage) (*page.PageData[any], error)
+	FindOrderRecordsSortedPage(ID, status, userRole string, page *request.RequestPage) (*page.PageData[any], error)
 
 	FindOrderRecord(orderID string) (*response.ResponseOrder, error)
 

@@ -120,6 +120,7 @@ func (o *orderRecordControl) PutOrderRecordFromStore(c *gin.Context) {
 // @Produce  json
 // @Router /app/v1/orders/pages/customer [get]
 // @Param customer-id query string true "customer-id"
+// @Param status query string true "status"
 // @Param RequestPage query request.RequestPage true "RequestPage"
 // @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
@@ -136,7 +137,12 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 		return
 	}
 
-	receipts, err := o.orderService.FindOrderRecordsSortedPage(customerID, enum.CustomerRole, page)
+	status := c.Query("status")
+	if _, exists := enum.OrderStatusMap[status]; !exists {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+	}
+
+	receipts, err := o.orderService.FindOrderRecordsSortedPage(customerID, status, enum.CustomerRole, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
@@ -153,6 +159,7 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 // @Produce  json
 // @Router /app/v1/orders/pages/store [get]
 // @Param store-id query string true "store-id"
+// @Param status query string true "status"
 // @Param RequestPage query request.RequestPage true "RequestPage"
 // @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
@@ -169,7 +176,12 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 		return
 	}
 
-	receipts, err := o.orderService.FindOrderRecordsSortedPage(storeID, enum.StoreRole, page)
+	status := c.Query("status")
+	if _, exists := enum.OrderStatusMap[status]; !exists {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+	}
+
+	receipts, err := o.orderService.FindOrderRecordsSortedPage(storeID, status, enum.StoreRole, page)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return

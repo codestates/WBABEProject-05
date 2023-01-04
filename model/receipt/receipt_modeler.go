@@ -18,7 +18,7 @@ type ReceiptModeler interface {
 
 	SelectToDayTotalCount() (int64, error)
 
-	SelectSortLimitedReceipt(ID, userRole string, sort *page.Sort, skip, limit int) ([]*entity.Receipt, error)
+	SelectSortLimitedReceipt(ID, status, userRole string, sort *page.Sort, skip, limit int) ([]*entity.Receipt, error)
 
-	SelectTotalCount(ID, userRole string) (int64, error)
+	SelectTotalCount(ID, status, userRole string) (int64, error)
 }
