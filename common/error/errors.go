@@ -45,6 +45,7 @@ var (
 	DuplicatedDataError       = NewAppErrorCustom(DuplicatedDataCode, "이미 존재하는 데이터 입니다.", DuplicatedData)
 	AlreadyReceivedOrderError = NewAppErrorCustom(DoesNotModifyOrderCode, "주문대기 상태에만 수정 가능 합니다.", DoesNotModifyOrder)
 	BadAccessOrderError       = NewAppErrorCustom(DoesNotModifyOrderCode, "자신의 주문만 수정 가능 합니다.", DoesNotModifyOrder)
+	AddNotRecommendMenusError = NewAppErrorCustom(AddNotRecommendMenusCode, "추천 메뉴들을 확인해 주세요.", AddNotRecommendMenus)
 )
 
 /* 501 ~ 599 서버 에러 */
