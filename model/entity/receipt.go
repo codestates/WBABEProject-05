@@ -9,15 +9,16 @@ import (
 )
 
 type Receipt struct {
-	ID           primitive.ObjectID   `bson:"_id,omitempty"`
-	StoreID      primitive.ObjectID   `bson:"store_id,omitempty"`
-	CustomerID   primitive.ObjectID   `bson:"customer_id,omitempty"`
-	Menus        []primitive.ObjectID `bson:"menu,omitempty"`
-	Price        int                  `bson:"price,omitempty"`
-	Status       string               `bson:"status,omitempty"`
-	CustomerAddr *dom.Address         `bson:"ordered_addr"`
-	Numbering    string               `bson:"numbering,omitempty"`
-	BaseTime     *dom.BaseTime        `bson:"base_time"`
+	ID            primitive.ObjectID   `bson:"_id,omitempty"`
+	StoreID       primitive.ObjectID   `bson:"store_id,omitempty"`
+	CustomerID    primitive.ObjectID   `bson:"customer_id,omitempty"`
+	Menus         []primitive.ObjectID `bson:"menu,omitempty"`
+	Price         int                  `bson:"price,omitempty"`
+	Status        string               `bson:"status,omitempty"`
+	CustomerAddr  *dom.Address         `bson:"ordered_addr"`
+	CustomerPhone string               `bson:"customer_phone,omitempty"`
+	Numbering     string               `bson:"numbering,omitempty"`
+	BaseTime      *dom.BaseTime        `bson:"base_time"`
 }
 
 func (s *Receipt) NewUpdateStatusBsonSetD() bson.D {

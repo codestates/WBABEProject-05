@@ -40,7 +40,7 @@ func (u *userService) ModifyUser(ID string, usr *request.RequestPutUser) (int, e
 		return 0, err
 	}
 
-	updateCount, err := u.userModel.PutUser(updateUser)
+	updateCount, err := u.userModel.UpdateUser(updateUser)
 	if err != nil {
 		return 0, err
 	}

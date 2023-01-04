@@ -34,7 +34,7 @@ func (r *receiptModel) InsertReceipt(receipt *entity.Receipt) (string, error) {
 		return "", err
 	}
 
-	return receipt.ID.Hex(), nil
+	return receipt.Numbering, nil
 }
 
 func (r *receiptModel) UpdateReceiptStatus(receipt *entity.Receipt) (int64, error) {

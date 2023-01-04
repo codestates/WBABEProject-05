@@ -8,6 +8,7 @@ import (
 	"github.com/codestates/WBABEProject-05/model/enum"
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/receipt"
+	"github.com/codestates/WBABEProject-05/model/user"
 	"github.com/codestates/WBABEProject-05/model/util"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
@@ -19,16 +20,17 @@ import (
 type orderRecordService struct {
 	receiptModel receipt.ReceiptModeler
 	menuModel    menu.MenuModeler
+	userModel    user.UserModeler
 }
 
 var instance *orderRecordService
 
-func NewOrderRecordService(rd receipt.ReceiptModeler, md menu.MenuModeler) *orderRecordService {
+func NewOrderRecordService(rd receipt.ReceiptModeler, md menu.MenuModeler, ud user.UserModeler) *orderRecordService {
 	if instance != nil {
 		return instance
 	}
 
-	instance = &orderRecordService{receiptModel: rd, menuModel: md}
+	instance = &orderRecordService{receiptModel: rd, menuModel: md, userModel: ud}
 	return instance
 }
 
@@ -38,11 +40,14 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 		return "", err
 	}
 
+	// 이전 주문 정보 저장도 비즈니스상 중요하지 않아보여 따로 컨트롤하지 않는 고루틴 처리
+	go o.putUserPreOrderInfo(order)
+
 	if err := o.setTotalPriceAndNumbering(rct, order); err != nil {
 		return "", err
 	}
 
-	insertedId, err := o.receiptModel.InsertReceipt(rct)
+	savedNumbering, err := o.receiptModel.InsertReceipt(rct)
 	if err != nil {
 		return "", err
 	}
@@ -50,7 +55,18 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 	// OrderCount 의 증가는 비즈니스상 중요하지않아보여 따로 컨틀롤하지 않는 고루틴 활용
 	go o.updateOrderCount(order)
 
-	return insertedId, nil
+	return savedNumbering, nil
+}
+
+func (o *orderRecordService) putUserPreOrderInfo(order *request.RequestOrder) {
+	preOrderInfo, err := order.ToUserPreOrderInfo()
+	if err != nil {
+		logger.AppLog.Error(err)
+	}
+	_, err = o.userModel.UpdateUserPreOrder(preOrderInfo)
+	if err != nil {
+		logger.AppLog.Error(err)
+	}
 }
 
 func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.RequestPutCustomerOrder) (string, error) {

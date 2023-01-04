@@ -14,6 +14,7 @@ type RequestOrder struct {
 	CustomerId   string          `json:"customer_id" binding:"required"`
 	Menus        []string        `json:"menu_ids" binding:"required"`
 	CustomerAddr *RequestAddress `json:"ordered_addr" binding:"required"`
+	PhoneNumber  string          `json:"phone_number" binding:"required"`
 }
 
 func (r *RequestOrder) ToNewReceipt() (*entity.Receipt, error) {
@@ -31,17 +32,31 @@ func (r *RequestOrder) ToNewReceipt() (*entity.Receipt, error) {
 		return nil, err
 	}
 
-	rc := &entity.Receipt{
-		ID:           primitive.NewObjectID(),
-		StoreID:      sid,
-		CustomerID:   cid,
-		Menus:        OBJMIDs,
-		Status:       enum.Waiting,
-		CustomerAddr: r.CustomerAddr.ToAddress(),
+	return &entity.Receipt{
+		ID:            primitive.NewObjectID(),
+		StoreID:       sid,
+		CustomerID:    cid,
+		Menus:         OBJMIDs,
+		Status:        enum.Waiting,
+		CustomerAddr:  r.CustomerAddr.ToAddress(),
+		CustomerPhone: r.PhoneNumber,
 		BaseTime: &dom.BaseTime{
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		},
+	}, nil
+}
+
+func (r *RequestOrder) ToUserPreOrderInfo() (*entity.User, error) {
+	cid, err := primitive.ObjectIDFromHex(r.CustomerId)
+	if err != nil {
+		return nil, err
 	}
-	return rc, nil
+	return &entity.User{
+		ID: cid,
+		PreOrderInfo: &dom.PreOrderInfo{
+			Address:     r.CustomerAddr.ToAddress(),
+			PhoneNumber: r.PhoneNumber,
+		},
+	}, nil
 }

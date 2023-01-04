@@ -30,7 +30,7 @@ func NewOrderRecordControl(svc order.OrderRecordServicer) *orderRecordControl {
 
 // PostOrderRecord godoc
 // @Tags 주문기록
-// @Summary call Post Order, return posted id by json.
+// @Summary call Post Order, return order numbering by json.
 // @Description 메뉴 주문을 할 수 있다.
 // @name PostOrderRecord
 // @Accept  json
@@ -45,7 +45,7 @@ func (o *orderRecordControl) PostOrderRecord(c *gin.Context) {
 		return
 	}
 
-	recordedID, err := o.orderService.RegisterOrderRecord(reqO)
+	savedNumbering, err := o.orderService.RegisterOrderRecord(reqO)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
@@ -53,7 +53,7 @@ func (o *orderRecordControl) PostOrderRecord(c *gin.Context) {
 
 	protocol.SuccessCodeAndData(
 		http.StatusCreated,
-		gin.H{"posted_id": recordedID},
+		gin.H{"order_numbering": savedNumbering},
 	).Response(c)
 }
 

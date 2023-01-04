@@ -9,7 +9,9 @@ var UserModel UserModeler
 type UserModeler interface {
 	PostUser(user *entity.User) (string, error)
 
-	PutUser(user *entity.User) (int64, error)
+	UpdateUser(user *entity.User) (int64, error)
+
+	UpdateUserPreOrder(user *entity.User) (int64, error)
 
 	SelectUser(id string) (*entity.User, error)
 

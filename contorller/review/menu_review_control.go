@@ -39,7 +39,7 @@ func NewMenuReviewControl(svc customer.MenuReviewServicer) *menuReviewControl {
 // @Param RequestPage query request.RequestPage true "RequestPage"
 // @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
-func (m *menuReviewControl) GetMenuSortedPagesByCustomerID(c *gin.Context) {
+func (m *menuReviewControl) GetMenuReviewSortedPagesByCustomerID(c *gin.Context) {
 	page := &request.RequestPage{}
 	if err := c.ShouldBindQuery(page); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)

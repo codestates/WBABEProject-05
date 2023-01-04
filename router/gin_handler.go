@@ -58,7 +58,7 @@ func OrdersHandler(ordersUrl *gin.RouterGroup) {
 
 // ReviewHandler ("/reviews")
 func ReviewHandler(reviewsUrl *gin.RouterGroup) {
-	reviewsUrl.POST("/review", review.MenuReviewControl.PostMenuReview)                  // 리뷰 등록
-	reviewsUrl.GET("/menu", review.MenuReviewControl.GetMenuReviewSortedPagesByMenuID)   // 메뉴별 리뷰 조회
-	reviewsUrl.GET("/customer", review.MenuReviewControl.GetMenuSortedPagesByCustomerID) // 사용자의 리뷰 조회
+	reviewsUrl.POST("/review", review.MenuReviewControl.PostMenuReview)                        // 리뷰 등록
+	reviewsUrl.GET("/menu", review.MenuReviewControl.GetMenuReviewSortedPagesByMenuID)         // 메뉴별 리뷰 조회
+	reviewsUrl.GET("/customer", review.MenuReviewControl.GetMenuReviewSortedPagesByCustomerID) // 사용자의 리뷰 조회
 }
