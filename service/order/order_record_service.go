@@ -2,10 +2,10 @@ package order
 
 import (
 	"fmt"
+	"github.com/codestates/WBABEProject-05/common/enum"
 	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/model/entity"
-	"github.com/codestates/WBABEProject-05/model/enum"
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/receipt"
 	"github.com/codestates/WBABEProject-05/model/user"
@@ -37,19 +37,19 @@ func NewOrderRecordService(rd receipt.ReceiptModeler, md menu.MenuModeler, ud us
 func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (string, error) {
 	rct, err := order.ToNewReceipt()
 	if err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	// 이전 주문 정보 저장도 비즈니스상 중요하지 않아보여 따로 컨트롤하지 않는 고루틴 처리
 	go o.updateUserPreOrderInfo(order)
 
 	if err := o.setTotalPriceAndNumbering(rct, order); err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	savedNumbering, err := o.receiptModel.InsertReceipt(rct)
 	if err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	// OrderCount 의 증가는 비즈니스상 중요하지않아보여 따로 컨틀롤하지 않는 고루틴 활용
@@ -61,25 +61,25 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.RequestPutCustomerOrder) (string, error) {
 	foundOrder, err := o.receiptModel.SelectReceiptByID(order.ID)
 	if err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	// 메뉴 추가의 경우 배달중은 실패 , 메뉴 변경의 경우 조리중,배달중인경우 실패 -> 즉, 기본으로 배달중은 실패, 추가적으로 완료도 실패시키자
 	if err := o.checkOrderStatus(order, foundOrder); err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	if util.ConvertOBJIDToString(foundOrder.CustomerID) != order.CustomerID {
-		return "", error2.BadAccessOrderError.New()
+		return enum.BlankSTR, error2.BadAccessOrderError.New()
 	}
 
 	if _, err := o.receiptModel.UpdateCancelReceipt(foundOrder); err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	savedID, err := o.RegisterOrderRecord(order.ToRequestOrder())
 	if err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	return savedID, nil

@@ -3,6 +3,7 @@ package review
 import (
 	"context"
 	"github.com/codestates/WBABEProject-05/common"
+	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/util"
 	"github.com/codestates/WBABEProject-05/protocol/page"
@@ -32,7 +33,7 @@ func (r *reviewModel) InsertReview(review *entity.Review) (string, error) {
 	defer cancel()
 
 	if _, err := r.collection.InsertOne(ctx, review); err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 	return review.ID.Hex(), nil
 }
@@ -46,7 +47,7 @@ func (r *reviewModel) SelectSortLimitedReviewsByMenuID(menuID string, sort *page
 		return nil, err
 	}
 
-	filter := bson.M{"menu_id": ID}
+	filter := bson.D{{"menu_id", ID}}
 	opt := util.NewSortFindOptions(sort, skip, limit)
 	reviews, err := r.findSortedReviews(ctx, filter, opt)
 	if err != nil {
@@ -65,7 +66,7 @@ func (r *reviewModel) SelectSortLimitedReviewsByUserID(ID, userRole string, sort
 		return nil, err
 	}
 
-	filter, err := util.NewFilterCheckedUserRole(OBJID, userRole)
+	filter, err := util.NewFilterCheckedUserRole(OBJID, enum.BlankSTR, userRole)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +106,7 @@ func (r *reviewModel) SelectTotalCountByUserID(ID, userRole string) (int64, erro
 		return 0, err
 	}
 
-	filter, err := util.NewFilterCheckedUserRole(OBJID, userRole)
+	filter, err := util.NewFilterCheckedUserRole(OBJID, enum.BlankSTR, userRole)
 	if err != nil {
 		return 0, err
 	}
@@ -118,7 +119,7 @@ func (r *reviewModel) SelectTotalCountByUserID(ID, userRole string) (int64, erro
 	return count, nil
 }
 
-func (r *reviewModel) findSortedReviews(ctx context.Context, filter bson.M, opt *options.FindOptions) ([]*entity.Review, error) {
+func (r *reviewModel) findSortedReviews(ctx context.Context, filter bson.D, opt *options.FindOptions) ([]*entity.Review, error) {
 	reviewCursor, err := r.collection.Find(ctx, filter, opt)
 	if err != nil {
 		return nil, err

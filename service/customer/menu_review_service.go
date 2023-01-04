@@ -2,6 +2,7 @@ package customer
 
 import (
 	"fmt"
+	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/review"
@@ -68,12 +69,12 @@ func (m *menuReviewService) FindReviewSortedPageByUserID(ID, userRole string, pg
 func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview) (string, error) {
 	newR, err := review.NewReview()
 	if err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	savedID, err := m.reviewModel.InsertReview(newR)
 	if err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	// Rating 은 비즈니스상 중요하지않아보여 따로 컨틀롤하지 않는 고루틴 활용

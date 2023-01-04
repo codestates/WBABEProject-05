@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/codestates/WBABEProject-05/common"
+	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -29,7 +30,7 @@ func (u *userModel) PostUser(user *entity.User) (string, error) {
 	defer cancel()
 
 	if _, err := u.collection.InsertOne(ctx, user); err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	return user.ID.Hex(), nil

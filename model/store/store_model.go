@@ -2,6 +2,7 @@ package store
 
 import (
 	"github.com/codestates/WBABEProject-05/common"
+	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/util"
 	"github.com/codestates/WBABEProject-05/protocol/page"
@@ -62,7 +63,7 @@ func (s *storeModel) InsertStore(store *entity.Store) (string, error) {
 	defer cancel()
 
 	if _, err := s.collection.InsertOne(ctx, store); err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	return store.ID.Hex(), nil

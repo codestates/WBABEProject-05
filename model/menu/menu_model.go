@@ -2,6 +2,7 @@ package menu
 
 import (
 	"github.com/codestates/WBABEProject-05/common"
+	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	mongo2 "github.com/codestates/WBABEProject-05/model/util"
 	"github.com/codestates/WBABEProject-05/protocol/page"
@@ -32,7 +33,7 @@ func (m *menuModel) InsertMenu(menu *entity.Menu) (string, error) {
 	defer cancel()
 
 	if _, err := m.collection.InsertOne(ctx, menu); err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	return menu.ID.Hex(), nil

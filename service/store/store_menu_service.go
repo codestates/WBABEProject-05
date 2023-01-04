@@ -2,6 +2,7 @@ package store
 
 import (
 	"encoding/json"
+	"github.com/codestates/WBABEProject-05/common/enum"
 	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/common/flag"
 	"github.com/codestates/WBABEProject-05/config/db"
@@ -40,16 +41,16 @@ func NewStoreMenuService(
 func (s *storeMenuService) RegisterStore(store *request.RequestPostStore) (string, error) {
 	postStore, err := store.NewPostStore()
 	if err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	if _, err = s.storeModel.SelectStoreByPhone(postStore.StorePhone); err == nil {
-		return "", &error2.DuplicatedDataError
+		return enum.BlankSTR, &error2.DuplicatedDataError
 	}
 
 	savedId, err := s.storeModel.InsertStore(postStore)
 	if err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	return savedId, nil
@@ -75,17 +76,17 @@ func (s *storeMenuService) ModifyStore(storeID string, store *request.RequestPut
 
 func (s *storeMenuService) RegisterMenu(menu *request.RequestMenu) (string, error) {
 	if foundMenu, _ := s.menuModel.SelectMenuByStoreIDAndName(menu.StoreID, menu.Name); foundMenu != nil {
-		return "", error2.DuplicatedDataError.New()
+		return enum.BlankSTR, error2.DuplicatedDataError.New()
 	}
 
 	newM, err := menu.NewMenu()
 	if err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	savedID, err := s.menuModel.InsertMenu(newM)
 	if err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	return savedID, nil

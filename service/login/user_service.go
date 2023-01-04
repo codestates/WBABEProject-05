@@ -1,6 +1,7 @@
 package login
 
 import (
+	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/model/user"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"
@@ -29,7 +30,7 @@ func (u *userService) RegisterUser(user *request.RequestUser) (string, error) {
 	postUser.Password = u.hashPassword(user.Password)
 	savedID, err := u.userModel.PostUser(postUser)
 	if err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 	return savedID, err
 }

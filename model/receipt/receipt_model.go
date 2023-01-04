@@ -2,6 +2,7 @@ package receipt
 
 import (
 	"github.com/codestates/WBABEProject-05/common"
+	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/util"
 	"github.com/codestates/WBABEProject-05/protocol/page"
@@ -31,7 +32,7 @@ func (r *receiptModel) InsertReceipt(receipt *entity.Receipt) (string, error) {
 	defer cancel()
 
 	if _, err := r.collection.InsertOne(ctx, receipt); err != nil {
-		return "", err
+		return enum.BlankSTR, err
 	}
 
 	return receipt.Numbering, nil

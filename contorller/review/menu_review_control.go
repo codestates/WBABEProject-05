@@ -1,8 +1,8 @@
 package review
 
 import (
+	"github.com/codestates/WBABEProject-05/common/enum"
 	utilErr "github.com/codestates/WBABEProject-05/common/error"
-	"github.com/codestates/WBABEProject-05/model/enum"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/customer"

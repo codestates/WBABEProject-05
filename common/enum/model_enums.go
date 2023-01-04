@@ -10,6 +10,8 @@ const (
 	Cooking       = "조리중"
 	Delivering    = "배달중"
 	Completion    = "배달완료"
+
+	BlankSTR = ""
 )
 
 var (

@@ -1,7 +1,7 @@
 package util
 
 import (
-	"github.com/codestates/WBABEProject-05/model/enum"
+	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -19,7 +19,7 @@ func NewFilterCheckedUserRole(OBJID primitive.ObjectID, status, userRole string)
 		filter = append(filter, bson.E{"store_id", OBJID})
 		//return bson.M{"store_id": OBJID}, nil
 	}
-	if status != "" {
+	if status != enum.BlankSTR {
 		filter = append(filter, bson.E{"status", status})
 	}
 	return filter, nil
