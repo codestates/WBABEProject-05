@@ -15,13 +15,20 @@ type ResponseUser struct {
 }
 
 func NewResponseUserFromUser(user *entity.User) *ResponseUser {
+	preInfo := &ResponseAddress{}
+	orderPhone := ""
+	if user.PreOrderInfo != nil {
+		preInfo = FromAddr(user.PreOrderInfo.Address)
+		orderPhone = user.PreOrderInfo.PhoneNumber
+	}
+
 	return &ResponseUser{
 		ID:               user.ID.Hex(),
 		Name:             user.Name,
 		NicName:          user.NicName,
 		PhoneNumber:      user.PhoneNumber,
 		Role:             user.Role,
-		OrderAddr:        FromAddr(user.PreOrderInfo.Address),
-		OrderPhoneNumber: user.PhoneNumber,
+		OrderAddr:        preInfo,
+		OrderPhoneNumber: orderPhone,
 	}
 }

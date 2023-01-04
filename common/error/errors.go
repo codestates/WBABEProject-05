@@ -1,6 +1,8 @@
 package error
 
-import "errors"
+import (
+	"errors"
+)
 
 type AppError struct {
 	Code int
@@ -8,11 +10,11 @@ type AppError struct {
 	Name string
 }
 
-func (e *AppError) Error() string {
+func (e AppError) Error() string {
 	return e.MSG
 }
 
-func (e *AppError) New() error {
+func (e AppError) New() error {
 	return errors.New(e.MSG)
 }
 

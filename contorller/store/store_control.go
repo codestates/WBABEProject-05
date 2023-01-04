@@ -97,6 +97,7 @@ func (s *storeControl) PutSore(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/stores/store/menus/menu [post]
+// @Param user-id query string true "user-id"
 // @Param RequestMenu body request.RequestMenu true "RequestMenu JSON"
 // @Success 201 {object} protocol.ApiResponse[any]
 func (s *storeControl) PostMenu(c *gin.Context) {
@@ -106,7 +107,13 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 		return
 	}
 
-	savedID, err := s.storeMenuService.RegisterMenu(reqM)
+	userID := c.Query("user-id")
+	if err := validator.IsBlank(userID); err != nil {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	savedID, err := s.storeMenuService.RegisterMenu(userID, reqM)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
@@ -125,6 +132,7 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/stores/store/menus/menu [put]
+// @Param user-id query string true "user-id"
 // @Param menu-id query string true "menu-id"
 // @Param RequestMenu body request.RequestMenu true "RequestMenu JSON"
 // @Success 200 {object} protocol.ApiResponse[any]
@@ -135,13 +143,19 @@ func (s *storeControl) PutMenu(c *gin.Context) {
 		return
 	}
 
+	userID := c.Query("user-id")
+	if err := validator.IsBlank(userID); err != nil {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
 	menuID := c.Query("menu-id")
 	if err := validator.IsBlank(menuID); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 
-	cnt, err := s.storeMenuService.ModifyMenu(menuID, reqM)
+	cnt, err := s.storeMenuService.ModifyMenu(userID, menuID, reqM)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
@@ -160,6 +174,7 @@ func (s *storeControl) PutMenu(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/stores/store/menus/menu [delete]
+// @Param user-id query string true "user-id"
 // @Param menu-id query string true "menu-id"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) DeleteMenu(c *gin.Context) {
@@ -169,7 +184,13 @@ func (s *storeControl) DeleteMenu(c *gin.Context) {
 		return
 	}
 
-	count, err := s.storeMenuService.DeleteMenuAndBackup(menuId)
+	userID := c.Query("user-id")
+	if err := validator.IsBlank(userID); err != nil {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	count, err := s.storeMenuService.DeleteMenuAndBackup(userID, menuId)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return

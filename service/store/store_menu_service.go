@@ -15,6 +15,7 @@ import (
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"
 	util2 "github.com/codestates/WBABEProject-05/service/util"
+	"github.com/codestates/WBABEProject-05/service/validator"
 )
 
 type storeMenuService struct {
@@ -39,13 +40,18 @@ func NewStoreMenuService(
 }
 
 func (s *storeMenuService) RegisterStore(store *request.RequestPostStore) (string, error) {
+	if err := validator.CheckRoleIsStore(store.UserID); err != nil {
+		return enum.BlankSTR, err
+	}
+
 	postStore, err := store.NewPostStore()
 	if err != nil {
 		return enum.BlankSTR, err
 	}
 
 	if _, err = s.storeModel.SelectStoreByPhone(postStore.StorePhone); err == nil {
-		return enum.BlankSTR, &error2.DuplicatedDataError
+		logger.AppLog.Error(err.Error())
+		return enum.BlankSTR, error2.DuplicatedDataError
 	}
 
 	savedId, err := s.storeModel.InsertStore(postStore)
@@ -57,8 +63,12 @@ func (s *storeMenuService) RegisterStore(store *request.RequestPostStore) (strin
 }
 
 func (s *storeMenuService) ModifyStore(storeID string, store *request.RequestPutStore) (int, error) {
-	if foundMenus, err := s.menuModel.SelectMenusByIDs(storeID, store.RecommendMenus); err != nil || len(foundMenus) == len(store.RecommendMenus) {
-		return 0, error2.AddNotRecommendMenusError.New()
+	if err := validator.CheckRoleIsStore(store.UserID); err != nil {
+		return 0, err
+	}
+
+	if err := validator.CheckExistsMenus(storeID, store.RecommendMenus); err != nil {
+		return 0, err
 	}
 
 	putStore, err := store.NewPutStore(storeID)
@@ -74,9 +84,13 @@ func (s *storeMenuService) ModifyStore(storeID string, store *request.RequestPut
 	return int(updateStore), err
 }
 
-func (s *storeMenuService) RegisterMenu(menu *request.RequestMenu) (string, error) {
-	if foundMenu, _ := s.menuModel.SelectMenuByStoreIDAndName(menu.StoreID, menu.Name); foundMenu != nil {
-		return enum.BlankSTR, error2.DuplicatedDataError.New()
+func (s *storeMenuService) RegisterMenu(userID string, menu *request.RequestMenu) (string, error) {
+	if err := validator.CheckRoleIsStore(userID); err != nil {
+		return enum.BlankSTR, err
+	}
+
+	if err := validator.CheckAlreadyExistsMenuByName(menu.StoreID, menu.Name); err != nil {
+		return enum.BlankSTR, err
 	}
 
 	newM, err := menu.NewMenu()
@@ -92,8 +106,16 @@ func (s *storeMenuService) RegisterMenu(menu *request.RequestMenu) (string, erro
 	return savedID, nil
 }
 
-func (s *storeMenuService) ModifyMenu(menuId string, menu *request.RequestMenu) (int, error) {
-	updateMenu, err := menu.NewUpdateMenu(menuId)
+func (s *storeMenuService) ModifyMenu(userID, menuID string, menu *request.RequestMenu) (int, error) {
+	if err := validator.CheckRoleIsStore(userID); err != nil {
+		return 0, err
+	}
+
+	if err := validator.CheckExistsMenu(menu.StoreID, menuID); err != nil {
+		return 0, err
+	}
+
+	updateMenu, err := menu.NewUpdateMenu(menuID)
 	if err != nil {
 		return 0, err
 	}
@@ -106,8 +128,12 @@ func (s *storeMenuService) ModifyMenu(menuId string, menu *request.RequestMenu) 
 	return int(cnt), nil
 }
 
-func (s *storeMenuService) DeleteMenuAndBackup(menuId string) (int, error) {
-	deletedM, err := s.menuModel.SelectMenuByIDsAndDelete(menuId)
+func (s *storeMenuService) DeleteMenuAndBackup(userID, menuID string) (int, error) {
+	if err := validator.CheckRoleIsStore(userID); err != nil {
+		return 0, err
+	}
+
+	deletedM, err := s.menuModel.SelectMenuByIDsAndDelete(menuID)
 	if err != nil || deletedM == nil {
 		return 0, err
 	}

@@ -41,7 +41,7 @@ func MenusHandler(menusUrl *gin.RouterGroup) {
 	menusUrl.POST("/menu", store2.StoreControl.PostMenu)                // 가게 메뉴 등록
 	menusUrl.PUT("/menu", store2.StoreControl.PutMenu)                  // 가게 메뉴 수정
 	menusUrl.DELETE("/menu", store2.StoreControl.DeleteMenu)            // 가게 메뉴 삭제
-	menusUrl.GET("/menu", store2.StoreControl.GetMenuSortedPagesByName) // 메뉴 이름으로 가게 메뉴들
+	menusUrl.GET("/menu", store2.StoreControl.GetMenuSortedPagesByName) // 메뉴 이름으로 모든 가게 메뉴들
 }
 
 // OrdersHandler ("/orders")

@@ -1,21 +1,23 @@
-GET {{host}}{{v1}}/stores/store/menus?store-id=63b4419c8571e6d2b86e8ef7&current-page=0&content-count=5&sort-name=order_count&direction=-1
+GET {{host}}{{v1}}/stores/store/menus?store-id=63b5af6948c1f59bda57c752&current-page=0&content-count=5&sort-name=order_count&direction=-1
+###
+GET {{host}}{{v1}}/stores/store/menus/menu?name=메뉴&current-page=1&content-count=5&sort-name=order_count&direction=-1
 
 ###
-POST {{host}}{{v1}}/stores/store/menus/menu
+POST {{host}}{{v1}}/stores/store/menus/menu?user-id=63b5ac622c5d4b2c42c4511b
 Content-Type: application/json
 
 {
-  "store_id":"63b4419c8571e6d2b86e8ef7",
-  "name": "가게1의 메뉴1",
+  "store_id":"63b5ac4c2c5d4b2c42c45119",
+  "name": "가게1의 메뉴1 수정이예용1",
   "limit_count": "non",
   "possible": true,
   "price": 2000,
   "origin": "국내산",
   "description":"맛있어짱!"
 }
-
+### =>  63b5b415a2163fa719931e43 , 63b5b429a2163fa719931e45 , 63b5b431a2163fa719931e46
 ###
-POST {{host}}{{v1}}/stores/store/menus/menu
+POST {{host}}{{v1}}/stores/store/menus/menu?user-id=63b5ac622c5d4b2c42c4511b
 Content-Type: application/json
 
 {
@@ -29,11 +31,11 @@ Content-Type: application/json
 }
 
 ###
-POST {{host}}{{v1}}/stores/store/menus/menu
+POST {{host}}{{v1}}/stores/store/menus/menu?user-id=63b5ac622c5d4b2c42c4511b
 Content-Type: application/json
 
 {
-  "store_id":"63b13667c261c10ddffa2eb5",
+  "store_id":"63b5ac622c5d4b2c42c4511b",
   "name": "가게1의 메뉴3",
   "limit_count": "non",
   "possible": true,
@@ -43,12 +45,12 @@ Content-Type: application/json
 }
 
 ###
-PUT {{host}}{{v1}}/stores/store/menus/menu?menu-id=63b0f8f1e303f470c77b2d1c
+PUT {{host}}{{v1}}/stores/store/menus/menu?menu-id=63b5c51a719bd01a89f88ca1&user-id=63b5ac622c5d4b2c42c4511b
 Content-Type: application/json
 
 {
-  "store_id":"63b0f8bee303f470c77b2d1b",
-  "name": "가게1의 메뉴1 수정이예용",
+  "store_id":"63b5bbf9e48fc8f155194bf6",
+  "name": "가게1의 메뉴1 zz",
   "limit_count": "10",
   "possible": true,
   "price": 1000,
@@ -57,6 +59,6 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{host}}{{v1}}/stores/store/menus/menu?menu-id=63b0f8f1e303f470c77b2d1c
+DELETE {{host}}{{v1}}/stores/store/menus/menu?user-id=63b5ac4c2c5d4b2c42c45119&menu-id=63b5c51a719bd01a89f88ca1
 
 ###
