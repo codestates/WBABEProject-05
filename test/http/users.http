@@ -16,10 +16,10 @@ POST {{host}}{{v1}}/users/user
 Content-Type: application/json
 
 {
-  "name": "테스트가게2",
-  "nic_name":"테스트가게입니다용2",
+  "name": "테스트가게3",
+  "nic_name":"테스트가게입니다용3",
   "password":"1234",
-  "phone_number": "010-3333-1234",
+  "phone_number": "010-4444-1234",
   "role":"store"
 }
 ### => 63b6f644697458e6fcdb4db4 , 63b6f9c0b7b6269193c57f4c

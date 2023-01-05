@@ -7,8 +7,8 @@ POST {{host}}{{v1}}/stores/store/menus/menu
 Content-Type: application/json
 
 {
-  "user_id" : "63b6f644697458e6fcdb4db4",
-  "store_id":"63b6f65d697458e6fcdb4db5",
+  "user_id" : "63b7149b69e6b4a461ad9c56",
+  "store_id":"63b714aa69e6b4a461ad9c57",
   "name": "가게3의 메뉴3",
   "limit_count": "non",
   "possible": true,
