@@ -33,7 +33,7 @@ func (s *storeMenuService) RegisterStore(store *request.RequestPostStore) (strin
 }
 
 func (s *storeMenuService) ModifyStore(storeID string, store *request.RequestPutStore) (int, error) {
-	if err := validator.CheckRoleIsStore(store.UserID); err != nil {
+	if err := validator.CheckStoreUser(storeID, store.UserID); err != nil {
 		return 0, err
 	}
 
@@ -55,7 +55,7 @@ func (s *storeMenuService) ModifyStore(storeID string, store *request.RequestPut
 }
 
 func (s *storeMenuService) RegisterMenu(menu *request.RequestMenu) (string, error) {
-	if err := validator.CheckRoleIsStore(menu.UserID); err != nil {
+	if err := validator.CheckStoreUser(menu.StoreID, menu.UserID); err != nil {
 		return enum.BlankSTR, err
 	}
 
@@ -77,7 +77,7 @@ func (s *storeMenuService) RegisterMenu(menu *request.RequestMenu) (string, erro
 }
 
 func (s *storeMenuService) ModifyMenu(menuID string, menu *request.RequestMenu) (int, error) {
-	if err := validator.CheckRoleIsStore(menu.UserID); err != nil {
+	if err := validator.CheckStoreUser(menu.StoreID, menu.UserID); err != nil {
 		return 0, err
 	}
 
@@ -99,7 +99,7 @@ func (s *storeMenuService) ModifyMenu(menuID string, menu *request.RequestMenu) 
 }
 
 func (s *storeMenuService) DeleteMenuAndBackup(menu *request.RequestDeleteMenu) (int, error) {
-	if err := validator.CheckRoleIsStore(menu.UserID); err != nil {
+	if err := validator.CheckStoreUser(menu.StoreID, menu.UserID); err != nil {
 		return 0, err
 	}
 
