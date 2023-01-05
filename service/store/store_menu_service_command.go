@@ -37,7 +37,7 @@ func (s *storeMenuService) ModifyStore(storeID string, store *request.RequestPut
 		return 0, err
 	}
 
-	if err := validator.CheckExistsMenus(storeID, store.RecommendMenus); err != nil {
+	if err := validator.CheckExistsMenus(storeID, store.RecommendMenus); err != nil && len(store.RecommendMenus) != 0 {
 		return 0, err
 	}
 
