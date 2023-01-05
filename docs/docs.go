@@ -133,13 +133,13 @@ const docTemplate = `{
                         "items": {
                             "type": "string"
                         },
-                        "name": "menu_ids",
+                        "name": "menu-ids",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "name": "store_id",
+                        "name": "store-id",
                         "in": "query",
                         "required": true
                     }
@@ -156,7 +156,7 @@ const docTemplate = `{
         },
         "/app/v1/orders/order/store": {
             "put": {
-                "description": "가게에서 주문 상태를 변경 할 수 있다.",
+                "description": "가게에서 주문 상태를 변경 할 수 있다. 이때 user_id는 가게를 생성한 user 즉, 가게 주인이다.",
                 "consumes": [
                     "application/json"
                 ],
@@ -190,7 +190,7 @@ const docTemplate = `{
         },
         "/app/v1/orders/pages/customer": {
             "get": {
-                "description": "특정 사용자의 주문기록들을 볼 수 있다.",
+                "description": "특정 사용자의 주문기록들을 볼 수 있다. status 값 : 주문대기,주문취소,주문접수완료,조리중,배달중,배달완료",
                 "consumes": [
                     "application/json"
                 ],
@@ -213,8 +213,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "status",
                         "name": "status",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "integer",
@@ -249,7 +248,7 @@ const docTemplate = `{
         },
         "/app/v1/orders/pages/store": {
             "get": {
-                "description": "특정 가게의 주문기록들을 볼 수 있다.",
+                "description": "특정 가게의 주문기록들을 볼 수 있다. status 값 : 주문대기,주문취소,주문접수완료,조리중,배달중,배달완료",
                 "consumes": [
                     "application/json"
                 ],
@@ -272,8 +271,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "status",
                         "name": "status",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "integer",
@@ -911,7 +909,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "회원가입을 할 수 있다.",
+                "description": "회원가입을 할 수 있다. role 값 : customer,store",
                 "consumes": [
                     "application/json"
                 ],

@@ -292,11 +292,11 @@ paths:
       - in: query
         items:
           type: string
-        name: menu_ids
+        name: menu-ids
         required: true
         type: array
       - in: query
-        name: store_id
+        name: store-id
         required: true
         type: string
       produces:
@@ -313,7 +313,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 가게에서 주문 상태를 변경 할 수 있다.
+      description: 가게에서 주문 상태를 변경 할 수 있다. 이때 user_id는 가게를 생성한 user 즉, 가게 주인이다.
       parameters:
       - description: RequestPutStoreOrder
         in: body
@@ -335,7 +335,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 특정 사용자의 주문기록들을 볼 수 있다.
+      description: '특정 사용자의 주문기록들을 볼 수 있다. status 값 : 주문대기,주문취소,주문접수완료,조리중,배달중,배달완료'
       parameters:
       - description: customer-id
         in: query
@@ -345,7 +345,6 @@ paths:
       - description: status
         in: query
         name: status
-        required: true
         type: string
       - in: query
         name: content_count
@@ -374,7 +373,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 특정 가게의 주문기록들을 볼 수 있다.
+      description: '특정 가게의 주문기록들을 볼 수 있다. status 값 : 주문대기,주문취소,주문접수완료,조리중,배달중,배달완료'
       parameters:
       - description: store-id
         in: query
@@ -384,7 +383,6 @@ paths:
       - description: status
         in: query
         name: status
-        required: true
         type: string
       - in: query
         name: content_count
@@ -801,7 +799,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 회원가입을 할 수 있다.
+      description: '회원가입을 할 수 있다. role 값 : customer,store'
       parameters:
       - description: RequestUser JSON
         in: body

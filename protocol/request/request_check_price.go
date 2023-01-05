@@ -1,6 +1,6 @@
 package request
 
 type RequestCheckPrice struct {
-	StoreID string   `json:"store_id" form:"store-id" binding:"required"`
-	Menus   []string `json:"menu_ids" form:"menu-ids" binding:"required"`
+	StoreID string   `json:"store-id" form:"store-id" binding:"required"`
+	Menus   []string `json:"menu-ids" form:"menu-ids" binding:"required"`
 }

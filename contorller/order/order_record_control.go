@@ -85,7 +85,7 @@ func (o *orderRecordControl) PutOrderRecordFromCustomer(c *gin.Context) {
 // PutOrderRecordFromStore godoc
 // @Tags 주문기록
 // @Summary call Put order records in store, return updated count by json.
-// @Description 가게에서 주문 상태를 변경 할 수 있다.
+// @Description 가게에서 주문 상태를 변경 할 수 있다. 이때 user_id는 가게를 생성한 user 즉, 가게 주인이다.
 // @name PutOrderRecordFromStore
 // @Accept  json
 // @Produce  json
@@ -112,13 +112,13 @@ func (o *orderRecordControl) PutOrderRecordFromStore(c *gin.Context) {
 // GetCustomerOrderRecordsSortedPage godoc
 // @Tags 주문기록
 // @Summary call Get sorted pages customer order records, return order records by json.
-// @Description 특정 사용자의 주문기록들을 볼 수 있다.
+// @Description 특정 사용자의 주문기록들을 볼 수 있다. status 값 : 주문대기,주문취소,주문접수완료,조리중,배달중,배달완료
 // @name GetCustomerOrderRecordsSortedPage
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/orders/pages/customer [get]
 // @Param customer-id query string true "customer-id"
-// @Param status query string true "status"
+// @Param status query string false "status"
 // @Param RequestPage query request.RequestPage true "RequestPage"
 // @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
@@ -136,7 +136,7 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 	}
 
 	status := c.Query("status")
-	if _, exists := enum.OrderStatusMap[status]; !exists {
+	if _, exists := enum.OrderStatusMap[status]; !exists && strings.Trim(status, " ") != "" {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
@@ -152,13 +152,13 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 // GetStoreOrderRecordsSortedPage godoc
 // @Tags 주문기록
 // @Summary call Get sorted pages store order records, return order records by json.
-// @Description 특정 가게의 주문기록들을 볼 수 있다.
+// @Description 특정 가게의 주문기록들을 볼 수 있다. status 값 : 주문대기,주문취소,주문접수완료,조리중,배달중,배달완료
 // @name GetStoreOrderRecordsSortedPage
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/orders/pages/store [get]
 // @Param store-id query string true "store-id"
-// @Param status query string true "status"
+// @Param status query string false "status"
 // @Param RequestPage query request.RequestPage true "RequestPage"
 // @Param Sort query page.Sort true "Sort"
 // @Success 200 {object} protocol.ApiResponse[any]
@@ -176,8 +176,9 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 	}
 
 	status := c.Query("status")
-	if _, exists := enum.OrderStatusMap[status]; !exists {
+	if _, exists := enum.OrderStatusMap[status]; !exists && strings.Trim(status, " ") != "" {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
 	}
 
 	receipts, err := o.orderService.FindOrderRecordsSortedPage(storeID, status, enum.StoreRole, page)

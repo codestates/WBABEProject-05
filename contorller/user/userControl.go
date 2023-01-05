@@ -116,7 +116,7 @@ func (u *userControl) DeleteUser(c *gin.Context) {
 // PostUser godoc
 // @Tags 사용자정보
 // @Summary call Post user, return saved id by json.
-// @Description 회원가입을 할 수 있다.
+// @Description 회원가입을 할 수 있다. role 값 : customer,store
 // @name PostUser
 // @Accept  json
 // @Produce  json
