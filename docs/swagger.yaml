@@ -19,10 +19,16 @@ definitions:
   request.RequestAddress:
     properties:
       detail:
+        maxLength: 50
+        minLength: 2
         type: string
       street:
+        maxLength: 50
+        minLength: 2
         type: string
       zip_code:
+        maxLength: 15
+        minLength: 2
         type: string
     required:
     - detail
@@ -32,10 +38,14 @@ definitions:
   request.RequestMenu:
     properties:
       description:
+        maxLength: 50
+        minLength: 1
         type: string
       limit_count:
         type: string
       name:
+        maxLength: 15
+        minLength: 2
         type: string
       origin:
         type: string
@@ -45,6 +55,8 @@ definitions:
         type: integer
       store_id:
         type: string
+      user_id:
+        type: string
     required:
     - description
     - name
@@ -52,6 +64,7 @@ definitions:
     - possible
     - price
     - store_id
+    - user_id
     type: object
   request.RequestOrder:
     properties:
@@ -63,23 +76,32 @@ definitions:
         type: array
       ordered_addr:
         $ref: '#/definitions/request.RequestAddress'
+      phone_number:
+        type: string
       store_id:
         type: string
     required:
     - customer_id
     - menu_ids
     - ordered_addr
+    - phone_number
     - store_id
     type: object
   request.RequestPostReview:
     properties:
       content:
+        maxLength: 100
+        minLength: 5
         type: string
       customer_id:
         type: string
       menu_id:
         type: string
+      order_id:
+        type: string
       rating:
+        maximum: 5
+        minimum: 1
         type: integer
       store_id:
         type: string
@@ -87,6 +109,7 @@ definitions:
     - content
     - customer_id
     - menu_id
+    - order_id
     - rating
     - store_id
     type: object
@@ -95,6 +118,8 @@ definitions:
       address:
         $ref: '#/definitions/request.RequestAddress'
       name:
+        maxLength: 15
+        minLength: 2
         type: string
       store_phone:
         type: string
@@ -118,6 +143,8 @@ definitions:
         type: string
       ordered_addr:
         $ref: '#/definitions/request.RequestAddress'
+      phone_number:
+        type: string
       store_id:
         type: string
     required:
@@ -125,6 +152,7 @@ definitions:
     - menu_ids
     - order_id
     - ordered_addr
+    - phone_number
     - store_id
     type: object
   request.RequestPutStore:
@@ -132,6 +160,8 @@ definitions:
       address:
         $ref: '#/definitions/request.RequestAddress'
       name:
+        maxLength: 15
+        minLength: 2
         type: string
       recommend_menus:
         items:
@@ -153,15 +183,25 @@ definitions:
         type: string
       status:
         type: string
+      store_id:
+        type: string
+      user_id:
+        type: string
     required:
     - order_id
     - status
+    - store_id
+    - user_id
     type: object
   request.RequestUser:
     properties:
       name:
+        maxLength: 15
+        minLength: 2
         type: string
       nic_name:
+        maxLength: 15
+        minLength: 2
         type: string
       password:
         type: string
@@ -218,7 +258,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/protocol.ApiResponse-any'
-      summary: call Post Order, return posted id by json.
+      summary: call Post Order, return order numbering by json.
       tags:
       - 주문기록
   /app/v1/orders/order/customer:
@@ -253,9 +293,11 @@ paths:
         items:
           type: string
         name: menu_ids
+        required: true
         type: array
       - in: query
         name: store_id
+        required: true
         type: string
       produces:
       - application/json
@@ -300,6 +342,11 @@ paths:
         name: customer-id
         required: true
         type: string
+      - description: status
+        in: query
+        name: status
+        required: true
+        type: string
       - in: query
         name: content_count
         type: integer
@@ -332,6 +379,11 @@ paths:
       - description: store-id
         in: query
         name: store-id
+        required: true
+        type: string
+      - description: status
+        in: query
+        name: status
         required: true
         type: string
       - in: query
@@ -582,9 +634,16 @@ paths:
       - application/json
       description: 메뉴를 삭제할 수 있다.
       parameters:
-      - description: menu-id
-        in: query
-        name: menu-id
+      - in: query
+        name: menuID
+        required: true
+        type: string
+      - in: query
+        name: storeID
+        required: true
+        type: string
+      - in: query
+        name: userID
         required: true
         type: string
       produces:
@@ -595,6 +654,38 @@ paths:
           schema:
             $ref: '#/definitions/protocol.ApiResponse-any'
       summary: call Delete menu, return deleted count by json.
+      tags:
+      - 가게
+    get:
+      consumes:
+      - application/json
+      description: 메뉴 이름으로 검색해 특정 가게 메뉴 리스트를 보여준다.
+      parameters:
+      - description: name
+        in: query
+        name: name
+        required: true
+        type: string
+      - in: query
+        name: content_count
+        type: integer
+      - in: query
+        name: current_page
+        type: integer
+      - in: query
+        name: direction
+        type: integer
+      - in: query
+        name: sort_name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.ApiResponse-any'
+      summary: call Get store menus page, return sorted menus page data by json.
       tags:
       - 가게
     post:

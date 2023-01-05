@@ -58,7 +58,7 @@ const docTemplate = `{
                 "tags": [
                     "주문기록"
                 ],
-                "summary": "call Post Order, return posted id by json.",
+                "summary": "call Post Order, return order numbering by json.",
                 "parameters": [
                     {
                         "description": "RequestOrder JSON",
@@ -134,12 +134,14 @@ const docTemplate = `{
                             "type": "string"
                         },
                         "name": "menu_ids",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
                         "name": "store_id",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -208,6 +210,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "type": "string",
+                        "description": "status",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "name": "content_count",
                         "in": "query"
@@ -256,6 +265,13 @@ const docTemplate = `{
                         "type": "string",
                         "description": "store-id",
                         "name": "store-id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "status",
+                        "name": "status",
                         "in": "query",
                         "required": true
                     },
@@ -629,6 +645,56 @@ const docTemplate = `{
             }
         },
         "/app/v1/stores/store/menus/menu": {
+            "get": {
+                "description": "메뉴 이름으로 검색해 특정 가게 메뉴 리스트를 보여준다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "가게"
+                ],
+                "summary": "call Get store menus page, return sorted menus page data by json.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "name": "content_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "current_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "direction",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "sort_name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ApiResponse-any"
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "메뉴를 수정할 수 있다.",
                 "consumes": [
@@ -715,8 +781,19 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "menu-id",
-                        "name": "menu-id",
+                        "name": "menuID",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "storeID",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "userID",
                         "in": "query",
                         "required": true
                     }
@@ -956,13 +1033,19 @@ const docTemplate = `{
             ],
             "properties": {
                 "detail": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2
                 },
                 "street": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2
                 },
                 "zip_code": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 2
                 }
             }
         },
@@ -974,17 +1057,22 @@ const docTemplate = `{
                 "origin",
                 "possible",
                 "price",
-                "store_id"
+                "store_id",
+                "user_id"
             ],
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 1
                 },
                 "limit_count": {
                     "type": "string"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 2
                 },
                 "origin": {
                     "type": "string"
@@ -997,6 +1085,9 @@ const docTemplate = `{
                 },
                 "store_id": {
                     "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },
@@ -1006,6 +1097,7 @@ const docTemplate = `{
                 "customer_id",
                 "menu_ids",
                 "ordered_addr",
+                "phone_number",
                 "store_id"
             ],
             "properties": {
@@ -1021,6 +1113,9 @@ const docTemplate = `{
                 "ordered_addr": {
                     "$ref": "#/definitions/request.RequestAddress"
                 },
+                "phone_number": {
+                    "type": "string"
+                },
                 "store_id": {
                     "type": "string"
                 }
@@ -1032,12 +1127,15 @@ const docTemplate = `{
                 "content",
                 "customer_id",
                 "menu_id",
+                "order_id",
                 "rating",
                 "store_id"
             ],
             "properties": {
                 "content": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 5
                 },
                 "customer_id": {
                     "type": "string"
@@ -1045,8 +1143,13 @@ const docTemplate = `{
                 "menu_id": {
                     "type": "string"
                 },
+                "order_id": {
+                    "type": "string"
+                },
                 "rating": {
-                    "type": "integer"
+                    "type": "integer",
+                    "maximum": 5,
+                    "minimum": 1
                 },
                 "store_id": {
                     "type": "string"
@@ -1066,7 +1169,9 @@ const docTemplate = `{
                     "$ref": "#/definitions/request.RequestAddress"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 2
                 },
                 "store_phone": {
                     "type": "string"
@@ -1083,6 +1188,7 @@ const docTemplate = `{
                 "menu_ids",
                 "order_id",
                 "ordered_addr",
+                "phone_number",
                 "store_id"
             ],
             "properties": {
@@ -1100,6 +1206,9 @@ const docTemplate = `{
                 },
                 "ordered_addr": {
                     "$ref": "#/definitions/request.RequestAddress"
+                },
+                "phone_number": {
+                    "type": "string"
                 },
                 "store_id": {
                     "type": "string"
@@ -1119,7 +1228,9 @@ const docTemplate = `{
                     "$ref": "#/definitions/request.RequestAddress"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 2
                 },
                 "recommend_menus": {
                     "type": "array",
@@ -1139,13 +1250,21 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "order_id",
-                "status"
+                "status",
+                "store_id",
+                "user_id"
             ],
             "properties": {
                 "order_id": {
                     "type": "string"
                 },
                 "status": {
+                    "type": "string"
+                },
+                "store_id": {
+                    "type": "string"
+                },
+                "user_id": {
                     "type": "string"
                 }
             }
@@ -1161,10 +1280,14 @@ const docTemplate = `{
             ],
             "properties": {
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 2
                 },
                 "nic_name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 2
                 },
                 "password": {
                     "type": "string"
