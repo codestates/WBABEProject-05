@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/codestates/WBABEProject-05/common"
 	"github.com/codestates/WBABEProject-05/common/enum"
+	common2 "github.com/codestates/WBABEProject-05/model/common"
+	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
-	"github.com/codestates/WBABEProject-05/model/util"
-	"github.com/codestates/WBABEProject-05/protocol/page"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -38,18 +38,18 @@ func (r *reviewModel) InsertReview(review *entity.Review) (string, error) {
 	return review.ID.Hex(), nil
 }
 
-func (r *reviewModel) SelectSortLimitedReviewsByMenuID(menuID string, sort *page.Sort, skip int, limit int) ([]*entity.Review, error) {
+func (r *reviewModel) SelectSortLimitedReviewsByMenuID(menuID string, pageQuery *query.PageQuery) ([]*entity.Review, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := util.ConvertStringToOBJID(menuID)
+	ID, err := common2.ConvertStringToOBJID(menuID)
 	if err != nil {
 		return nil, err
 	}
 
 	filter := bson.D{{"menu_id", ID}}
-	opt := util.NewSortFindOptions(sort, skip, limit)
-	reviews, err := r.findSortedReviews(ctx, filter, opt)
+	opt := pageQuery.NewSortFindOptions()
+	reviews, err := r.findReviews(ctx, filter, opt)
 	if err != nil {
 		return nil, err
 	}
@@ -57,22 +57,22 @@ func (r *reviewModel) SelectSortLimitedReviewsByMenuID(menuID string, sort *page
 	return reviews, nil
 }
 
-func (r *reviewModel) SelectSortLimitedReviewsByUserID(ID, userRole string, sort *page.Sort, skip int, limit int) ([]*entity.Review, error) {
+func (r *reviewModel) SelectSortLimitedReviewsByUserID(ID, userRole string, pageQuery *query.PageQuery) ([]*entity.Review, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	OBJID, err := util.ConvertStringToOBJID(ID)
+	OBJID, err := common2.ConvertStringToOBJID(ID)
 	if err != nil {
 		return nil, err
 	}
 
-	filter, err := util.NewFilterCheckedUserRole(OBJID, enum.BlankSTR, userRole)
+	filter, err := common2.NewFilterCheckedUserRole(OBJID, enum.BlankSTR, userRole)
 	if err != nil {
 		return nil, err
 	}
 
-	opt := util.NewSortFindOptions(sort, skip, limit)
-	reviews, err := r.findSortedReviews(ctx, filter, opt)
+	opt := pageQuery.NewSortFindOptions()
+	reviews, err := r.findReviews(ctx, filter, opt)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (r *reviewModel) SelectTotalCountByMenuID(menuID string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := util.ConvertStringToOBJID(menuID)
+	ID, err := common2.ConvertStringToOBJID(menuID)
 	if err != nil {
 		return 0, err
 	}
@@ -101,12 +101,12 @@ func (r *reviewModel) SelectTotalCountByUserID(ID, userRole string) (int64, erro
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	OBJID, err := util.ConvertStringToOBJID(ID)
+	OBJID, err := common2.ConvertStringToOBJID(ID)
 	if err != nil {
 		return 0, err
 	}
 
-	filter, err := util.NewFilterCheckedUserRole(OBJID, enum.BlankSTR, userRole)
+	filter, err := common2.NewFilterCheckedUserRole(OBJID, enum.BlankSTR, userRole)
 	if err != nil {
 		return 0, err
 	}
@@ -119,7 +119,7 @@ func (r *reviewModel) SelectTotalCountByUserID(ID, userRole string) (int64, erro
 	return count, nil
 }
 
-func (r *reviewModel) findSortedReviews(ctx context.Context, filter bson.D, opt *options.FindOptions) ([]*entity.Review, error) {
+func (r *reviewModel) findReviews(ctx context.Context, filter bson.D, opt *options.FindOptions) ([]*entity.Review, error) {
 	reviewCursor, err := r.collection.Find(ctx, filter, opt)
 	if err != nil {
 		return nil, err

@@ -12,7 +12,7 @@ import (
 var MongoModel Modeler
 var MongoCollection map[string]*mongo.Collection
 
-// model Collection 은 Store , Customer , Receipt , Review
+// model Collection 은 Store , Customer , Receipt , Review , user
 type model struct {
 	client     *mongo.Client
 	collection map[string]*mongo.Collection
@@ -69,7 +69,7 @@ func (m *model) CreateIndexes(colName string, unique bool, indexName ...string) 
 	}
 }
 
-// CreateComplexIndex 복합 인텍스 생성
+// CreateCompoundIndex 복합 인텍스 생성
 func (m *model) CreateCompoundIndex(colName string, unique bool, indexName ...string) {
 	ctx, cancel := util.GetContext(util.ModelTimeOut)
 	defer cancel()

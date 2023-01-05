@@ -1,8 +1,8 @@
 package review
 
 import (
+	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
-	"github.com/codestates/WBABEProject-05/protocol/page"
 )
 
 var ReviewModel ReviewModeler
@@ -10,9 +10,9 @@ var ReviewModel ReviewModeler
 type ReviewModeler interface {
 	InsertReview(review *entity.Review) (string, error)
 
-	SelectSortLimitedReviewsByMenuID(menuID string, sort *page.Sort, skip int, limit int) ([]*entity.Review, error)
+	SelectSortLimitedReviewsByMenuID(menuID string, pageQuery *query.PageQuery) ([]*entity.Review, error)
 
-	SelectSortLimitedReviewsByUserID(ID, userRole string, sort *page.Sort, skip int, limit int) ([]*entity.Review, error)
+	SelectSortLimitedReviewsByUserID(ID, userRole string, pageQuery *query.PageQuery) ([]*entity.Review, error)
 
 	SelectTotalCountByMenuID(menuID string) (int64, error)
 

@@ -1,8 +1,8 @@
 package menu
 
 import (
+	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
-	"github.com/codestates/WBABEProject-05/protocol/page"
 )
 
 var MenuModel MenuModeler
@@ -14,9 +14,9 @@ type MenuModeler interface {
 
 	UpdateMenuRating(menu *entity.Menu) (int64, error)
 
-	SelectSortLimitedMenus(storeID string, sort *page.Sort, skip, limit int) ([]*entity.Menu, error)
+	SelectSortLimitedMenus(storeID string, pageQuery *query.PageQuery) ([]*entity.Menu, error)
 
-	SelectSortLimitedMenusByName(name string, sort *page.Sort, skip, limit int) ([]*entity.Menu, error)
+	SelectSortLimitedMenusByName(name string, pageQuery *query.PageQuery) ([]*entity.Menu, error)
 
 	SelectTotalCount(storeID string) (int64, error)
 

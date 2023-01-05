@@ -2,9 +2,9 @@ package request
 
 import (
 	"github.com/codestates/WBABEProject-05/common/enum"
+	"github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/entity/dom"
-	"github.com/codestates/WBABEProject-05/model/util"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
@@ -27,7 +27,7 @@ func (r *RequestOrder) ToNewReceipt() (*entity.Receipt, error) {
 		return nil, err
 	}
 
-	OBJMIDs, err := util.ConvertStringsToOBJIDs(r.Menus)
+	OBJMIDs, err := common.ConvertStringsToOBJIDs(r.Menus)
 	if err != nil {
 		return nil, err
 	}

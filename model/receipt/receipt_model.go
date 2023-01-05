@@ -3,9 +3,9 @@ package receipt
 import (
 	"github.com/codestates/WBABEProject-05/common"
 	"github.com/codestates/WBABEProject-05/common/enum"
+	common2 "github.com/codestates/WBABEProject-05/model/common"
+	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
-	"github.com/codestates/WBABEProject-05/model/util"
-	"github.com/codestates/WBABEProject-05/protocol/page"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -52,7 +52,7 @@ func (r *receiptModel) SelectReceiptByID(receiptID string) (*entity.Receipt, err
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := util.ConvertStringToOBJID(receiptID)
+	ID, err := common2.ConvertStringToOBJID(receiptID)
 	if err != nil {
 		return nil, err
 	}
@@ -64,21 +64,21 @@ func (r *receiptModel) SelectReceiptByID(receiptID string) (*entity.Receipt, err
 	}
 	return receipt, nil
 }
-func (r *receiptModel) SelectSortLimitedReceipt(ID, status, userRole string, sort *page.Sort, skip, limit int) ([]*entity.Receipt, error) {
+func (r *receiptModel) SelectSortLimitedReceipt(ID, status, userRole string, pageQuery *query.PageQuery) ([]*entity.Receipt, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	objID, err := util.ConvertStringToOBJID(ID)
+	objID, err := common2.ConvertStringToOBJID(ID)
 	if err != nil {
 		return nil, err
 	}
 
-	filter, err := util.NewFilterCheckedUserRole(objID, status, userRole)
+	filter, err := common2.NewFilterCheckedUserRole(objID, status, userRole)
 	if err != nil {
 		return nil, err
 	}
 
-	opt := util.NewSortFindOptions(sort, skip, limit)
+	opt := pageQuery.NewSortFindOptions()
 	receiptCursor, err := r.collection.Find(ctx, filter, opt)
 	if err != nil {
 		return nil, err
@@ -96,7 +96,7 @@ func (r *receiptModel) SelectToDayTotalCount() (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	filter, err := util.NewToDayGteFilter()
+	filter, err := common2.NewToDayGteFilter()
 	if err != nil {
 		return 0, err
 	}
@@ -118,7 +118,7 @@ func (r *receiptModel) SelectTotalCount(ID, status, userRole string) (int64, err
 		return 0, err
 	}
 
-	filter, err := util.NewFilterCheckedUserRole(objID, status, userRole)
+	filter, err := common2.NewFilterCheckedUserRole(objID, status, userRole)
 	if err != nil {
 		return 0, err
 	}

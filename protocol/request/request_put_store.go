@@ -1,8 +1,8 @@
 package request
 
 import (
+	"github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/entity"
-	"github.com/codestates/WBABEProject-05/model/util"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -25,7 +25,7 @@ func (r *RequestPutStore) NewPutStore(storeID string) (*entity.Store, error) {
 		return nil, err
 	}
 
-	rsMIDS, err := util.ConvertStringsToOBJIDs(r.RecommendMenus)
+	rsMIDS, err := common.ConvertStringsToOBJIDs(r.RecommendMenus)
 	if err != nil {
 		return nil, err
 	}

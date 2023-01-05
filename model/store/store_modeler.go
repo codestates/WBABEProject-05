@@ -1,8 +1,8 @@
 package store
 
 import (
+	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
-	"github.com/codestates/WBABEProject-05/protocol/page"
 )
 
 var StoreModel StoreModeler
@@ -17,7 +17,7 @@ type StoreModeler interface {
 
 	UpdateStore(store *entity.Store) (int64, error)
 
-	SelectSortLimitedStore(sort *page.Sort, skip int, limit int) ([]*entity.Store, error)
+	SelectSortLimitedStore(pageQuery *query.PageQuery) ([]*entity.Store, error)
 
 	SelectTotalCount() (int64, error)
 }

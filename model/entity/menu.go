@@ -23,7 +23,7 @@ type Menu struct {
 	BaseTime         *dom.BaseTime      `bson:"base_time"`
 }
 
-func (m *Menu) NewUpdateMenuBsonSetDWithPost() bson.D {
+func (m *Menu) NewUpdateMenuBsonSetD() bson.D {
 	return bson.D{
 		{"$set",
 			bson.D{

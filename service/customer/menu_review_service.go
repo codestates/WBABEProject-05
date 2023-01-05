@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/logger"
+	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/review"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
-	util2 "github.com/codestates/WBABEProject-05/service/util"
+	util2 "github.com/codestates/WBABEProject-05/service/common"
 	"math"
 )
 
@@ -33,7 +34,9 @@ func NewMenuReviewService(rMod review.ReviewModeler, mMod menu.MenuModeler) *men
 func (m *menuReviewService) FindReviewSortedPageByMenuID(menuID string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
-	reviews, err := m.reviewModel.SelectSortLimitedReviewsByMenuID(menuID, pg.Sort, skip, pg.ContentCount)
+	pageQuery := query.NewPageQuery(pg.Sort.Name, pg.Sort.Direction, skip, pg.ContentCount)
+
+	reviews, err := m.reviewModel.SelectSortLimitedReviewsByMenuID(menuID, pageQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +54,9 @@ func (m *menuReviewService) FindReviewSortedPageByMenuID(menuID string, pg *requ
 func (m *menuReviewService) FindReviewSortedPageByUserID(ID, userRole string, pg *request.RequestPage) (*page.PageData[any], error) {
 	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
-	reviews, err := m.reviewModel.SelectSortLimitedReviewsByUserID(ID, userRole, pg.Sort, skip, pg.ContentCount)
+	pageQuery := query.NewPageQuery(pg.Sort.Name, pg.Sort.Direction, skip, pg.ContentCount)
+
+	reviews, err := m.reviewModel.SelectSortLimitedReviewsByUserID(ID, userRole, pageQuery)
 	if err != nil {
 		return nil, err
 	}
