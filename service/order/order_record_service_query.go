@@ -24,7 +24,7 @@ func (o *orderRecordService) FindOrderRecordsSortedPage(ID, status, userRole str
 		return nil, err
 	}
 
-	pgInfo := pg.NewPageInfo(int(totalCount))
+	pgInfo := pg.ToPageInfo(int(totalCount))
 
 	return page.NewPageData(receipts, pgInfo), nil
 }

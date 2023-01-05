@@ -14,7 +14,7 @@ type ResponseUser struct {
 	OrderPhoneNumber string           `json:"pre_order_phone_number"`
 }
 
-func NewResponseUserFromUser(user *entity.User) *ResponseUser {
+func FromUser(user *entity.User) *ResponseUser {
 	preInfo := &ResponseAddress{}
 	orderPhone := ""
 	if user.PreOrderInfo != nil {

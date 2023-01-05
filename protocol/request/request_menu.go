@@ -17,7 +17,7 @@ type RequestMenu struct {
 	LimitCount  string `json:"limit_count,omitempty"`
 }
 
-func (r *RequestMenu) NewMenu() (*entity.Menu, error) {
+func (r *RequestMenu) ToPostMenu() (*entity.Menu, error) {
 	sID, err := primitive.ObjectIDFromHex(r.StoreID)
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (r *RequestMenu) NewMenu() (*entity.Menu, error) {
 	}, nil
 }
 
-func (r *RequestMenu) NewUpdateMenu(ID string) (*entity.Menu, error) {
+func (r *RequestMenu) ToPutMenu(ID string) (*entity.Menu, error) {
 	mID, err := primitive.ObjectIDFromHex(ID)
 	if err != nil {
 		return nil, err

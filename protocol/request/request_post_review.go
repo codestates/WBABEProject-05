@@ -15,7 +15,7 @@ type RequestPostReview struct {
 	Rating     int    `json:"rating" binding:"required,min=1,max=5"`
 }
 
-func (r *RequestPostReview) NewReview() (*entity.Review, error) {
+func (r *RequestPostReview) ToPostReview() (*entity.Review, error) {
 	sID, err := primitive.ObjectIDFromHex(r.StoreID)
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func (r *RequestPostReview) NewReview() (*entity.Review, error) {
 		return nil, err
 	}
 
-	mID, err := primitive.ObjectIDFromHex((r.MenuID))
+	mID, err := primitive.ObjectIDFromHex(r.MenuID)
 
 	if err != nil {
 		return nil, err

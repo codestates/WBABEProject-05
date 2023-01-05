@@ -13,7 +13,7 @@ type ResponseStoreRecommendMenus struct {
 	RecommendMenus []*ResponseMenu  `json:"recommend_menus"`
 }
 
-func NewResponseStoreAndMenus(store *entity.Store, menus []*entity.Menu) *ResponseStoreRecommendMenus {
+func FromStoreAndMenus(store *entity.Store, menus []*entity.Menu) *ResponseStoreRecommendMenus {
 	return &ResponseStoreRecommendMenus{
 		StoreID:        store.ID.Hex(),
 		UserID:         store.UserID.Hex(),

@@ -26,7 +26,7 @@ func NewUserService(modeler user.UserModeler) *userService {
 }
 
 func (u *userService) RegisterUser(user *request.RequestUser) (string, error) {
-	postUser := user.NewPostUser()
+	postUser := user.ToPostUser()
 	postUser.Password = u.hashPassword(user.Password)
 	savedID, err := u.userModel.PostUser(postUser)
 	if err != nil {
@@ -36,7 +36,7 @@ func (u *userService) RegisterUser(user *request.RequestUser) (string, error) {
 }
 
 func (u *userService) ModifyUser(ID string, usr *request.RequestPutUser) (int, error) {
-	updateUser, err := usr.NewUpdatePutUser(ID)
+	updateUser, err := usr.ToPutUser(ID)
 	if err != nil {
 		return 0, err
 	}
@@ -53,7 +53,7 @@ func (u *userService) FindUser(ID string) (*response.ResponseUser, error) {
 	if err != nil {
 		return nil, err
 	}
-	resUser := response.NewResponseUserFromUser(foundUser)
+	resUser := response.FromUser(foundUser)
 	return resUser, nil
 }
 

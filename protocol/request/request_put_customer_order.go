@@ -8,7 +8,7 @@ type RequestPutCustomerOrder struct {
 	CustomerAddr *RequestAddress `json:"ordered_addr" binding:"required"`
 }
 
-func (r *RequestPutCustomerOrder) ToRequestOrder() *RequestOrder {
+func (r *RequestPutCustomerOrder) ToPutRequestOrder() *RequestOrder {
 	return &RequestOrder{
 		StoreId:      r.StoreID,
 		CustomerId:   r.CustomerID,

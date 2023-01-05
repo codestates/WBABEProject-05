@@ -13,7 +13,7 @@ func (s *storeMenuService) RegisterStore(store *request.RequestPostStore) (strin
 		return enum.BlankSTR, err
 	}
 
-	postStore, err := store.NewPostStore()
+	postStore, err := store.ToPostStore()
 	if err != nil {
 		return enum.BlankSTR, err
 	}
@@ -40,7 +40,7 @@ func (s *storeMenuService) ModifyStore(storeID string, store *request.RequestPut
 		return 0, err
 	}
 
-	putStore, err := store.NewPutStore(storeID)
+	putStore, err := store.ToPutStore(storeID)
 	if err != nil {
 		return 0, err
 	}
@@ -62,7 +62,7 @@ func (s *storeMenuService) RegisterMenu(userID string, menu *request.RequestMenu
 		return enum.BlankSTR, err
 	}
 
-	newM, err := menu.NewMenu()
+	newM, err := menu.ToPostMenu()
 	if err != nil {
 		return enum.BlankSTR, err
 	}
@@ -84,7 +84,7 @@ func (s *storeMenuService) ModifyMenu(userID, menuID string, menu *request.Reque
 		return 0, err
 	}
 
-	updateMenu, err := menu.NewUpdateMenu(menuID)
+	updateMenu, err := menu.ToPutMenu(menuID)
 	if err != nil {
 		return 0, err
 	}

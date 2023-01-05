@@ -46,7 +46,7 @@ func (m *menuReviewService) FindReviewSortedPageByMenuID(menuID string, pg *requ
 		return nil, err
 	}
 
-	pgInfo := pg.NewPageInfo(int(totalCount))
+	pgInfo := pg.ToPageInfo(int(totalCount))
 
 	return page.NewPageData(reviews, pgInfo), nil
 }
@@ -66,13 +66,13 @@ func (m *menuReviewService) FindReviewSortedPageByUserID(ID, userRole string, pg
 		return nil, err
 	}
 
-	pgInfo := pg.NewPageInfo(int(totalCount))
+	pgInfo := pg.ToPageInfo(int(totalCount))
 
 	return page.NewPageData(reviews, pgInfo), nil
 }
 
 func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview) (string, error) {
-	newR, err := review.NewReview()
+	newR, err := review.ToPostReview()
 	if err != nil {
 		return enum.BlankSTR, err
 	}

@@ -17,7 +17,7 @@ type RequestOrder struct {
 	PhoneNumber  string          `json:"phone_number" binding:"required"`
 }
 
-func (r *RequestOrder) ToNewReceipt() (*entity.Receipt, error) {
+func (r *RequestOrder) ToPostReceipt() (*entity.Receipt, error) {
 	sid, err := primitive.ObjectIDFromHex(r.StoreId)
 	if err != nil {
 		return nil, err

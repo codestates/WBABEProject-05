@@ -14,7 +14,7 @@ type RequestPutStore struct {
 	RecommendMenus []string        `json:"recommend_menus,omitempty"`
 }
 
-func (r *RequestPutStore) NewPutStore(storeID string) (*entity.Store, error) {
+func (r *RequestPutStore) ToPutStore(storeID string) (*entity.Store, error) {
 	sOBJID, err := primitive.ObjectIDFromHex(storeID)
 	if err != nil {
 		return nil, err

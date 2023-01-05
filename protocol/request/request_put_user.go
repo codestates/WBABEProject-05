@@ -12,7 +12,7 @@ type RequestPutUser struct {
 	Role        string `json:"role"  binding:"required,eq=store|eq=customer"`
 }
 
-func (r *RequestPutUser) NewUpdatePutUser(ID string) (*entity.User, error) {
+func (r *RequestPutUser) ToPutUser(ID string) (*entity.User, error) {
 	OBJID, err := primitive.ObjectIDFromHex(ID)
 	if err != nil {
 		return nil, err

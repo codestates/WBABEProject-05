@@ -14,7 +14,7 @@ type RequestPostStore struct {
 	StorePhone string          `json:"store_phone" binding:"required"`
 }
 
-func (r *RequestPostStore) NewPostStore() (*entity.Store, error) {
+func (r *RequestPostStore) ToPostStore() (*entity.Store, error) {
 	userID, err := primitive.ObjectIDFromHex(r.UserID)
 	if err != nil {
 		return nil, err

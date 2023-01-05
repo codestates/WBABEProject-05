@@ -10,7 +10,7 @@ type RequestPage struct {
 	Sort         *page.Sort `json:"sorting"`
 }
 
-func (r *RequestPage) NewPageInfo(totalCount int) *page.PageInfo {
+func (r *RequestPage) ToPageInfo(totalCount int) *page.PageInfo {
 	var totalPages int
 	totalPages = totalCount / r.ContentCount
 	b := (totalCount % r.ContentCount) != 0

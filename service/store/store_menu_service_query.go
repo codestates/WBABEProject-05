@@ -29,7 +29,7 @@ func (s *storeMenuService) FindMenusSortedPage(storeID string, pg *request.Reque
 		return nil, err
 	}
 
-	pgInfo := pg.NewPageInfo(int(totalCount))
+	pgInfo := pg.ToPageInfo(int(totalCount))
 
 	return page.NewPageData(menus, pgInfo), nil
 }
@@ -49,7 +49,7 @@ func (s *storeMenuService) FindMenusSortedPageByName(name string, pg *request.Re
 		return nil, err
 	}
 
-	pgInfo := pg.NewPageInfo(int(totalCount))
+	pgInfo := pg.ToPageInfo(int(totalCount))
 
 	return page.NewPageData(menus, pgInfo), nil
 }
@@ -66,7 +66,7 @@ func (s *storeMenuService) FindRecommendMenus(storeID string) (*response.Respons
 		return nil, err
 	}
 
-	return response.NewResponseStoreAndMenus(foundStore, menus), nil
+	return response.FromStoreAndMenus(foundStore, menus), nil
 }
 
 func (s *storeMenuService) FindStore(storeID string) (*response.ResponseStore, error) {
@@ -93,7 +93,7 @@ func (s *storeMenuService) FindStoresSortedPage(pg *request.RequestPage) (*page.
 		return nil, err
 	}
 
-	pgInfo := pg.NewPageInfo(int(totalCount))
+	pgInfo := pg.ToPageInfo(int(totalCount))
 
 	return page.NewPageData(receipts, pgInfo), nil
 }

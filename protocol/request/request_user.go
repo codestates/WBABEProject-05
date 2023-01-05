@@ -15,7 +15,7 @@ type RequestUser struct {
 	Role        string `json:"role"  binding:"required,eq=store|eq=customer"`
 }
 
-func (r *RequestUser) NewPostUser() *entity.User {
+func (r *RequestUser) ToPostUser() *entity.User {
 	return &entity.User{
 		ID:          primitive.NewObjectID(),
 		Name:        r.Name,
@@ -30,7 +30,7 @@ func (r *RequestUser) NewPostUser() *entity.User {
 	}
 }
 
-func (r *RequestUser) NewUpdateUser(ID string) (*entity.User, error) {
+func (r *RequestUser) ToPutUser(ID string) (*entity.User, error) {
 	OBJID, err := primitive.ObjectIDFromHex(ID)
 	if err != nil {
 		return nil, err

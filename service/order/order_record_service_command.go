@@ -14,7 +14,7 @@ import (
 )
 
 func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (string, error) {
-	rct, err := order.ToNewReceipt()
+	rct, err := order.ToPostReceipt()
 	if err != nil {
 		return enum.BlankSTR, err
 	}
@@ -43,7 +43,6 @@ func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.Reques
 		return enum.BlankSTR, err
 	}
 
-	// 메뉴 추가의 경우 배달중은 실패 , 메뉴 변경의 경우 조리중,배달중인경우 실패 -> 즉, 기본으로 배달중은 실패, 추가적으로 완료도 실패시키자
 	if err := o.checkOrderStatus(order, foundOrder); err != nil {
 		return enum.BlankSTR, err
 	}
@@ -56,7 +55,7 @@ func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.Reques
 		return enum.BlankSTR, err
 	}
 
-	savedID, err := o.RegisterOrderRecord(order.ToRequestOrder())
+	savedID, err := o.RegisterOrderRecord(order.ToPutRequestOrder())
 	if err != nil {
 		return enum.BlankSTR, err
 	}
@@ -125,6 +124,7 @@ func (o *orderRecordService) setTotalPrice(rct *entity.Receipt, order *request.R
 	menusErr <- nil
 }
 
+// checkOrderStatus 메뉴 추가의 경우 배달중은 실패 , 메뉴 변경의 경우 조리중,배달중인경우 실패 -> 즉, 기본으로 배달중은 실패, 추가적으로 완료도 실패시키자
 func (o *orderRecordService) checkOrderStatus(order *request.RequestPutCustomerOrder, foundOrder *entity.Receipt) error {
 	reqMIDs := util2.ConvertSliceToExistMap(order.MenuIDs)
 	isChange := o.isChangeOrderMenus(foundOrder, reqMIDs)
