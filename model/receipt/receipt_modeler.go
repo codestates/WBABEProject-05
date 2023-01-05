@@ -8,7 +8,7 @@ import (
 var ReceiptModel ReceiptModeler
 
 type ReceiptModeler interface {
-	InsertReceipt(receipt *entity.Receipt) (string, error)
+	InsertReceipt(receipt *entity.Receipt) (*entity.Receipt, error)
 
 	UpdateReceiptStatus(receipt *entity.Receipt) (int64, error)
 

@@ -9,9 +9,9 @@ import (
 var OrderRecordService OrderRecordServicer
 
 type OrderRecordServicer interface {
-	RegisterOrderRecord(order *request.RequestOrder) (string, error)
+	RegisterOrderRecord(order *request.RequestOrder) (*response.ResponsePostOrder, error)
 
-	ModifyOrderRecordFromCustomer(order *request.RequestPutCustomerOrder) (string, error)
+	ModifyOrderRecordFromCustomer(order *request.RequestPutCustomerOrder) (*response.ResponsePostOrder, error)
 
 	ModifyOrderRecordFromStore(order *request.RequestPutStoreOrder) (int, error)
 

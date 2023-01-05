@@ -8,68 +8,73 @@ import (
 	"github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/protocol/request"
+	"github.com/codestates/WBABEProject-05/protocol/response"
 	util2 "github.com/codestates/WBABEProject-05/service/common"
 	"github.com/codestates/WBABEProject-05/service/validator"
 	"sync"
 	"time"
 )
 
-func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (string, error) {
+func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (*response.ResponsePostOrder, error) {
+	if err := validator.CheckExistsMenus(order.StoreID, order.Menus); err != nil {
+		return nil, err
+	}
+
 	rct, err := order.ToPostReceipt()
 	if err != nil {
-		return enum.BlankSTR, err
+		return nil, err
 	}
 
 	// 이전 주문 정보 저장도 비즈니스상 중요하지 않아보여 따로 컨트롤하지 않는 고루틴 처리
 	go o.updateUserPreOrderInfo(order)
 
 	if err := o.setTotalPriceAndNumbering(rct, order); err != nil {
-		return enum.BlankSTR, err
+		return nil, err
 	}
 
-	savedNumbering, err := o.receiptModel.InsertReceipt(rct)
+	savedOrder, err := o.receiptModel.InsertReceipt(rct)
 	if err != nil {
-		return enum.BlankSTR, err
+		return nil, err
 	}
 
 	// OrderCount 의 증가는 비즈니스상 중요하지않아보여 따로 컨틀롤하지 않는 고루틴 활용
 	go o.updateOrderCount(order)
 
-	return savedNumbering, nil
+	return response.FromReceipt(savedOrder), nil
 }
 
-func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.RequestPutCustomerOrder) (string, error) {
+func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.RequestPutCustomerOrder) (*response.ResponsePostOrder, error) {
 	if err := validator.CheckRoleIsCustomer(order.CustomerID); err != nil {
-		return enum.BlankSTR, err
+		return nil, err
 	}
 
 	foundOrder, err := o.receiptModel.SelectReceiptByID(order.ID)
 	if err != nil {
-		return enum.BlankSTR, error2.DoesNotExistsOrderErr.New()
+		return nil, error2.DoesNotExistsOrderErr
 	}
 
 	if common.ConvertOBJIDToString(foundOrder.CustomerID) != order.CustomerID {
-		return enum.BlankSTR, error2.BadAccessOrderError.New()
+		return nil, error2.BadAccessOrderError
 	}
 
 	if err := o.checkOrderStatus(order, foundOrder); err != nil {
-		return enum.BlankSTR, err
+		return nil, err
 	}
 
 	if _, err := o.receiptModel.UpdateCancelReceipt(foundOrder); err != nil {
-		return enum.BlankSTR, err
+		return nil, err
 	}
 
-	savedID, err := o.RegisterOrderRecord(order.ToPutRequestOrder())
+	resPostOrder, err := o.RegisterOrderRecord(order.ToPutRequestOrder())
 	if err != nil {
-		return enum.BlankSTR, err
+		return nil, error2.DoesNotReOrderError
 	}
 
-	return savedID, nil
+	return resPostOrder, nil
 }
 
 func (o *orderRecordService) ModifyOrderRecordFromStore(order *request.RequestPutStoreOrder) (int, error) {
-	if err := validator.CheckRoleIsStore(order.UserID); err != nil {
+	if err := validator.CheckStoreUser(order.StoreID, order.UserID); err != nil {
 		return 0, err
 	}
 
@@ -79,9 +84,12 @@ func (o *orderRecordService) ModifyOrderRecordFromStore(order *request.RequestPu
 	}
 
 	if common.ConvertOBJIDToString(foundOrder.StoreID) != order.StoreID {
-		return 0, error2.BadAccessOrderError.New()
+		return 0, error2.BadAccessOrderError
 	}
 
+	if foundOrder.Status == enum.Cancel || foundOrder.Status == enum.Completion {
+		return 0, error2.DoesNotModifyOrderError
+	}
 	foundOrder.Status = order.Status
 
 	updatedCnt, err := o.receiptModel.UpdateReceiptStatus(foundOrder)
@@ -128,7 +136,7 @@ func (o *orderRecordService) setNumbering(wg *sync.WaitGroup, countErr chan erro
 
 func (o *orderRecordService) setTotalPrice(rct *entity.Receipt, order *request.RequestOrder, menusErr chan error, wg *sync.WaitGroup) {
 	defer wg.Done()
-	menus, err := o.menuModel.SelectMenusByIDs(order.StoreId, order.Menus)
+	menus, err := o.menuModel.SelectMenusByIDs(order.StoreID, order.Menus)
 	if err != nil {
 		menusErr <- err
 		return
@@ -142,19 +150,22 @@ func (o *orderRecordService) checkOrderStatus(order *request.RequestPutCustomerO
 	reqMIDs := util2.ConvertSliceToExistMap(order.MenuIDs)
 	isChange := o.isChangeOrderMenus(foundOrder, reqMIDs)
 	switch {
-	case isChange:
-		if foundOrder.Status == enum.Cooking {
-			return error2.DoseNotModifyOrderError.New()
-		}
-	case foundOrder.Status == enum.Completion || foundOrder.Status == enum.Delivering:
-		return error2.DoseNotModifyOrderError.New()
+	case isChange && foundOrder.Status == enum.Cooking:
+		// 변경이면서 이미 조리중
+		return error2.DoesNotModifyOrderError
+	case !isChange && len(foundOrder.MenuIDs) == len(order.MenuIDs):
+		// 주문 메뉴가 현재 똑같음
+		return error2.DuplicatedDataError
+	case foundOrder.Status == enum.Completion || foundOrder.Status == enum.Delivering || foundOrder.Status == enum.Cancel:
+		// 이미 완료거나 배달중 , 취소주문
+		return error2.DoesNotModifyOrderError
 	}
 	return nil
 }
 
 func (o *orderRecordService) isChangeOrderMenus(foundOrder *entity.Receipt, reqMIDs map[string]int) bool {
 	for _, ID := range foundOrder.MenuIDs {
-		// false -> 변경으로 볼 수 있다.
+		// exist 가 false 는 -> 변경으로 볼 수 있다.
 		if _, exist := reqMIDs[ID.Hex()]; !exist {
 			return true
 		}

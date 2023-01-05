@@ -3,13 +3,13 @@ POST {{host}}{{v1}}/users/user
 Content-Type: application/json
 
 {
-  "name": "테스트유저2",
-  "nic_name":"테스트유저입니다용2",
+  "name": "테스트유저1",
+  "nic_name":"테스트유저입니다용1",
   "password":"1234",
-  "phone_number": "010-2222-3333",
+  "phone_number": "010-1111-3333",
   "role":"customer"
 }
-### => 63b5ac4c2c5d4b2c42c45119 , 63b5ac582c5d4b2c42c4511a
+### => 63b6f63b697458e6fcdb4db3
 
 ### -> user 생성 - store => TODO 유저 타입 제한 필요
 POST {{host}}{{v1}}/users/user
@@ -19,15 +19,15 @@ Content-Type: application/json
   "name": "테스트가게2",
   "nic_name":"테스트가게입니다용2",
   "password":"1234",
-  "phone_number": "010-2222-1234",
+  "phone_number": "010-3333-1234",
   "role":"store"
 }
-### => 63b5ac622c5d4b2c42c4511b
+### => 63b6f644697458e6fcdb4db4 , 63b6f9c0b7b6269193c57f4c
 ###
-GET {{host}}{{v1}}/users/user?user-id=63b5ac622c5d4b2c42c4511b
+GET {{host}}{{v1}}/users/user?user-id=63b6f608697458e6fcdb4db1
 
 ###
-PUT {{host}}{{v1}}/users/user?user-id=63b5ac6f2c5d4b2c42c4511d
+PUT {{host}}{{v1}}/users/user?user-id=63b6f551697458e6fcdb4dad
 Content-Type: application/json
 
 {
@@ -38,4 +38,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{host}}{{v1}}/users/user?user-id=63b5ac6f2c5d4b2c42c4511d
+DELETE {{host}}{{v1}}/users/user?user-id=63b6f577697458e6fcdb4dae

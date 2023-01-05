@@ -3,19 +3,20 @@ GET {{host}}{{v1}}/stores/store/menus?store-id=63b5af6948c1f59bda57c752&current-
 GET {{host}}{{v1}}/stores/store/menus/menu?name=메뉴&current-page=1&content-count=5&sort-name=order_count&direction=-1
 
 ###
-POST {{host}}{{v1}}/stores/store/menus/menu?user-id=63b5ac622c5d4b2c42c4511b
+POST {{host}}{{v1}}/stores/store/menus/menu
 Content-Type: application/json
 
 {
-  "store_id":"63b5ac4c2c5d4b2c42c45119",
-  "name": "가게1의 메뉴1 수정이예용1",
+  "user_id" : "63b6f644697458e6fcdb4db4",
+  "store_id":"63b6f65d697458e6fcdb4db5",
+  "name": "가게3의 메뉴3",
   "limit_count": "non",
   "possible": true,
-  "price": 2000,
+  "price": 3900,
   "origin": "국내산",
   "description":"맛있어짱!"
 }
-### =>  63b5b415a2163fa719931e43 , 63b5b429a2163fa719931e45 , 63b5b431a2163fa719931e46
+### =>  63b6f955b7b6269193c57f48 , 63b6f969b7b6269193c57f49 , 63b6f972b7b6269193c57f4a
 ###
 POST {{host}}{{v1}}/stores/store/menus/menu?user-id=63b5ac622c5d4b2c42c4511b
 Content-Type: application/json
@@ -45,15 +46,16 @@ Content-Type: application/json
 }
 
 ###
-PUT {{host}}{{v1}}/stores/store/menus/menu?menu-id=63b5c51a719bd01a89f88ca1&user-id=63b5ac622c5d4b2c42c4511b
+PUT {{host}}{{v1}}/stores/store/menus/menu?menu-id=63b6f955b7b6269193c57f48
 Content-Type: application/json
 
 {
-  "store_id":"63b5bbf9e48fc8f155194bf6",
-  "name": "가게1의 메뉴1 zz",
+  "user_id" : "63b6f644697458e6fcdb4db4",
+  "store_id":"63b6f65d697458e6fcdb4db5",
+  "name": "가게1의 메뉴1 수정2",
   "limit_count": "10",
   "possible": true,
-  "price": 1000,
+  "price": 4000,
   "origin": "국내산",
   "description":"맛있어짱!"
 }

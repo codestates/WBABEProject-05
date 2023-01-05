@@ -10,19 +10,19 @@ import (
 )
 
 type RequestOrder struct {
-	StoreId      string          `json:"store_id" binding:"required"`
-	CustomerId   string          `json:"customer_id" binding:"required"`
+	StoreID      string          `json:"store_id" binding:"required"`
+	CustomerID   string          `json:"customer_id" binding:"required"`
 	Menus        []string        `json:"menu_ids" binding:"required"`
 	CustomerAddr *RequestAddress `json:"ordered_addr" binding:"required"`
 	PhoneNumber  string          `json:"phone_number" binding:"required"`
 }
 
 func (r *RequestOrder) ToPostReceipt() (*entity.Receipt, error) {
-	sid, err := primitive.ObjectIDFromHex(r.StoreId)
+	sid, err := primitive.ObjectIDFromHex(r.StoreID)
 	if err != nil {
 		return nil, err
 	}
-	cid, err := primitive.ObjectIDFromHex(r.CustomerId)
+	cid, err := primitive.ObjectIDFromHex(r.CustomerID)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (r *RequestOrder) ToPostReceipt() (*entity.Receipt, error) {
 }
 
 func (r *RequestOrder) ToUserPreOrderInfo() (*entity.User, error) {
-	cid, err := primitive.ObjectIDFromHex(r.CustomerId)
+	cid, err := primitive.ObjectIDFromHex(r.CustomerID)
 	if err != nil {
 		return nil, err
 	}

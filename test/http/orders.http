@@ -2,31 +2,33 @@ POST {{host}}{{v1}}/orders/order
 Content-Type: application/json
 
 {
-  "store_id": "63b4419c8571e6d2b86e8ef7",
-  "customer_id": "63b36290d8c372b476efe407",
-  "menu_ids":["63b441a58571e6d2b86e8ef8"],
+  "store_id": "63b6f65d697458e6fcdb4db5",
+  "customer_id": "63b6f63b697458e6fcdb4db3",
+  "menu_ids":["63b6f969b7b6269193c57f49" , "63b6f955b7b6269193c57f48"],
   "ordered_addr":{
-    "street":"테스트거리",
+    "street":"주문했어용",
     "detail":"오른쪽",
     "zip_code":"1241-21"
-  }
+  },
+  "phone_number": "010-3123-1111"
 }
-### => 63b1381ca6a0036664b843e5
+### => 63b702f22061fd50c48a60ae
 
 ###
 PUT {{host}}{{v1}}/orders/order/customer
 Content-Type: application/json
 
 {
-  "order_id": "63b1381ca6a0036664b843e5",
-  "store_id": "63b13667c261c10ddffa2eb5",
-  "customer_id": "63b1364bc261c10ddffa2eb3",
-  "menu_ids": ["63b1370fc261c10ddffa2eb8"],
+  "order_id": "63b70b8d6f4b7c5d037bf7cb",
+  "store_id": "63b6f65d697458e6fcdb4db5",
+  "customer_id": "63b6f63b697458e6fcdb4db3",
+  "menu_ids": ["63b6f969b7b6269193c57f49", "63b6f972b7b6269193c57f4a"],
   "ordered_addr":{
     "street":"테스트거리수정집입니다.",
     "detail":"왼쪽으로바꾸겠습니다.",
     "zip_code":"1241-21"
-  }
+  },
+  "phone_number": "010-3234-4555"
 }
 
 ###
@@ -34,16 +36,18 @@ PUT {{host}}{{v1}}/orders/order/store
 Content-Type: application/json
 
 {
-  "order_id": "63b17dce1773f27c5c3f2905",
-  "status": "주문완료"
+  "order_id": "63b70bb66f4b7c5d037bf7cc",
+  "store_id": "63b6f65d697458e6fcdb4db5",
+  "user_id": "63b6f644697458e6fcdb4db4",
+  "status": "배달중"
 }
 ### => TODO status enum 처럼 특정 값들로 제약 필요
 ###
-GET {{host}}{{v1}}/orders/order/price?store-id=63b13667c261c10ddffa2eb5&menu-ids=63b1370fc261c10ddffa2eb8,63b1370cc261c10ddffa2eb7
+GET {{host}}{{v1}}/orders/order/price?store-id=63b6f65d697458e6fcdb4db5&menu-ids=63b6f969b7b6269193c57f49,63b6f972b7b6269193c57f4a
 
 ###
-GET {{host}}{{v1}}/orders/pages/customer?customer-id=63b1364bc261c10ddffa2eb3&current-page=0&content-count=5&sort-name=base_time.updated_at&direction=-1
+GET {{host}}{{v1}}/orders/pages/customer?customer-id=63b6f63b697458e6fcdb4db3&status=배달중&current-page=0&content-count=5&sort-name=base_time.updated_at&direction=-1
 
 ###
-GET {{host}}{{v1}}/orders/pages/store?store-id=63b13667c261c10ddffa2eb5&current-page=0&content-count=5&sort-name=base_time.updated_at&direction=-1
+GET {{host}}{{v1}}/orders/pages/store?store-id=63b6f65d697458e6fcdb4db5&status=배달중&current-page=0&content-count=5&sort-name=base_time.updated_at&direction=-1
 

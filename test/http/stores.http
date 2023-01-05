@@ -2,8 +2,8 @@ POST {{host}}{{v1}}/stores/store
 Content-Type: application/json
 
 {
-  "user_id": "63b5ac4c2c5d4b2c42c45119",
-  "name": "가게4이예요.",
+  "user_id": "63b6f644697458e6fcdb4db4",
+  "name": "가게1이예요.",
   "address": {
     "street": "테스트거리",
     "detail": "오른쪽입니다.",
@@ -11,7 +11,7 @@ Content-Type: application/json
   },
   "store_phone": "010-3323-2323"
 }
-### => 63b5af6948c1f59bda57c752 , 63b5bbf9e48fc8f155194bf6
+### => 63b6f65d697458e6fcdb4db5
 
 ###
 GET {{host}}{{v1}}/stores?current-page=0&content-count=6&sort-name=base_time.updated_at&direction=-1
@@ -19,11 +19,11 @@ GET {{host}}{{v1}}/stores?current-page=0&content-count=6&sort-name=base_time.upd
 
 ###
 # PUT의 recommend_menus 넣을경우 ==> 메뉴등록 선행필요
-PUT {{host}}{{v1}}/stores/store?store-id=63b5af6948c1f59bda57c752
+PUT {{host}}{{v1}}/stores/store?store-id=63b6f65d697458e6fcdb4db5
 Content-Type: application/json
 
 {
-  "user_id": "63b5ac622c5d4b2c42c4511b",
+  "user_id": "63b6f644697458e6fcdb4db4",
   "name": "가게1수정이예요.",
   "address": {
     "street": "테스트거리",
@@ -31,12 +31,12 @@ Content-Type: application/json
     "zip_code": "1241-21"
   },
   "store_phone": "010-6222-2323",
-  "recommend_menus": ["63b5b422a2163fa719931e44", "63b5b429a2163fa719931e45"]
+  "recommend_menus": ["63b6f969b7b6269193c57f49" , "63b6f972b7b6269193c57f4a"]
 }
 ### => TODO 유효한 menu들인지도 검증필요할듯
 
 ###
-GET {{host}}{{v1}}/stores/store/recommends?store-id=63b5af6948c1f59bda57c752
+GET {{host}}{{v1}}/stores/store/recommends?store-id=63b6f65d697458e6fcdb4db5
 Content-Type: application/json
 
 ###

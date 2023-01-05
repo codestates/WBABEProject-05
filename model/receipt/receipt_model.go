@@ -2,7 +2,6 @@ package receipt
 
 import (
 	"github.com/codestates/WBABEProject-05/common"
-	"github.com/codestates/WBABEProject-05/common/enum"
 	common2 "github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
@@ -27,15 +26,15 @@ func NewReceiptModel(col *mongo.Collection) ReceiptModeler {
 	return instance
 }
 
-func (r *receiptModel) InsertReceipt(receipt *entity.Receipt) (string, error) {
+func (r *receiptModel) InsertReceipt(receipt *entity.Receipt) (*entity.Receipt, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
 	if _, err := r.collection.InsertOne(ctx, receipt); err != nil {
-		return enum.BlankSTR, err
+		return nil, err
 	}
 
-	return receipt.Numbering, nil
+	return receipt, nil
 }
 
 func (r *receiptModel) UpdateReceiptStatus(receipt *entity.Receipt) (int64, error) {

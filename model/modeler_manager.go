@@ -34,6 +34,7 @@ func CreateIndexesInModels() {
 
 	// Store Collection
 	AppModel.CreateIndexes(StoreCollectionName, true, "store_phone")
+	AppModel.CreateCompoundIndex(StoreCollectionName, false, "store_id", "user_id")
 
 	// MenuCollection
 	AppModel.CreateIndexes(MenuCollectionName, false, "store_id", "name")

@@ -55,18 +55,18 @@ func (s *storeControl) PostStore(c *gin.Context) {
 	).Response(c)
 }
 
-// PutSore godoc
+// PutStore godoc
 // @Tags 가게
 // @Summary call Put store, return modify count by json.
 // @Description 가게를 수정할 수 있다.
-// @name PutSore
+// @name PutStore
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/stores/store [put]
 // @Param store-id query string true "store-id"
 // @Param RequestPutStore body request.RequestPutStore true "RequestPutStore JSON"
 // @Success 200 {object} protocol.ApiResponse[any]
-func (s *storeControl) PutSore(c *gin.Context) {
+func (s *storeControl) PutStore(c *gin.Context) {
 	var store *request.RequestPutStore
 	if err := c.ShouldBind(&store); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)

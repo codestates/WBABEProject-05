@@ -109,7 +109,7 @@ func (s *storeMenuService) DeleteMenuAndBackup(menu *request.RequestDeleteMenu) 
 	}
 
 	if common.ConvertOBJIDToString(foundM.StoreID) != menu.StoreID {
-		return 0, error2.UnauthorizedError.New()
+		return 0, error2.UnauthorizedError
 	}
 
 	deletedM, err := s.menuModel.SelectMenuByIDsAndDelete(menu.MenuID)

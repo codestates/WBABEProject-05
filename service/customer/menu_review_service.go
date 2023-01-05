@@ -5,7 +5,9 @@ import (
 	"github.com/codestates/WBABEProject-05/common/enum"
 	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/logger"
+	"github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/common/query"
+	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/menu"
 	"github.com/codestates/WBABEProject-05/model/receipt"
 	"github.com/codestates/WBABEProject-05/model/review"
@@ -80,8 +82,13 @@ func (m *menuReviewService) FindReviewSortedPageByUserID(ID, userRole string, pg
 }
 
 func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview) (string, error) {
-	if _, err := m.receiptModel.SelectReceiptByID(review.OrderID); err != nil {
-		return "", error2.DoesNotExistsOrderErr.New()
+	foundReceipt, err := m.receiptModel.SelectReceiptByID(review.OrderID)
+	if err != nil {
+		return enum.BlankSTR, error2.DoesNotExistsOrderErr
+	}
+
+	if s, err := m.checkPossiblePostReview(review, foundReceipt); err != nil {
+		return s, err
 	}
 
 	newR, err := review.ToPostReview()
@@ -98,6 +105,18 @@ func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview
 	go m.updateMenuScores(review)
 
 	return savedID, nil
+}
+
+func (m *menuReviewService) checkPossiblePostReview(review *request.RequestPostReview, foundReceipt *entity.Receipt) (string, error) {
+	foundMIDs := common.ConvertOBJIDsToStrings(foundReceipt.MenuIDs)
+	existMap := util2.ConvertSliceToExistMap(foundMIDs)
+	if _, exists := existMap[review.MenuID]; !exists {
+		return enum.BlankSTR, error2.DoesNotPostReviewErr
+	}
+	if foundReceipt.CustomerID.Hex() != review.CustomerID || foundReceipt.StoreID.Hex() != review.StoreID {
+		return enum.BlankSTR, error2.DoesNotPostReviewErr
+	}
+	return "", nil
 }
 
 func (m *menuReviewService) updateMenuScores(review *request.RequestPostReview) {

@@ -60,6 +60,10 @@ func (s *storeMenuService) FindRecommendMenus(storeID string) (*response.Respons
 		return nil, err
 	}
 
+	if len(foundStore.RecommendMenus) == 0 {
+		return response.FromStoreAndMenus(foundStore, make([]*entity.Menu, 0)), nil
+	}
+
 	strMIDs := common.ConvertOBJIDsToStrings(foundStore.RecommendMenus)
 	menus, err := s.menuModel.SelectMenusByIDs(storeID, strMIDs)
 	if err != nil {

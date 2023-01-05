@@ -30,7 +30,7 @@ func StoresHandler(storesUrl *gin.RouterGroup) {
 	storesUrl.GET("", store2.StoreControl.GetStoresSortedPage)                // 가게들 정보
 	storesUrl.GET("/store", store2.StoreControl.GetStore)                     // 특정 가게 정보
 	storesUrl.POST("/store", store2.StoreControl.PostStore)                   // 가게 등록
-	storesUrl.PUT("/store", store2.StoreControl.PutSore)                      // 가게 수정
+	storesUrl.PUT("/store", store2.StoreControl.PutStore)                     // 가게 수정
 	storesUrl.GET("/store/recommends", store2.StoreControl.GetRecommendMenus) // 가게 추천메뉴
 }
 

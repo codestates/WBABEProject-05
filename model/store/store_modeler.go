@@ -11,6 +11,8 @@ var StoreModel StoreModeler
 type StoreModeler interface {
 	SelectStoreByID(storeId string) (*entity.Store, error)
 
+	SelectStoreByIDAndUserID(storeID, userID string) (*entity.Store, error)
+
 	SelectStoreByPhone(storePhone string) (*entity.Store, error)
 
 	InsertStore(store *entity.Store) (string, error)

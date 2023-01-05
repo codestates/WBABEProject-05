@@ -36,7 +36,7 @@ func (s *Receipt) NewUpdateStatusCancelBsonSetD() bson.D {
 	return bson.D{
 		{"$set",
 			bson.D{
-				{"Status", enum.Cancel},
+				{"status", enum.Cancel},
 				{"base_time.updated_at", time.Now()},
 			},
 		},

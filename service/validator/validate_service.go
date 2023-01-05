@@ -13,7 +13,7 @@ import (
 func CheckBlank(STR string) error {
 	s := strings.Trim(STR, " ")
 	if s == enum.BlankSTR {
-		return error2.BadRequestError.New()
+		return error2.BadRequestError
 	}
 	return nil
 }
@@ -25,7 +25,7 @@ func CheckRoleIsStore(userID string) error {
 		return err
 	}
 	if selectUser.Role != enum.StoreRole {
-		return error2.UnauthorizedError.New()
+		return error2.UnauthorizedError
 	}
 	return nil
 }
@@ -37,7 +37,7 @@ func CheckRoleIsCustomer(userID string) error {
 		return err
 	}
 	if selectUser.Role != enum.CustomerRole {
-		return error2.UnauthorizedError.New()
+		return error2.UnauthorizedError
 	}
 	return nil
 }
@@ -69,6 +69,14 @@ func CheckExistsMenu(storeID, menuID string) error {
 // CheckExistsMenus 입력받은 메뉴들중 하나라도 존재하지 않으면 DataNotFoundError
 func CheckExistsMenus(storeID string, menuIDs []string) error {
 	if foundMenus, err := menu.MenuModel.SelectMenusByIDs(storeID, menuIDs); err != nil || len(foundMenus) != len(menuIDs) {
+		return error2.DataNotFoundError
+	}
+	return nil
+}
+
+// CheckStoreUser 가게의 user 즉 주인이 맞지 않으면 DataNotFoundError
+func CheckStoreUser(storeID, userID string) error {
+	if _, err := store2.StoreModel.SelectStoreByIDAndUserID(storeID, userID); err != nil {
 		return error2.DataNotFoundError
 	}
 	return nil

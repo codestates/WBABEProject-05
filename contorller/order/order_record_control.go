@@ -45,7 +45,7 @@ func (o *orderRecordControl) PostOrderRecord(c *gin.Context) {
 		return
 	}
 
-	savedNumbering, err := o.orderService.RegisterOrderRecord(reqO)
+	resPostOrder, err := o.orderService.RegisterOrderRecord(reqO)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
@@ -53,7 +53,7 @@ func (o *orderRecordControl) PostOrderRecord(c *gin.Context) {
 
 	protocol.SuccessCodeAndData(
 		http.StatusCreated,
-		gin.H{"order_numbering": savedNumbering},
+		resPostOrder,
 	).Response(c)
 }
 
@@ -74,14 +74,12 @@ func (o *orderRecordControl) PutOrderRecordFromCustomer(c *gin.Context) {
 		return
 	}
 
-	newOrderID, err := o.orderService.ModifyOrderRecordFromCustomer(reqO)
+	resPostOrder, err := o.orderService.ModifyOrderRecordFromCustomer(reqO)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
-	protocol.SuccessData(gin.H{
-		"new_order_id": newOrderID,
-	}).Response(c)
+	protocol.SuccessData(resPostOrder).Response(c)
 }
 
 // PutOrderRecordFromStore godoc
@@ -140,6 +138,7 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 	status := c.Query("status")
 	if _, exists := enum.OrderStatusMap[status]; !exists {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
 	}
 
 	receipts, err := o.orderService.FindOrderRecordsSortedPage(customerID, status, enum.CustomerRole, page)

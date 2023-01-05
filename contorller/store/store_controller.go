@@ -7,7 +7,7 @@ var StoreControl StoreContoller
 type StoreContoller interface {
 	PostStore(c *gin.Context)
 
-	PutSore(c *gin.Context)
+	PutStore(c *gin.Context)
 
 	PostMenu(c *gin.Context)
 

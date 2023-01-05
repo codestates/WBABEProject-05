@@ -6,13 +6,15 @@ type RequestPutCustomerOrder struct {
 	CustomerID   string          `json:"customer_id" binding:"required"`
 	MenuIDs      []string        `json:"menu_ids" binding:"required"`
 	CustomerAddr *RequestAddress `json:"ordered_addr" binding:"required"`
+	PhoneNumber  string          `json:"phone_number" binding:"required"`
 }
 
 func (r *RequestPutCustomerOrder) ToPutRequestOrder() *RequestOrder {
 	return &RequestOrder{
-		StoreId:      r.StoreID,
-		CustomerId:   r.CustomerID,
+		StoreID:      r.StoreID,
+		CustomerID:   r.CustomerID,
 		Menus:        r.MenuIDs,
 		CustomerAddr: r.CustomerAddr,
+		PhoneNumber:  r.PhoneNumber,
 	}
 }

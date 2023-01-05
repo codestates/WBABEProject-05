@@ -26,17 +26,40 @@ func NewStoreModel(col *mongo.Collection) *storeModel {
 	return instance
 }
 
-func (s *storeModel) SelectStoreByID(storeId string) (*entity.Store, error) {
+func (s *storeModel) SelectStoreByID(storeID string) (*entity.Store, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := common2.ConvertStringToOBJID(storeId)
+	ID, err := common2.ConvertStringToOBJID(storeID)
 	if err != nil {
 		return nil, err
 	}
 
 	var store *entity.Store
 	filter := bson.M{"_id": ID}
+	if err := s.collection.FindOne(ctx, filter).Decode(&store); err != nil {
+		return nil, err
+	}
+
+	return store, nil
+}
+
+func (s *storeModel) SelectStoreByIDAndUserID(storeID, userID string) (*entity.Store, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	sID, err := common2.ConvertStringToOBJID(storeID)
+	if err != nil {
+		return nil, err
+	}
+
+	uID, err := common2.ConvertStringToOBJID(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	var store *entity.Store
+	filter := bson.D{{"_id", sID}, {"user_id", uID}}
 	if err := s.collection.FindOne(ctx, filter).Decode(&store); err != nil {
 		return nil, err
 	}

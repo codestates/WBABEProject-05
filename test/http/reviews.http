@@ -3,18 +3,19 @@ POST {{host}}{{v1}}/reviews/review
 Content-Type: application/json
 
 {
-  "store_id": "63b4419c8571e6d2b86e8ef7",
-  "customer_id": "63b36290d8c372b476efe407",
-  "menu_id": "63b441a58571e6d2b86e8ef8",
+  "store_id": "63b6f65d697458e6fcdb4db5",
+  "customer_id": "63b6f63b697458e6fcdb4db3",
+  "menu_id": "63b6f955b7b6269193c57f48",
+  "order_id": "63b70b8d6f4b7c5d037bf7cb",
   "content": "진짜?정말?맛있어용!ㅎㅎㅎ",
-  "rating": 4
+  "rating": 3
 }
 ### => rating 상한선 뿐만아닌 전체적으로 validate 기능들 필요할듯
 
 ### -> 메뉴별 리뷰보기
-GET {{host}}{{v1}}/reviews/menu?menu-id=63b1370fc261c10ddffa2eb8&current-page=0&content-count=6&sort-name=base_time.updated_at&direction=-1
+GET {{host}}{{v1}}/reviews/menu?menu-id=63b6f955b7b6269193c57f48&current-page=0&content-count=6&sort-name=base_time.updated_at&direction=-1
 
 ### -> 고객이 자신의 리뷰 보기
-GET {{host}}{{v1}}/reviews/customer?customer-id=63b1364bc261c10ddffa2eb3&current-page=0&content-count=6&sort-name=base_time.updated_at&direction=-1
+GET {{host}}{{v1}}/reviews/customer?customer-id=63b6f63b697458e6fcdb4db3&current-page=0&content-count=6&sort-name=base_time.updated_at&direction=-1
 
 ###
