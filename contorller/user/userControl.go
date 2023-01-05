@@ -38,7 +38,7 @@ func NewUserControl(svc login.UserServicer) *userControl {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) GetUser(c *gin.Context) {
 	userID := c.Query("user-id")
-	if err := validator.IsBlank(userID); err != nil {
+	if err := validator.CheckBlank(userID); err != nil {
 		protocol.Fail(error2.NewAppError(err)).Response(c)
 		return
 	}
@@ -71,7 +71,7 @@ func (u *userControl) PutUser(c *gin.Context) {
 	}
 
 	userID := c.Query("user-id")
-	if err := validator.IsBlank(userID); err != nil {
+	if err := validator.CheckBlank(userID); err != nil {
 		protocol.Fail(error2.NewAppError(err)).Response(c)
 		return
 	}
@@ -98,7 +98,7 @@ func (u *userControl) PutUser(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (u *userControl) DeleteUser(c *gin.Context) {
 	userID := c.Query("user-id")
-	if err := validator.IsBlank(userID); err != nil {
+	if err := validator.CheckBlank(userID); err != nil {
 		protocol.Fail(error2.NewAppError(err)).Response(c)
 		return
 	}

@@ -132,7 +132,7 @@ func (o *orderRecordControl) GetCustomerOrderRecordsSortedPage(c *gin.Context) {
 	}
 
 	customerID := c.Query("customer-id")
-	if err := validator.IsBlank(customerID); err != nil {
+	if err := validator.CheckBlank(customerID); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
@@ -171,7 +171,7 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 	}
 
 	storeID := c.Query("store-id")
-	if err := validator.IsBlank(storeID); err != nil {
+	if err := validator.CheckBlank(storeID); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
@@ -201,7 +201,7 @@ func (o *orderRecordControl) GetStoreOrderRecordsSortedPage(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (o *orderRecordControl) GetOrderRecord(c *gin.Context) {
 	orderID := c.Query("order-id")
-	if err := validator.IsBlank(orderID); err != nil {
+	if err := validator.CheckBlank(orderID); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}

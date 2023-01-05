@@ -9,8 +9,8 @@ import (
 	"strings"
 )
 
-// IsBlank trimmed string 가 ""  인 경우 BadRequestError
-func IsBlank(STR string) error {
+// CheckBlank string trim 한 값이 "" 인 경우 BadRequestError
+func CheckBlank(STR string) error {
 	s := strings.Trim(STR, " ")
 	if s == enum.BlankSTR {
 		return error2.BadRequestError.New()
@@ -18,13 +18,25 @@ func IsBlank(STR string) error {
 	return nil
 }
 
-// CheckRoleIsStore  사용자가 존재할경우 역할이 store 인지 확인
+// CheckRoleIsStore 사용자가 존재할경우 역할이 store 인지 확인
 func CheckRoleIsStore(userID string) error {
 	selectUser, err := user.UserModel.SelectUser(userID)
 	if err != nil {
 		return err
 	}
 	if selectUser.Role != enum.StoreRole {
+		return error2.UnauthorizedError.New()
+	}
+	return nil
+}
+
+// CheckRoleIsCustomer 사용자가 존재할경우 역할이 store 인지 확인
+func CheckRoleIsCustomer(userID string) error {
+	selectUser, err := user.UserModel.SelectUser(userID)
+	if err != nil {
+		return err
+	}
+	if selectUser.Role != enum.CustomerRole {
 		return error2.UnauthorizedError.New()
 	}
 	return nil

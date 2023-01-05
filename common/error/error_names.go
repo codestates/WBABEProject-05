@@ -8,6 +8,7 @@ const (
 	DuplicatedData       = "이미 존재하는 데이터"
 	DoesNotModifyOrder   = "주문 수정 불가"
 	AddNotRecommendMenus = "추천 메뉴 수정 불가"
+	DoesNotExistsOrder   = "주문 기록 없음"
 
 	InternalServerErr = "서버 로직 오류"
 	FailRequestErr    = "시스템 오류"
@@ -24,6 +25,7 @@ const (
 	DuplicatedDataCode       = 445
 	DoesNotModifyOrderCode   = 446
 	AddNotRecommendMenusCode = 447
+	DoesNotExistsOrderCode   = 448
 
 	InternalServerErrCode = 551
 	SystemErrCode         = 552

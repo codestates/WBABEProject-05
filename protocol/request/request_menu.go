@@ -8,6 +8,7 @@ import (
 )
 
 type RequestMenu struct {
+	UserID      string `json:"user_id" binding:"required"`
 	StoreID     string `json:"store_id" binding:"required"`
 	Name        string `json:"name" binding:"required,min=2,max=15"`
 	Possible    bool   `json:"possible" binding:"required"`

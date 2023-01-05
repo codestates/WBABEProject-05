@@ -46,8 +46,9 @@ var (
 	DataNotFoundError         = NewAppErrorCustom(DataNotFoundCode, "데이터를 찾을 수 없습니다.", DataNotFound)
 	DuplicatedDataError       = NewAppErrorCustom(DuplicatedDataCode, "이미 존재하는 데이터 입니다.", DuplicatedData)
 	DoseNotModifyOrderError   = NewAppErrorCustom(DoesNotModifyOrderCode, "주문을 수정 할 수 없는 상태입니다.", DoesNotModifyOrder)
-	BadAccessOrderError       = NewAppErrorCustom(DoesNotModifyOrderCode, "자신의 주문만 수정 가능 합니다.", DoesNotModifyOrder)
+	BadAccessOrderError       = NewAppErrorCustom(DoesNotModifyOrderCode, "본인과 관련된 주문만 수정 가능 합니다.", DoesNotModifyOrder)
 	AddNotRecommendMenusError = NewAppErrorCustom(AddNotRecommendMenusCode, "추가하려는 추천 메뉴들을 확인해 주세요.", AddNotRecommendMenus)
+	DoesNotExistsOrderErr     = NewAppErrorCustom(DoesNotExistsOrderCode, "주문 기록이 없습니다.", DoesNotExistsOrder)
 )
 
 /* 501 ~ 599 서버 에러 */

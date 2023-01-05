@@ -9,6 +9,7 @@ import (
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	util2 "github.com/codestates/WBABEProject-05/service/common"
+	"github.com/codestates/WBABEProject-05/service/validator"
 	"sync"
 	"time"
 )
@@ -38,17 +39,21 @@ func (o *orderRecordService) RegisterOrderRecord(order *request.RequestOrder) (s
 }
 
 func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.RequestPutCustomerOrder) (string, error) {
-	foundOrder, err := o.receiptModel.SelectReceiptByID(order.ID)
-	if err != nil {
+	if err := validator.CheckRoleIsCustomer(order.CustomerID); err != nil {
 		return enum.BlankSTR, err
 	}
 
-	if err := o.checkOrderStatus(order, foundOrder); err != nil {
-		return enum.BlankSTR, err
+	foundOrder, err := o.receiptModel.SelectReceiptByID(order.ID)
+	if err != nil {
+		return enum.BlankSTR, error2.DoesNotExistsOrderErr.New()
 	}
 
 	if common.ConvertOBJIDToString(foundOrder.CustomerID) != order.CustomerID {
 		return enum.BlankSTR, error2.BadAccessOrderError.New()
+	}
+
+	if err := o.checkOrderStatus(order, foundOrder); err != nil {
+		return enum.BlankSTR, err
 	}
 
 	if _, err := o.receiptModel.UpdateCancelReceipt(foundOrder); err != nil {
@@ -64,9 +69,17 @@ func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.Reques
 }
 
 func (o *orderRecordService) ModifyOrderRecordFromStore(order *request.RequestPutStoreOrder) (int, error) {
+	if err := validator.CheckRoleIsStore(order.UserID); err != nil {
+		return 0, err
+	}
+
 	foundOrder, err := o.receiptModel.SelectReceiptByID(order.ID)
 	if err != nil {
 		return 0, err
+	}
+
+	if common.ConvertOBJIDToString(foundOrder.StoreID) != order.StoreID {
+		return 0, error2.BadAccessOrderError.New()
 	}
 
 	foundOrder.Status = order.Status

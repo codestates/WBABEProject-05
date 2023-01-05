@@ -74,7 +74,7 @@ func (s *storeControl) PutSore(c *gin.Context) {
 	}
 
 	storeID := c.Query("store-id")
-	if err := validator.IsBlank(storeID); err != nil {
+	if err := validator.CheckBlank(storeID); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
@@ -97,7 +97,6 @@ func (s *storeControl) PutSore(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/stores/store/menus/menu [post]
-// @Param user-id query string true "user-id"
 // @Param RequestMenu body request.RequestMenu true "RequestMenu JSON"
 // @Success 201 {object} protocol.ApiResponse[any]
 func (s *storeControl) PostMenu(c *gin.Context) {
@@ -107,13 +106,7 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 		return
 	}
 
-	userID := c.Query("user-id")
-	if err := validator.IsBlank(userID); err != nil {
-		protocol.Fail(utilErr.BadRequestError).Response(c)
-		return
-	}
-
-	savedID, err := s.storeMenuService.RegisterMenu(userID, reqM)
+	savedID, err := s.storeMenuService.RegisterMenu(reqM)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
@@ -132,7 +125,6 @@ func (s *storeControl) PostMenu(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/stores/store/menus/menu [put]
-// @Param user-id query string true "user-id"
 // @Param menu-id query string true "menu-id"
 // @Param RequestMenu body request.RequestMenu true "RequestMenu JSON"
 // @Success 200 {object} protocol.ApiResponse[any]
@@ -143,19 +135,13 @@ func (s *storeControl) PutMenu(c *gin.Context) {
 		return
 	}
 
-	userID := c.Query("user-id")
-	if err := validator.IsBlank(userID); err != nil {
-		protocol.Fail(utilErr.BadRequestError).Response(c)
-		return
-	}
-
 	menuID := c.Query("menu-id")
-	if err := validator.IsBlank(menuID); err != nil {
+	if err := validator.CheckBlank(menuID); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
 
-	cnt, err := s.storeMenuService.ModifyMenu(userID, menuID, reqM)
+	cnt, err := s.storeMenuService.ModifyMenu(menuID, reqM)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
@@ -174,23 +160,16 @@ func (s *storeControl) PutMenu(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/stores/store/menus/menu [delete]
-// @Param user-id query string true "user-id"
-// @Param menu-id query string true "menu-id"
+// @Param RequestDeleteMenu query request.RequestDeleteMenu true "RequestDeleteMenu"
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) DeleteMenu(c *gin.Context) {
-	menuId := c.Query("menu-id")
-	if err := validator.IsBlank(menuId); err != nil {
-		protocol.Fail(utilErr.NewAppError(err)).Response(c)
-		return
-	}
-
-	userID := c.Query("user-id")
-	if err := validator.IsBlank(userID); err != nil {
+	menu := &request.RequestDeleteMenu{}
+	if err := c.ShouldBindQuery(menu); err != nil {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}
 
-	count, err := s.storeMenuService.DeleteMenuAndBackup(userID, menuId)
+	count, err := s.storeMenuService.DeleteMenuAndBackup(menu)
 	if err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
@@ -220,7 +199,7 @@ func (s *storeControl) GetMenuSortedPagesByStoreID(c *gin.Context) {
 	}
 
 	storeID := c.Query("store-id")
-	if err := validator.IsBlank(storeID); err != nil {
+	if err := validator.CheckBlank(storeID); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
@@ -253,7 +232,7 @@ func (s *storeControl) GetMenuSortedPagesByName(c *gin.Context) {
 	}
 
 	name := c.Query("name")
-	if err := validator.IsBlank(name); err != nil {
+	if err := validator.CheckBlank(name); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
@@ -278,7 +257,7 @@ func (s *storeControl) GetMenuSortedPagesByName(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) GetRecommendMenus(c *gin.Context) {
 	storeID := c.Query("store-id")
-	if err := validator.IsBlank(storeID); err != nil {
+	if err := validator.CheckBlank(storeID); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
@@ -330,7 +309,7 @@ func (s *storeControl) GetStoresSortedPage(c *gin.Context) {
 // @Success 200 {object} protocol.ApiResponse[any]
 func (s *storeControl) GetStore(c *gin.Context) {
 	storeID := c.Query("store-id")
-	if err := validator.IsBlank(storeID); err != nil {
+	if err := validator.CheckBlank(storeID); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}

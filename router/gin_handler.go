@@ -32,7 +32,6 @@ func StoresHandler(storesUrl *gin.RouterGroup) {
 	storesUrl.POST("/store", store2.StoreControl.PostStore)                   // 가게 등록
 	storesUrl.PUT("/store", store2.StoreControl.PutSore)                      // 가게 수정
 	storesUrl.GET("/store/recommends", store2.StoreControl.GetRecommendMenus) // 가게 추천메뉴
-	// "/swag/store" sagger 테스트용
 }
 
 // MenusHandler ("/stores/store/menus")

@@ -24,6 +24,7 @@ func NewOrderRecordService(rd receipt.ReceiptModeler, md menu.MenuModeler, ud us
 	return instance
 }
 
+// command & query 둘다 사용
 func (o *orderRecordService) sumMenusPrice(menus []*entity.Menu) int {
 	var totalPrice int
 	for _, m := range menus {

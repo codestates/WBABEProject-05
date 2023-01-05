@@ -4,6 +4,7 @@ import (
 	"github.com/codestates/WBABEProject-05/common/enum"
 	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/logger"
+	"github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/validator"
 )
@@ -53,8 +54,8 @@ func (s *storeMenuService) ModifyStore(storeID string, store *request.RequestPut
 	return int(updateStore), err
 }
 
-func (s *storeMenuService) RegisterMenu(userID string, menu *request.RequestMenu) (string, error) {
-	if err := validator.CheckRoleIsStore(userID); err != nil {
+func (s *storeMenuService) RegisterMenu(menu *request.RequestMenu) (string, error) {
+	if err := validator.CheckRoleIsStore(menu.UserID); err != nil {
 		return enum.BlankSTR, err
 	}
 
@@ -75,8 +76,8 @@ func (s *storeMenuService) RegisterMenu(userID string, menu *request.RequestMenu
 	return savedID, nil
 }
 
-func (s *storeMenuService) ModifyMenu(userID, menuID string, menu *request.RequestMenu) (int, error) {
-	if err := validator.CheckRoleIsStore(userID); err != nil {
+func (s *storeMenuService) ModifyMenu(menuID string, menu *request.RequestMenu) (int, error) {
+	if err := validator.CheckRoleIsStore(menu.UserID); err != nil {
 		return 0, err
 	}
 
@@ -97,12 +98,21 @@ func (s *storeMenuService) ModifyMenu(userID, menuID string, menu *request.Reque
 	return int(cnt), nil
 }
 
-func (s *storeMenuService) DeleteMenuAndBackup(userID, menuID string) (int, error) {
-	if err := validator.CheckRoleIsStore(userID); err != nil {
+func (s *storeMenuService) DeleteMenuAndBackup(menu *request.RequestDeleteMenu) (int, error) {
+	if err := validator.CheckRoleIsStore(menu.UserID); err != nil {
 		return 0, err
 	}
 
-	deletedM, err := s.menuModel.SelectMenuByIDsAndDelete(menuID)
+	foundM, err := s.menuModel.SelectMenuByID(menu.MenuID)
+	if err != nil {
+		return 0, err
+	}
+
+	if common.ConvertOBJIDToString(foundM.StoreID) != menu.StoreID {
+		return 0, error2.UnauthorizedError.New()
+	}
+
+	deletedM, err := s.menuModel.SelectMenuByIDsAndDelete(menu.MenuID)
 	if err != nil || deletedM == nil {
 		return 0, err
 	}

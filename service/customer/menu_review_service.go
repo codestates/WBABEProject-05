@@ -3,9 +3,11 @@ package customer
 import (
 	"fmt"
 	"github.com/codestates/WBABEProject-05/common/enum"
+	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/menu"
+	"github.com/codestates/WBABEProject-05/model/receipt"
 	"github.com/codestates/WBABEProject-05/model/review"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
@@ -16,17 +18,23 @@ import (
 var instance *menuReviewService
 
 type menuReviewService struct {
-	reviewModel review.ReviewModeler
-	menuModel   menu.MenuModeler
+	reviewModel  review.ReviewModeler
+	menuModel    menu.MenuModeler
+	receiptModel receipt.ReceiptModeler
 }
 
-func NewMenuReviewService(rMod review.ReviewModeler, mMod menu.MenuModeler) *menuReviewService {
+func NewMenuReviewService(
+	rMod review.ReviewModeler,
+	mMod menu.MenuModeler,
+	receiptMod receipt.ReceiptModeler,
+) *menuReviewService {
 	if instance != nil {
 		return instance
 	}
 	instance = &menuReviewService{
-		reviewModel: rMod,
-		menuModel:   mMod,
+		reviewModel:  rMod,
+		menuModel:    mMod,
+		receiptModel: receiptMod,
 	}
 	return instance
 }
@@ -72,6 +80,10 @@ func (m *menuReviewService) FindReviewSortedPageByUserID(ID, userRole string, pg
 }
 
 func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview) (string, error) {
+	if _, err := m.receiptModel.SelectReceiptByID(review.OrderID); err != nil {
+		return "", error2.DoesNotExistsOrderErr.New()
+	}
+
 	newR, err := review.ToPostReview()
 	if err != nil {
 		return enum.BlankSTR, err

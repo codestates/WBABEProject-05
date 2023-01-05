@@ -13,11 +13,11 @@ type StoreMenuServicer interface {
 
 	ModifyStore(storeID string, store *request.RequestPutStore) (int, error)
 
-	RegisterMenu(userID string, menu *request.RequestMenu) (string, error)
+	RegisterMenu(menu *request.RequestMenu) (string, error)
 
-	ModifyMenu(userID, menuId string, menu *request.RequestMenu) (int, error)
+	ModifyMenu(menuId string, menu *request.RequestMenu) (int, error)
 
-	DeleteMenuAndBackup(userID, menuId string) (int, error)
+	DeleteMenuAndBackup(menu *request.RequestDeleteMenu) (int, error)
 
 	FindMenusSortedPage(storeID string, page *request.RequestPage) (*page.PageData[any], error)
 

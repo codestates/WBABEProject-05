@@ -27,11 +27,11 @@ func NewMenuReviewControl(svc customer.MenuReviewServicer) *menuReviewControl {
 	return instance
 }
 
-// GetMenuSortedPagesByCustomerID godoc
+// GetMenuReviewSortedPagesByCustomerID godoc
 // @Tags 메뉴리뷰
 // @Summary call Get sorted page menu reviews, return sorted page menu reviews by json.
 // @Description 특정 사용자의 리뷰들을 볼 수 있다.
-// @name GetMenuSortedPagesByCustomerID
+// @name GetMenuReviewSortedPagesByCustomerID
 // @Accept  json
 // @Produce  json
 // @Router /app/v1/reviews/customer [get]
@@ -47,7 +47,7 @@ func (m *menuReviewControl) GetMenuReviewSortedPagesByCustomerID(c *gin.Context)
 	}
 
 	customerID := c.Query("customer-id")
-	if err := validator.IsBlank(customerID); err != nil {
+	if err := validator.CheckBlank(customerID); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
@@ -80,7 +80,7 @@ func (m *menuReviewControl) GetMenuReviewSortedPagesByMenuID(c *gin.Context) {
 	}
 
 	menuID := c.Query("menu-id")
-	if err := validator.IsBlank(menuID); err != nil {
+	if err := validator.CheckBlank(menuID); err != nil {
 		protocol.Fail(utilErr.NewAppError(err)).Response(c)
 		return
 	}
