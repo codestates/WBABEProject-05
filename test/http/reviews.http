@@ -10,7 +10,7 @@ Content-Type: application/json
   "content": "진짜?정말?맛있어용!ㅎㅎㅎ",
   "rating": 3
 }
-### => rating 상한선 뿐만아닌 전체적으로 validate 기능들 필요할듯
+###
 
 ### -> 메뉴별 리뷰보기
 GET {{host}}{{v1}}/reviews/menu?menu-id=63b6f955b7b6269193c57f48&current-page=0&content-count=6&sort-name=base_time.updated_at&direction=-1

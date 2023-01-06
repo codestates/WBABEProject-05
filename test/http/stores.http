@@ -15,7 +15,7 @@ Content-Type: application/json
 
 ###
 GET {{host}}{{v1}}/stores?current-page=0&content-count=6&sort-name=base_time.updated_at&direction=-1
-### => TODO 메뉴가 삭제되면 store 의 recommend 여기서도 빠지는 CASE CADE 기능이 필요
+### =>
 
 ###
 # PUT의 recommend_menus 넣을경우 ==> 메뉴등록 선행필요
@@ -33,10 +33,10 @@ Content-Type: application/json
   "store_phone": "010-6622-2323",
   "recommend_menus": []
 }
-### => TODO 유효한 menu들인지도 검증필요할듯
+###
 
 ###
-GET {{host}}{{v1}}/stores/store/recommends?store-id=63b6f65d697458e6fcdb4db5
+GET {{host}}{{v1}}/stores/store/recommends?store-id=63b719a8df31b995028a1f97
 Content-Type: application/json
 
 ###

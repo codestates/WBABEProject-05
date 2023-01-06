@@ -35,6 +35,6 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{host}}{{v1}}/stores/store/menus/menu?user-id=63b5ac4c2c5d4b2c42c45119&menu-id=63b5c51a719bd01a89f88ca1
+DELETE {{host}}{{v1}}/stores/store/menus/menu?user-id=63b718f6df31b995028a1f95&menu-id=63b71a8f9867c36ef6b7d518&store-id=63b719a8df31b995028a1f97
 
 ###

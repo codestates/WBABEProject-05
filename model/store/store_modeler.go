@@ -7,7 +7,6 @@ import (
 
 var StoreModel StoreModeler
 
-// TODO 디테일한 점이 많아 서비스 만들어야할듯하다
 type StoreModeler interface {
 	SelectStoreByID(storeId string) (*entity.Store, error)
 
@@ -22,4 +21,6 @@ type StoreModeler interface {
 	SelectSortLimitedStore(pageQuery *query.PageQuery) ([]*entity.Store, error)
 
 	SelectTotalCount() (int64, error)
+
+	UpdatePullRecommendMenu(storeID, menuID string) (int64, error)
 }

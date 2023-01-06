@@ -4,7 +4,7 @@ import (
 	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"github.com/codestates/WBABEProject-05/protocol/request"
-	"github.com/codestates/WBABEProject-05/service/login"
+	"github.com/codestates/WBABEProject-05/service/user"
 	"github.com/codestates/WBABEProject-05/service/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -13,10 +13,10 @@ import (
 var instance *userControl
 
 type userControl struct {
-	userService login.UserServicer
+	userService user.UserServicer
 }
 
-func NewUserControl(svc login.UserServicer) *userControl {
+func NewUserControl(svc user.UserServicer) *userControl {
 	if instance != nil {
 		return instance
 	}

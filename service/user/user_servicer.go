@@ -1,4 +1,4 @@
-package login
+package user
 
 import (
 	"github.com/codestates/WBABEProject-05/protocol/request"

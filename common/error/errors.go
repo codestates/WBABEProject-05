@@ -50,6 +50,7 @@ var (
 	AddNotRecommendMenusError = NewAppErrorCustom(AddNotRecommendMenusCode, "추가하려는 추천 메뉴들을 확인해 주세요.", AddNotRecommendMenus)
 	DoesNotExistsOrderErr     = NewAppErrorCustom(DoesNotExistsOrderCode, "주문 기록이 없습니다.", DoesNotExistsOrder)
 	DoesNotPostReviewErr      = NewAppErrorCustom(DoesNotPostReviewCode, "리뷰를 작성 할 수 없습니다.", DoesNotPostReview)
+	FailDeleteRecommendErr    = NewAppErrorCustom(FailDeleteRecommendCode, "추천 메뉴에서 삭제하지 못 했습니다.", FailDeleteRecommend)
 )
 
 /* 501 ~ 599 서버 에러 */

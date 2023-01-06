@@ -41,7 +41,7 @@ Content-Type: application/json
   "user_id": "63b6f644697458e6fcdb4db4",
   "status": "배달중"
 }
-### => TODO status enum 처럼 특정 값들로 제약 필요
+###
 ###
 GET {{host}}{{v1}}/orders/order/price?store-id=63b719a8df31b995028a1f97&menu-ids=63b71a449867c36ef6b7d514,63b71a7c9867c36ef6b7d515
 

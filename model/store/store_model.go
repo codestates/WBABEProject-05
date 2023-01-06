@@ -135,3 +135,26 @@ func (s *storeModel) SelectTotalCount() (int64, error) {
 
 	return count, nil
 }
+
+func (s *storeModel) UpdatePullRecommendMenu(storeID, menuID string) (int64, error) {
+	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
+	defer cancel()
+
+	sID, err := common2.ConvertStringToOBJID(storeID)
+	if err != nil {
+		return 0, err
+	}
+
+	mID, err := common2.ConvertStringToOBJID(menuID)
+	if err != nil {
+		return 0, err
+	}
+
+	filter := bson.M{"_id": sID}
+	opt := bson.M{"$pull": bson.M{"recommend_menus": mID}}
+	updateOne, err := s.collection.UpdateOne(ctx, filter, opt)
+	if err != nil {
+		return 0, err
+	}
+	return updateOne.ModifiedCount, nil
+}
