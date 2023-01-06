@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/codestates/WBABEProject-05/common"
 	"github.com/codestates/WBABEProject-05/common/convertor"
+	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"go.mongodb.org/mongo-driver/bson"
@@ -92,7 +93,7 @@ func (m *menuModel) SelectMenusByIDs(storeID string, menuIDs []string) ([]*entit
 	filter := bson.M{"store_id": sID, "_id": bson.M{"$in": inID}}
 	opt := options.Find().SetSort(
 		bson.M{
-			"base_time.updated_at": -1,
+			enum.SortBaseTimeUpdateAt: enum.SortDESC,
 		})
 
 	menus, err := m.findMenus(ctx, filter, opt)
@@ -113,7 +114,7 @@ func (m *menuModel) SelectMenuByID(menuID string) (*entity.Menu, error) {
 	}
 
 	var menu *entity.Menu
-	filter := bson.M{"_id": mID}
+	filter := query.GetDefaultIDFilter(mID)
 	if err := m.collection.FindOne(ctx, filter).Decode(&menu); err != nil {
 		return nil, err
 	}
@@ -149,7 +150,7 @@ func (m *menuModel) SelectMenuByIDsAndDelete(menuID string) (*entity.Menu, error
 	}
 
 	var menu *entity.Menu
-	filter := bson.M{"_id": mID}
+	filter := query.GetDefaultIDFilter(mID)
 	if err := m.collection.FindOneAndDelete(ctx, filter).Decode(&menu); err != nil {
 		return nil, err
 	}

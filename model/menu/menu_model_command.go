@@ -4,6 +4,7 @@ import (
 	"github.com/codestates/WBABEProject-05/common"
 	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/common/enum"
+	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -23,7 +24,7 @@ func (m *menuModel) UpdateMenu(menu *entity.Menu) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	filter := bson.M{"_id": menu.ID}
+	filter := query.GetDefaultIDFilter(menu.ID)
 	opt := menu.NewUpdateMenuBsonSetD()
 	result, err := m.collection.UpdateOne(ctx, filter, opt)
 	if err != nil {
@@ -37,7 +38,7 @@ func (m *menuModel) UpdateMenuRating(menu *entity.Menu) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	filter := bson.M{"_id": menu.ID}
+	filter := query.GetDefaultIDFilter(menu.ID)
 	opt := menu.NewUpdateMenuBsonSetDAboutReview()
 	result, err := m.collection.UpdateOne(ctx, filter, opt)
 	if err != nil {

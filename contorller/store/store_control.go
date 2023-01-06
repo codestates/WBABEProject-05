@@ -1,6 +1,7 @@
 package store
 
 import (
+	"github.com/codestates/WBABEProject-05/common/enum"
 	utilErr "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/common/validator"
 	"github.com/codestates/WBABEProject-05/logger"
@@ -276,8 +277,8 @@ func (s *storeControl) GetRecommendMenus(c *gin.Context) {
 // @Summary call Get store pages, return store pages data by json.
 // @Description 가게들 정보를 보여준다. 정렬 가능 - name: base_time.updated_at | direction: 1, -1
 // @name GetStoresSortedPage
-// @Accept  json
-// @Produce  json
+// @Accept json
+// @Produce json
 // @Router /app/v1/stores [get]
 // @Param RequestPage query request.RequestPage true "RequestPage"
 // @Param Sort query page.Sort true "Sort"
@@ -285,6 +286,11 @@ func (s *storeControl) GetRecommendMenus(c *gin.Context) {
 func (s *storeControl) GetStoresSortedPage(c *gin.Context) {
 	page := &request.RequestPage{}
 	if err := c.ShouldBindQuery(page); err != nil {
+		protocol.Fail(utilErr.BadRequestError).Response(c)
+		return
+	}
+
+	if page.Sort.Name != enum.SortBaseTimeUpdateAt {
 		protocol.Fail(utilErr.BadRequestError).Response(c)
 		return
 	}

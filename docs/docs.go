@@ -446,7 +446,7 @@ const docTemplate = `{
             "get": {
                 "description": "가게들 정보를 보여준다. 정렬 가능 - name: base_time.updated_at | direction: 1, -1",
                 "consumes": [
-                    "text/html"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -779,19 +779,19 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "name": "menuID",
+                        "name": "menu_id",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "name": "storeID",
+                        "name": "store_id",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "name": "userID",
+                        "name": "user_id",
                         "in": "query",
                         "required": true
                     }

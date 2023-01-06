@@ -500,7 +500,7 @@ paths:
   /app/v1/stores:
     get:
       consumes:
-      - text/html
+      - application/json
       description: '가게들 정보를 보여준다. 정렬 가능 - name: base_time.updated_at | direction:
         1, -1'
       parameters:
@@ -635,15 +635,15 @@ paths:
       description: 메뉴를 삭제할 수 있다.
       parameters:
       - in: query
-        name: menuID
+        name: menu_id
         required: true
         type: string
       - in: query
-        name: storeID
+        name: store_id
         required: true
         type: string
       - in: query
-        name: userID
+        name: user_id
         required: true
         type: string
       produces:

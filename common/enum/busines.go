@@ -11,6 +11,12 @@ const (
 	Delivering    = "배달중"
 	Completion    = "배달완료"
 
+	SortBaseTimeUpdateAt = "base_time.updated_at"
+	SortRating           = "rating"
+	SortOrderCount       = "order_count"
+	SortASC              = 1
+	SortDESC             = -1
+
 	BlankSTR = ""
 )
 
