@@ -2,15 +2,15 @@ package order
 
 import (
 	"github.com/codestates/WBABEProject-05/common/convertor"
-	"github.com/codestates/WBABEProject-05/model/common/query"
+	"github.com/codestates/WBABEProject-05/common/util"
+	"github.com/codestates/WBABEProject-05/model/query"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"
-	util2 "github.com/codestates/WBABEProject-05/service/common"
 )
 
 func (o *orderRecordService) FindOrderRecordsSortedPage(ID, status, userRole string, pg *request.RequestPage) (*page.PageData[any], error) {
-	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
+	skip := util.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
 	pageQuery := query.NewPageQuery(pg.Sort.Name, pg.Sort.Direction, skip, pg.ContentCount)
 

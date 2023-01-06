@@ -3,8 +3,8 @@ package user
 import (
 	"github.com/codestates/WBABEProject-05/common"
 	"github.com/codestates/WBABEProject-05/common/enum"
-	common2 "github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
+	common2 "github.com/codestates/WBABEProject-05/model/query"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )

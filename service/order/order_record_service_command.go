@@ -5,12 +5,12 @@ import (
 	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/common/enum"
 	error2 "github.com/codestates/WBABEProject-05/common/error"
+	"github.com/codestates/WBABEProject-05/common/util"
 	"github.com/codestates/WBABEProject-05/common/validator"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"
-	util2 "github.com/codestates/WBABEProject-05/service/common"
 	"sync"
 	"time"
 )
@@ -147,7 +147,7 @@ func (o *orderRecordService) setTotalPrice(rct *entity.Receipt, order *request.R
 
 // checkOrderStatus 메뉴 추가의 경우 배달중은 실패 , 메뉴 변경의 경우 조리중,배달중인경우 실패 -> 즉, 기본으로 배달중은 실패, 추가적으로 완료도 실패시키자
 func (o *orderRecordService) checkOrderStatus(order *request.RequestPutCustomerOrder, foundOrder *entity.Receipt) error {
-	reqMIDs := util2.ConvertSliceToExistMap(order.MenuIDs)
+	reqMIDs := util.ConvertSliceToExistMap(order.MenuIDs)
 	isChange := o.isChangeOrderMenus(foundOrder, reqMIDs)
 	switch {
 	case isChange && foundOrder.Status == enum.Cooking:

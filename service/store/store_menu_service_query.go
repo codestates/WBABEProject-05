@@ -4,18 +4,18 @@ import (
 	"encoding/json"
 	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/common/flag"
+	"github.com/codestates/WBABEProject-05/common/util"
 	"github.com/codestates/WBABEProject-05/config/db"
 	"github.com/codestates/WBABEProject-05/logger"
-	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
+	"github.com/codestates/WBABEProject-05/model/query"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"
-	util2 "github.com/codestates/WBABEProject-05/service/common"
 )
 
 func (s *storeMenuService) FindMenusSortedPage(storeID string, pg *request.RequestPage) (*page.PageData[any], error) {
-	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
+	skip := util.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
 	pageQuery := query.NewPageQuery(pg.Sort.Name, pg.Sort.Direction, skip, pg.ContentCount)
 
@@ -35,7 +35,7 @@ func (s *storeMenuService) FindMenusSortedPage(storeID string, pg *request.Reque
 }
 
 func (s *storeMenuService) FindMenusSortedPageByName(name string, pg *request.RequestPage) (*page.PageData[any], error) {
-	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
+	skip := util.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
 	pageQuery := query.NewPageQuery(pg.Sort.Name, pg.Sort.Direction, skip, pg.ContentCount)
 
@@ -83,7 +83,7 @@ func (s *storeMenuService) FindStore(storeID string) (*response.ResponseStore, e
 }
 
 func (s *storeMenuService) FindStoresSortedPage(pg *request.RequestPage) (*page.PageData[any], error) {
-	skip := util2.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
+	skip := util.NewSkipNumber(pg.CurrentPage, pg.ContentCount)
 
 	pageQuery := query.NewPageQuery(pg.Sort.Name, pg.Sort.Direction, skip, pg.ContentCount)
 
