@@ -156,7 +156,7 @@ const docTemplate = `{
         },
         "/app/v1/orders/order/store": {
             "put": {
-                "description": "가게에서 주문 상태를 변경 할 수 있다. 이때 user_id는 가게를 생성한 user 즉, 가게 주인이다.",
+                "description": "가게에서 주문 상태를 변경 할 수 있다. 이때 user_id는 가게를 생성한 user 즉, 가게 주인이다. status 값 : 주문대기,주문취소,주문접수완료,조리중,배달중,배달완료",
                 "consumes": [
                     "application/json"
                 ],
@@ -217,12 +217,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "content_count",
+                        "name": "content-count",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "current_page",
+                        "name": "current-page",
                         "in": "query"
                     },
                     {
@@ -232,7 +232,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "sort_name",
+                        "name": "sort-name",
                         "in": "query"
                     }
                 ],
@@ -275,12 +275,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "content_count",
+                        "name": "content-count",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "current_page",
+                        "name": "current-page",
                         "in": "query"
                     },
                     {
@@ -290,7 +290,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "sort_name",
+                        "name": "sort-name",
                         "in": "query"
                     }
                 ],
@@ -327,12 +327,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "content_count",
+                        "name": "content-count",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "current_page",
+                        "name": "current-page",
                         "in": "query"
                     },
                     {
@@ -342,7 +342,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "sort_name",
+                        "name": "sort-name",
                         "in": "query"
                     }
                 ],
@@ -379,12 +379,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "content_count",
+                        "name": "content-count",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "current_page",
+                        "name": "current-page",
                         "in": "query"
                     },
                     {
@@ -394,7 +394,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "sort_name",
+                        "name": "sort-name",
                         "in": "query"
                     }
                 ],
@@ -458,12 +458,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "content_count",
+                        "name": "content-count",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "current_page",
+                        "name": "current-page",
                         "in": "query"
                     },
                     {
@@ -473,7 +473,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "sort_name",
+                        "name": "sort-name",
                         "in": "query"
                     }
                 ],
@@ -613,12 +613,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "content_count",
+                        "name": "content-count",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "current_page",
+                        "name": "current-page",
                         "in": "query"
                     },
                     {
@@ -628,7 +628,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "sort_name",
+                        "name": "sort-name",
                         "in": "query"
                     }
                 ],
@@ -665,12 +665,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "content_count",
+                        "name": "content-count",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "current_page",
+                        "name": "current-page",
                         "in": "query"
                     },
                     {
@@ -680,7 +680,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "sort_name",
+                        "name": "sort-name",
                         "in": "query"
                     }
                 ],
@@ -779,19 +779,19 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "name": "menu_id",
+                        "name": "menu-id",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "name": "store_id",
+                        "name": "store-id",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "name": "user_id",
+                        "name": "user-id",
                         "in": "query",
                         "required": true
                     }
@@ -1002,7 +1002,7 @@ const docTemplate = `{
                 "direction": {
                     "type": "integer"
                 },
-                "sort_name": {
+                "sort-name": {
                     "type": "string"
                 }
             }

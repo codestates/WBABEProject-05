@@ -14,12 +14,12 @@ Content-Type: application/json
 ### => 63b6f65d697458e6fcdb4db5
 
 ###
-GET {{host}}{{v1}}/stores?current-page=0&content-count=6&sort-name=base_time.updated_at&direction=-1
+GET {{host}}{{v1}}/stores?current_page=1&content_count=6&sort_name=base_time.updated_at&direction=-1
 ### =>
 
 ###
 # PUT의 recommend_menus 넣을경우 ==> 메뉴등록 선행필요
-PUT {{host}}{{v1}}/stores/store?store-id=63b714aa69e6b4a461ad9c57
+PUT {{host}}{{v1}}/stores/store?store-id=63b719a8df31b995028a1f97
 Content-Type: application/json
 
 {

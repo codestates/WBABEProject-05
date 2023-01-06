@@ -85,7 +85,7 @@ func (o *orderRecordControl) PutOrderRecordFromCustomer(c *gin.Context) {
 // PutOrderRecordFromStore godoc
 // @Tags 주문기록
 // @Summary call Put order records in store, return updated count by json.
-// @Description 가게에서 주문 상태를 변경 할 수 있다. 이때 user_id는 가게를 생성한 user 즉, 가게 주인이다.
+// @Description 가게에서 주문 상태를 변경 할 수 있다. 이때 user_id는 가게를 생성한 user 즉, 가게 주인이다. status 값 : 주문대기,주문취소,주문접수완료,조리중,배달중,배달완료
 // @name PutOrderRecordFromStore
 // @Accept  json
 // @Produce  json
