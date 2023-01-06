@@ -2,10 +2,10 @@ package store
 
 import (
 	"encoding/json"
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/common/flag"
 	"github.com/codestates/WBABEProject-05/config/db"
 	"github.com/codestates/WBABEProject-05/logger"
-	"github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/protocol/page"
@@ -64,7 +64,7 @@ func (s *storeMenuService) FindRecommendMenus(storeID string) (*response.Respons
 		return response.FromStoreAndMenus(foundStore, make([]*entity.Menu, 0)), nil
 	}
 
-	strMIDs := common.ConvertOBJIDsToStrings(foundStore.RecommendMenus)
+	strMIDs := convertor.ConvertOBJIDsToStrings(foundStore.RecommendMenus)
 	menus, err := s.menuModel.SelectMenusByIDs(storeID, strMIDs)
 	if err != nil {
 		return nil, err

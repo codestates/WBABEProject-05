@@ -500,8 +500,9 @@ paths:
   /app/v1/stores:
     get:
       consumes:
-      - application/json
-      description: 가게들 정보를 보여준다.
+      - text/html
+      description: '가게들 정보를 보여준다. 정렬 가능 - name: base_time.updated_at | direction:
+        1, -1'
       parameters:
       - in: query
         name: content_count
@@ -597,7 +598,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: 특정 가게 메뉴 리스트를 보여준다.
+      description: '특정 가게 메뉴 리스트를 보여준다. 정렬 가능 - name: rating, order_count, base_time.updated_at
+        | direction: 1, -1'
       parameters:
       - description: store-id
         in: query
@@ -657,7 +659,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: 메뉴 이름으로 검색해 특정 가게 메뉴 리스트를 보여준다.
+      description: '메뉴 이름으로 검색해 특정 가게 메뉴 리스트를 보여준다. 정렬 가능 - name: rating, order_count,
+        base_time.updated_at | direction: 1, -1'
       parameters:
       - description: name
         in: query

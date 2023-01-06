@@ -3,10 +3,10 @@ package order
 import (
 	"github.com/codestates/WBABEProject-05/common/enum"
 	utilErr "github.com/codestates/WBABEProject-05/common/error"
+	"github.com/codestates/WBABEProject-05/common/validator"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/order"
-	"github.com/codestates/WBABEProject-05/service/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"

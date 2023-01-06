@@ -2,15 +2,15 @@ package order
 
 import (
 	"fmt"
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/common/enum"
 	error2 "github.com/codestates/WBABEProject-05/common/error"
+	"github.com/codestates/WBABEProject-05/common/validator"
 	"github.com/codestates/WBABEProject-05/logger"
-	"github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/protocol/response"
 	util2 "github.com/codestates/WBABEProject-05/service/common"
-	"github.com/codestates/WBABEProject-05/service/validator"
 	"sync"
 	"time"
 )
@@ -53,7 +53,7 @@ func (o *orderRecordService) ModifyOrderRecordFromCustomer(order *request.Reques
 		return nil, error2.DoesNotExistsOrderErr
 	}
 
-	if common.ConvertOBJIDToString(foundOrder.CustomerID) != order.CustomerID {
+	if convertor.ConvertOBJIDToString(foundOrder.CustomerID) != order.CustomerID {
 		return nil, error2.BadAccessOrderError
 	}
 
@@ -83,7 +83,7 @@ func (o *orderRecordService) ModifyOrderRecordFromStore(order *request.RequestPu
 		return 0, err
 	}
 
-	if common.ConvertOBJIDToString(foundOrder.StoreID) != order.StoreID {
+	if convertor.ConvertOBJIDToString(foundOrder.StoreID) != order.StoreID {
 		return 0, error2.BadAccessOrderError
 	}
 

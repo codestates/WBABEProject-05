@@ -3,8 +3,8 @@ package review
 import (
 	"context"
 	"github.com/codestates/WBABEProject-05/common"
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/common/enum"
-	common2 "github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"go.mongodb.org/mongo-driver/bson"
@@ -42,7 +42,7 @@ func (r *reviewModel) SelectSortLimitedReviewsByMenuID(menuID string, pageQuery 
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := common2.ConvertStringToOBJID(menuID)
+	ID, err := convertor.ConvertStringToOBJID(menuID)
 	if err != nil {
 		return nil, err
 	}
@@ -61,12 +61,12 @@ func (r *reviewModel) SelectSortLimitedReviewsByUserID(ID, userRole string, page
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	OBJID, err := common2.ConvertStringToOBJID(ID)
+	OBJID, err := convertor.ConvertStringToOBJID(ID)
 	if err != nil {
 		return nil, err
 	}
 
-	filter, err := common2.NewFilterCheckedUserRole(OBJID, enum.BlankSTR, userRole)
+	filter, err := query.GetCheckedUserRoleStatusFilter(OBJID, enum.BlankSTR, userRole)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (r *reviewModel) SelectTotalCountByMenuID(menuID string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := common2.ConvertStringToOBJID(menuID)
+	ID, err := convertor.ConvertStringToOBJID(menuID)
 	if err != nil {
 		return 0, err
 	}
@@ -101,12 +101,12 @@ func (r *reviewModel) SelectTotalCountByUserID(ID, userRole string) (int64, erro
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	OBJID, err := common2.ConvertStringToOBJID(ID)
+	OBJID, err := convertor.ConvertStringToOBJID(ID)
 	if err != nil {
 		return 0, err
 	}
 
-	filter, err := common2.NewFilterCheckedUserRole(OBJID, enum.BlankSTR, userRole)
+	filter, err := query.GetCheckedUserRoleStatusFilter(OBJID, enum.BlankSTR, userRole)
 	if err != nil {
 		return 0, err
 	}

@@ -444,9 +444,9 @@ const docTemplate = `{
         },
         "/app/v1/stores": {
             "get": {
-                "description": "가게들 정보를 보여준다.",
+                "description": "가게들 정보를 보여준다. 정렬 가능 - name: base_time.updated_at | direction: 1, -1",
                 "consumes": [
-                    "application/json"
+                    "text/html"
                 ],
                 "produces": [
                     "application/json"
@@ -592,7 +592,7 @@ const docTemplate = `{
         },
         "/app/v1/stores/store/menus": {
             "get": {
-                "description": "특정 가게 메뉴 리스트를 보여준다.",
+                "description": "특정 가게 메뉴 리스트를 보여준다. 정렬 가능 - name: rating, order_count, base_time.updated_at | direction: 1, -1",
                 "consumes": [
                     "application/json"
                 ],
@@ -644,7 +644,7 @@ const docTemplate = `{
         },
         "/app/v1/stores/store/menus/menu": {
             "get": {
-                "description": "메뉴 이름으로 검색해 특정 가게 메뉴 리스트를 보여준다.",
+                "description": "메뉴 이름으로 검색해 특정 가게 메뉴 리스트를 보여준다. 정렬 가능 - name: rating, order_count, base_time.updated_at | direction: 1, -1",
                 "consumes": [
                     "application/json"
                 ],

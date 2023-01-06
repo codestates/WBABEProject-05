@@ -1,4 +1,4 @@
-package common
+package query
 
 import (
 	"github.com/codestates/WBABEProject-05/common/enum"
@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func NewFilterCheckedUserRole(OBJID primitive.ObjectID, status, userRole string) (bson.D, error) {
+func GetCheckedUserRoleStatusFilter(OBJID primitive.ObjectID, status, userRole string) (bson.D, error) {
 	var filter []bson.E
 	switch userRole {
 	case enum.CustomerRole:
@@ -23,7 +23,7 @@ func NewFilterCheckedUserRole(OBJID primitive.ObjectID, status, userRole string)
 	return filter, nil
 }
 
-func NewToDayGteFilter() (bson.M, error) {
+func GetToDayGteFilter() (bson.M, error) {
 	KST, err := time.LoadLocation("Asia/Seoul")
 	if err != nil {
 		return nil, err
@@ -31,4 +31,8 @@ func NewToDayGteFilter() (bson.M, error) {
 	now := time.Now()
 	startTime := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, KST).UTC()
 	return bson.M{"base_time.created_at": bson.M{"$gte": startTime}}, nil
+}
+
+func GetDefaultIDFilter(obID primitive.ObjectID) bson.M {
+	return bson.M{"_id": obID}
 }

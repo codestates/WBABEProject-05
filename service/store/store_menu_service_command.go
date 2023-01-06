@@ -1,12 +1,12 @@
 package store
 
 import (
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/common/enum"
 	error2 "github.com/codestates/WBABEProject-05/common/error"
+	"github.com/codestates/WBABEProject-05/common/validator"
 	"github.com/codestates/WBABEProject-05/logger"
-	"github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/protocol/request"
-	"github.com/codestates/WBABEProject-05/service/validator"
 )
 
 func (s *storeMenuService) RegisterStore(store *request.RequestPostStore) (string, error) {
@@ -108,7 +108,7 @@ func (s *storeMenuService) DeleteMenuAndBackup(menu *request.RequestDeleteMenu) 
 		return 0, err
 	}
 
-	if common.ConvertOBJIDToString(foundM.StoreID) != menu.StoreID {
+	if convertor.ConvertOBJIDToString(foundM.StoreID) != menu.StoreID {
 		return 0, error2.UnauthorizedError
 	}
 

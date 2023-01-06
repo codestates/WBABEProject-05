@@ -2,10 +2,10 @@ package customer
 
 import (
 	"fmt"
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/common/enum"
 	error2 "github.com/codestates/WBABEProject-05/common/error"
 	"github.com/codestates/WBABEProject-05/logger"
-	"github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/menu"
@@ -108,14 +108,18 @@ func (m *menuReviewService) RegisterMenuReview(review *request.RequestPostReview
 }
 
 func (m *menuReviewService) checkPossiblePostReview(review *request.RequestPostReview, foundReceipt *entity.Receipt) (string, error) {
-	foundMIDs := common.ConvertOBJIDsToStrings(foundReceipt.MenuIDs)
+	foundMIDs := convertor.ConvertOBJIDsToStrings(foundReceipt.MenuIDs)
+
 	existMap := util2.ConvertSliceToExistMap(foundMIDs)
+
 	if _, exists := existMap[review.MenuID]; !exists {
 		return enum.BlankSTR, error2.DoesNotPostReviewErr
 	}
+
 	if foundReceipt.CustomerID.Hex() != review.CustomerID || foundReceipt.StoreID.Hex() != review.StoreID {
 		return enum.BlankSTR, error2.DoesNotPostReviewErr
 	}
+
 	return "", nil
 }
 

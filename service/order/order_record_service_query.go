@@ -1,7 +1,7 @@
 package order
 
 import (
-	"github.com/codestates/WBABEProject-05/model/common"
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/protocol/page"
 	"github.com/codestates/WBABEProject-05/protocol/request"
@@ -35,7 +35,7 @@ func (o *orderRecordService) FindOrderRecord(orderID string) (*response.Response
 		return nil, err
 	}
 
-	menuIDs := common.ConvertOBJIDsToStrings(foundReceipt.MenuIDs)
+	menuIDs := convertor.ConvertOBJIDsToStrings(foundReceipt.MenuIDs)
 
 	menus, err := o.menuModel.SelectMenusByIDs(foundReceipt.StoreID.Hex(), menuIDs)
 	if err != nil {

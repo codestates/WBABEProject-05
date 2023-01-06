@@ -2,7 +2,7 @@ package receipt
 
 import (
 	"github.com/codestates/WBABEProject-05/common"
-	common2 "github.com/codestates/WBABEProject-05/model/common"
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"go.mongodb.org/mongo-driver/bson"
@@ -51,13 +51,13 @@ func (r *receiptModel) SelectReceiptByID(receiptID string) (*entity.Receipt, err
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := common2.ConvertStringToOBJID(receiptID)
+	ID, err := convertor.ConvertStringToOBJID(receiptID)
 	if err != nil {
 		return nil, err
 	}
 
 	var receipt *entity.Receipt
-	filter := bson.M{"_id": ID}
+	filter := query.GetDefaultIDFilter(ID)
 	if err := r.collection.FindOne(ctx, filter).Decode(&receipt); err != nil {
 		return nil, err
 	}
@@ -67,12 +67,12 @@ func (r *receiptModel) SelectSortLimitedReceipt(ID, status, userRole string, pag
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	objID, err := common2.ConvertStringToOBJID(ID)
+	objID, err := convertor.ConvertStringToOBJID(ID)
 	if err != nil {
 		return nil, err
 	}
 
-	filter, err := common2.NewFilterCheckedUserRole(objID, status, userRole)
+	filter, err := query.GetCheckedUserRoleStatusFilter(objID, status, userRole)
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func (r *receiptModel) SelectToDayTotalCount() (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	filter, err := common2.NewToDayGteFilter()
+	filter, err := query.GetToDayGteFilter()
 	if err != nil {
 		return 0, err
 	}
@@ -117,7 +117,7 @@ func (r *receiptModel) SelectTotalCount(ID, status, userRole string) (int64, err
 		return 0, err
 	}
 
-	filter, err := common2.NewFilterCheckedUserRole(objID, status, userRole)
+	filter, err := query.GetCheckedUserRoleStatusFilter(objID, status, userRole)
 	if err != nil {
 		return 0, err
 	}
@@ -134,7 +134,7 @@ func (r *receiptModel) updateStatusByBsonSetD(receipt *entity.Receipt, bsonSet b
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	filter := bson.M{"_id": receipt.ID}
+	filter := query.GetDefaultIDFilter(receipt.ID)
 	result, err := r.collection.UpdateOne(ctx, filter, bsonSet)
 	if err != nil {
 		return 0, err

@@ -3,7 +3,7 @@ package menu
 import (
 	"context"
 	"github.com/codestates/WBABEProject-05/common"
-	mongo2 "github.com/codestates/WBABEProject-05/model/common"
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"go.mongodb.org/mongo-driver/bson"
@@ -14,7 +14,7 @@ func (m *menuModel) SelectSortLimitedMenus(storeID string, pageQuery *query.Page
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := mongo2.ConvertStringToOBJID(storeID)
+	ID, err := convertor.ConvertStringToOBJID(storeID)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (m *menuModel) SelectTotalCount(storeID string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := mongo2.ConvertStringToOBJID(storeID)
+	ID, err := convertor.ConvertStringToOBJID(storeID)
 	if err != nil {
 		return 0, err
 	}
@@ -79,12 +79,12 @@ func (m *menuModel) SelectMenusByIDs(storeID string, menuIDs []string) ([]*entit
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	sID, err := mongo2.ConvertStringToOBJID(storeID)
+	sID, err := convertor.ConvertStringToOBJID(storeID)
 	if err != nil {
 		return nil, err
 	}
 
-	inID, err := mongo2.ConvertStringsToOBJIDs(menuIDs)
+	inID, err := convertor.ConvertStringsToOBJIDs(menuIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +107,7 @@ func (m *menuModel) SelectMenuByID(menuID string) (*entity.Menu, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	mID, err := mongo2.ConvertStringToOBJID(menuID)
+	mID, err := convertor.ConvertStringToOBJID(menuID)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (m *menuModel) SelectMenuByStoreIDAndName(storeID, name string) (*entity.Me
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	sID, err := mongo2.ConvertStringToOBJID(storeID)
+	sID, err := convertor.ConvertStringToOBJID(storeID)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func (m *menuModel) SelectMenuByIDsAndDelete(menuID string) (*entity.Menu, error
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	mID, err := mongo2.ConvertStringToOBJID(menuID)
+	mID, err := convertor.ConvertStringToOBJID(menuID)
 	if err != nil {
 		return nil, err
 	}

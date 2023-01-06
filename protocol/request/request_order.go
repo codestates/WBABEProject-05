@@ -1,8 +1,8 @@
 package request
 
 import (
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/common/enum"
-	"github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"github.com/codestates/WBABEProject-05/model/entity/dom"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -27,7 +27,7 @@ func (r *RequestOrder) ToPostReceipt() (*entity.Receipt, error) {
 		return nil, err
 	}
 
-	OBJMIDs, err := common.ConvertStringsToOBJIDs(r.Menus)
+	OBJMIDs, err := convertor.ConvertStringsToOBJIDs(r.Menus)
 	if err != nil {
 		return nil, err
 	}

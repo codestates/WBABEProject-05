@@ -6,17 +6,7 @@ import (
 	"github.com/codestates/WBABEProject-05/model/menu"
 	store2 "github.com/codestates/WBABEProject-05/model/store"
 	"github.com/codestates/WBABEProject-05/model/user"
-	"strings"
 )
-
-// CheckBlank string trim 한 값이 "" 인 경우 BadRequestError
-func CheckBlank(STR string) error {
-	s := strings.Trim(STR, " ")
-	if s == enum.BlankSTR {
-		return error2.BadRequestError
-	}
-	return nil
-}
 
 // CheckRoleIsStore 사용자가 존재할경우 역할이 store 인지 확인
 func CheckRoleIsStore(userID string) error {

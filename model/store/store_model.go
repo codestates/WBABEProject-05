@@ -2,8 +2,8 @@ package store
 
 import (
 	"github.com/codestates/WBABEProject-05/common"
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/common/enum"
-	common2 "github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"go.mongodb.org/mongo-driver/bson"
@@ -30,13 +30,13 @@ func (s *storeModel) SelectStoreByID(storeID string) (*entity.Store, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	ID, err := common2.ConvertStringToOBJID(storeID)
+	ID, err := convertor.ConvertStringToOBJID(storeID)
 	if err != nil {
 		return nil, err
 	}
 
 	var store *entity.Store
-	filter := bson.M{"_id": ID}
+	filter := query.GetDefaultIDFilter(ID)
 	if err := s.collection.FindOne(ctx, filter).Decode(&store); err != nil {
 		return nil, err
 	}
@@ -48,12 +48,12 @@ func (s *storeModel) SelectStoreByIDAndUserID(storeID, userID string) (*entity.S
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	sID, err := common2.ConvertStringToOBJID(storeID)
+	sID, err := convertor.ConvertStringToOBJID(storeID)
 	if err != nil {
 		return nil, err
 	}
 
-	uID, err := common2.ConvertStringToOBJID(userID)
+	uID, err := convertor.ConvertStringToOBJID(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func (s *storeModel) UpdateStore(store *entity.Store) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	filter := bson.M{"_id": store.ID}
+	filter := query.GetDefaultIDFilter(store.ID)
 	opt := store.NewUpdateStoreBsonSetD()
 	updateResult, err := s.collection.UpdateOne(ctx, filter, opt)
 	if err != nil {
@@ -140,17 +140,17 @@ func (s *storeModel) UpdatePullRecommendMenu(storeID, menuID string) (int64, err
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	sID, err := common2.ConvertStringToOBJID(storeID)
+	sID, err := convertor.ConvertStringToOBJID(storeID)
 	if err != nil {
 		return 0, err
 	}
 
-	mID, err := common2.ConvertStringToOBJID(menuID)
+	mID, err := convertor.ConvertStringToOBJID(menuID)
 	if err != nil {
 		return 0, err
 	}
 
-	filter := bson.M{"_id": sID}
+	filter := query.GetDefaultIDFilter(sID)
 	opt := bson.M{"$pull": bson.M{"recommend_menus": mID}}
 	updateOne, err := s.collection.UpdateOne(ctx, filter, opt)
 	if err != nil {

@@ -2,8 +2,8 @@ package menu
 
 import (
 	"github.com/codestates/WBABEProject-05/common"
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/common/enum"
-	mongo2 "github.com/codestates/WBABEProject-05/model/common"
 	"github.com/codestates/WBABEProject-05/model/entity"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -51,7 +51,7 @@ func (m *menuModel) UpdateMenusInCOrderCount(menus []string) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	IDs, err := mongo2.ConvertStringsToOBJIDs(menus)
+	IDs, err := convertor.ConvertStringsToOBJIDs(menus)
 	if err != nil {
 		return 0, err
 	}

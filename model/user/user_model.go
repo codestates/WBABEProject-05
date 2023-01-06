@@ -3,8 +3,8 @@ package user
 import (
 	"github.com/codestates/WBABEProject-05/common"
 	"github.com/codestates/WBABEProject-05/common/enum"
+	common2 "github.com/codestates/WBABEProject-05/model/common/query"
 	"github.com/codestates/WBABEProject-05/model/entity"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -40,7 +40,7 @@ func (u *userModel) UpdateUser(user *entity.User) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	filter := bson.M{"_id": user.ID}
+	filter := common2.GetDefaultIDFilter(user.ID)
 	setField := user.NewBsonSetDForUpdateUser()
 	updateRes, err := u.collection.UpdateOne(ctx, filter, setField)
 	if err != nil {
@@ -54,7 +54,7 @@ func (u *userModel) UpdateUserPreOrder(user *entity.User) (int64, error) {
 	ctx, cancel := common.NewContext(common.ModelContextTimeOut)
 	defer cancel()
 
-	filter := bson.M{"_id": user.ID}
+	filter := common2.GetDefaultIDFilter(user.ID)
 	setField := user.NewBsonSetDForUpdatePreOrder()
 	updateRes, err := u.collection.UpdateOne(ctx, filter, setField)
 	if err != nil {
@@ -74,7 +74,7 @@ func (u *userModel) SelectUser(id string) (*entity.User, error) {
 	}
 
 	var user *entity.User
-	filter := bson.M{"_id": obID}
+	filter := common2.GetDefaultIDFilter(obID)
 	if err := u.collection.FindOne(ctx, filter).Decode(&user); err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func (u *userModel) DeleteUser(id string) (int64, error) {
 		return 0, err
 	}
 
-	filter := bson.M{"_id": obID}
+	filter := common2.GetDefaultIDFilter(obID)
 	delRes, err := u.collection.DeleteOne(ctx, filter)
 	if err != nil {
 		return 0, err

@@ -2,11 +2,11 @@ package store
 
 import (
 	utilErr "github.com/codestates/WBABEProject-05/common/error"
+	"github.com/codestates/WBABEProject-05/common/validator"
 	"github.com/codestates/WBABEProject-05/logger"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/store"
-	"github.com/codestates/WBABEProject-05/service/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -182,7 +182,7 @@ func (s *storeControl) DeleteMenu(c *gin.Context) {
 // GetMenuSortedPagesByStoreID godoc
 // @Tags 가게
 // @Summary call Get sorted menu page, return sorted menu pages data by json.
-// @Description 특정 가게 메뉴 리스트를 보여준다.
+// @Description 특정 가게 메뉴 리스트를 보여준다. 정렬 가능 - name: rating, order_count, base_time.updated_at | direction: 1, -1
 // @name GetMenuSortedPagesByStoreID
 // @Accept  json
 // @Produce  json
@@ -215,7 +215,7 @@ func (s *storeControl) GetMenuSortedPagesByStoreID(c *gin.Context) {
 // GetMenuSortedPagesByName godoc
 // @Tags 가게
 // @Summary call Get store menus page, return sorted menus page data by json.
-// @Description 메뉴 이름으로 검색해 특정 가게 메뉴 리스트를 보여준다.
+// @Description 메뉴 이름으로 검색해 특정 가게 메뉴 리스트를 보여준다. 정렬 가능 - name: rating, order_count, base_time.updated_at | direction: 1, -1
 // @name GetMenuSortedPagesByName
 // @Accept  json
 // @Produce  json
@@ -274,7 +274,7 @@ func (s *storeControl) GetRecommendMenus(c *gin.Context) {
 // GetStoresSortedPage godoc
 // @Tags 가게
 // @Summary call Get store pages, return store pages data by json.
-// @Description 가게들 정보를 보여준다.
+// @Description 가게들 정보를 보여준다. 정렬 가능 - name: base_time.updated_at | direction: 1, -1
 // @name GetStoresSortedPage
 // @Accept  json
 // @Produce  json

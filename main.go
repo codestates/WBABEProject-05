@@ -2,6 +2,7 @@ package main
 
 import (
 	app "github.com/codestates/WBABEProject-05/common/app"
+	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/common/flag"
 	"github.com/codestates/WBABEProject-05/config"
 	gin "github.com/codestates/WBABEProject-05/contorller"
@@ -21,11 +22,11 @@ var (
 	}
 
 	mongoCollectionNames = []string{
-		mongo.ReceiptCollectionName,
-		mongo.ReviewCollectionName,
-		mongo.StoreCollectionName,
-		mongo.UserCollectionName,
-		mongo.MenuCollectionName,
+		enum.ReceiptCollectionName,
+		enum.ReviewCollectionName,
+		enum.StoreCollectionName,
+		enum.UserCollectionName,
+		enum.MenuCollectionName,
 	}
 )
 

@@ -2,10 +2,10 @@ package user
 
 import (
 	error2 "github.com/codestates/WBABEProject-05/common/error"
+	"github.com/codestates/WBABEProject-05/common/validator"
 	"github.com/codestates/WBABEProject-05/protocol"
 	"github.com/codestates/WBABEProject-05/protocol/request"
 	"github.com/codestates/WBABEProject-05/service/user"
-	"github.com/codestates/WBABEProject-05/service/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

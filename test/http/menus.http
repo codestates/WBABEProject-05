@@ -1,4 +1,4 @@
-GET {{host}}{{v1}}/stores/store/menus?store-id=63b5af6948c1f59bda57c752&current-page=0&content-count=5&sort-name=order_count&direction=-1
+GET {{host}}{{v1}}/stores/store/menus?store-id=63b719a8df31b995028a1f97&current-page=0&content-count=5&sort-name=order_count&direction=-1
 ###
 GET {{host}}{{v1}}/stores/store/menus/menu?name=메뉴&current-page=1&content-count=5&sort-name=order_count&direction=-1
 

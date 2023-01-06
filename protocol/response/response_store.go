@@ -1,7 +1,7 @@
 package response
 
 import (
-	"github.com/codestates/WBABEProject-05/model/common"
+	"github.com/codestates/WBABEProject-05/common/convertor"
 	"github.com/codestates/WBABEProject-05/model/entity"
 )
 
@@ -15,7 +15,7 @@ type ResponseStore struct {
 }
 
 func NewResponseStore(store *entity.Store) *ResponseStore {
-	recommendIDs := common.ConvertOBJIDsToStrings(store.RecommendMenus)
+	recommendIDs := convertor.ConvertOBJIDsToStrings(store.RecommendMenus)
 	return &ResponseStore{
 		StoreID:        store.ID.Hex(),
 		UserID:         store.UserID.Hex(),
