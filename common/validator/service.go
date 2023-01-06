@@ -12,7 +12,7 @@ import (
 func CheckRoleIsStore(userID string) error {
 	selectUser, err := user.UserModel.SelectUser(userID)
 	if err != nil {
-		return err
+		return error2.UserNotFoundErr
 	}
 	if selectUser.Role != enum.StoreRole {
 		return error2.UnauthorizedError
@@ -24,7 +24,7 @@ func CheckRoleIsStore(userID string) error {
 func CheckRoleIsCustomer(userID string) error {
 	selectUser, err := user.UserModel.SelectUser(userID)
 	if err != nil {
-		return err
+		return error2.UserNotFoundErr
 	}
 	if selectUser.Role != enum.CustomerRole {
 		return error2.UnauthorizedError

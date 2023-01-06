@@ -12,10 +12,7 @@ type storeMenuService struct {
 
 var instance *storeMenuService
 
-func NewStoreMenuService(
-	sd store.StoreModeler,
-	md menu.MenuModeler,
-) *storeMenuService {
+func NewStoreMenuService(sd store.StoreModeler, md menu.MenuModeler) *storeMenuService {
 	if instance != nil {
 		return instance
 	}

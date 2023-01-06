@@ -11,6 +11,7 @@ const (
 	DoesNotExistsOrder   = "주문 기록 없음"
 	DoesNotPostReview    = "리뷰 작성 불가"
 	FailDeleteRecommend  = "추천 메뉴 삭제 실패"
+	UserNotFound         = "존재하지 않는 사용자"
 
 	InternalServerErr = "서버 로직 오류"
 	FailRequestErr    = "시스템 오류"
@@ -31,6 +32,7 @@ const (
 	DoesNotExistsOrderCode   = 448
 	DoesNotPostReviewCode    = 449
 	FailDeleteRecommendCode  = 450
+	UserNotFoundCode         = 451
 
 	InternalServerErrCode = 551
 	SystemErrCode         = 552

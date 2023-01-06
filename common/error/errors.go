@@ -51,6 +51,7 @@ var (
 	DoesNotExistsOrderErr     = NewAppErrorCustom(DoesNotExistsOrderCode, "주문 기록이 없습니다.", DoesNotExistsOrder)
 	DoesNotPostReviewErr      = NewAppErrorCustom(DoesNotPostReviewCode, "리뷰를 작성 할 수 없습니다.", DoesNotPostReview)
 	FailDeleteRecommendErr    = NewAppErrorCustom(FailDeleteRecommendCode, "추천 메뉴에서 삭제하지 못 했습니다.", FailDeleteRecommend)
+	UserNotFoundErr           = NewAppErrorCustom(UserNotFoundCode, "존재하지 않는 사용자입니다.", UserNotFound)
 )
 
 /* 501 ~ 599 서버 에러 */

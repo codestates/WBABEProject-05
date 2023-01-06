@@ -25,11 +25,7 @@ type menuReviewService struct {
 	receiptModel receipt.ReceiptModeler
 }
 
-func NewMenuReviewService(
-	rMod review.ReviewModeler,
-	mMod menu.MenuModeler,
-	receiptMod receipt.ReceiptModeler,
-) *menuReviewService {
+func NewMenuReviewService(rMod review.ReviewModeler, mMod menu.MenuModeler, receiptMod receipt.ReceiptModeler) *menuReviewService {
 	if instance != nil {
 		return instance
 	}
