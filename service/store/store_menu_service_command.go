@@ -117,12 +117,9 @@ func (s *storeMenuService) DeleteMenuAndBackup(menu *request.RequestDeleteMenu) 
 		return 0, err
 	}
 
-	updateS, err := s.storeModel.UpdatePullRecommendMenu(menu.StoreID, menu.MenuID)
-	if err != nil || updateS == 0 {
-		return 0, error2.FailDeleteRecommendErr
-	}
-
 	go s.saveDeletedMenuBackupData(deletedM)
 
-	return int(updateS), nil
+	recommendPullCount, _ := s.storeModel.UpdatePullRecommendMenu(menu.StoreID, menu.MenuID)
+
+	return int(recommendPullCount), nil
 }

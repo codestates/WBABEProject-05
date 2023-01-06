@@ -9,7 +9,7 @@ Content-Type: application/json
   "phone_number": "010-1111-3333",
   "role":"customer"
 }
-### => 63b6f63b697458e6fcdb4db3
+### => 63b82a949aea17d4a97e996b
 
 ### -> user 생성 - store => TODO 유저 타입 제한 필요
 POST {{host}}{{v1}}/users/user
@@ -22,12 +22,12 @@ Content-Type: application/json
   "phone_number": "010-4444-1234",
   "role":"store"
 }
-### => 63b6f644697458e6fcdb4db4 , 63b6f9c0b7b6269193c57f4c
+### => 63b82a9a9aea17d4a97e996c
 ###
-GET {{host}}{{v1}}/users/user?user-id=63b6f608697458e6fcdb4db1
+GET {{host}}{{v1}}/users/user?user-id=63b82a9a9aea17d4a97e996c
 
 ###
-PUT {{host}}{{v1}}/users/user?user-id=63b6f551697458e6fcdb4dad
+PUT {{host}}{{v1}}/users/user?user-id=63b82a9a9aea17d4a97e996c
 Content-Type: application/json
 
 {

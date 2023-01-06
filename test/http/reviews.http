@@ -3,10 +3,10 @@ POST {{host}}{{v1}}/reviews/review
 Content-Type: application/json
 
 {
-  "store_id": "63b6f65d697458e6fcdb4db5",
-  "customer_id": "63b6f63b697458e6fcdb4db3",
-  "menu_id": "63b6f955b7b6269193c57f48",
-  "order_id": "63b70b8d6f4b7c5d037bf7cb",
+  "store_id": "63b82b009aea17d4a97e996d",
+  "customer_id": "63b82a949aea17d4a97e996b",
+  "menu_id": "63b82b3f9aea17d4a97e996f",
+  "order_id": "63b82e2b9aea17d4a97e9971",
   "content": "진짜?정말?맛있어용!ㅎㅎㅎ",
   "rating": 3
 }

@@ -55,7 +55,7 @@ func (u *userControl) GetUser(c *gin.Context) {
 // PutUser godoc
 // @Tags 사용자정보
 // @Summary call Put user, return updated count by json.
-// @Description 사용자 정보를 수정 할 수 있다.
+// @Description 사용자 정보를 수정 할 수 있다. role 값 : customer,store
 // @name PutUser
 // @Accept  json
 // @Produce  json

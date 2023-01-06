@@ -2,9 +2,9 @@ POST {{host}}{{v1}}/orders/order
 Content-Type: application/json
 
 {
-  "store_id": "63b6f65d697458e6fcdb4db5",
-  "customer_id": "63b6f63b697458e6fcdb4db3",
-  "menu_ids":["63b6f969b7b6269193c57f49" , "63b6f955b7b6269193c57f48"],
+  "store_id": "63b82b009aea17d4a97e996d",
+  "customer_id": "63b82a949aea17d4a97e996b",
+  "menu_ids":["63b82b3f9aea17d4a97e996f"],
   "ordered_addr":{
     "street":"주문했어용",
     "detail":"오른쪽",
@@ -12,17 +12,17 @@ Content-Type: application/json
   },
   "phone_number": "010-3123-1111"
 }
-### => 63b702f22061fd50c48a60ae
+### => "order_id": "63b82e2b9aea17d4a97e9971", "order_numbering": "1673014827609181000-0"
 
 ###
 PUT {{host}}{{v1}}/orders/order/customer
 Content-Type: application/json
 
 {
-  "order_id": "63b70b8d6f4b7c5d037bf7cb",
-  "store_id": "63b6f65d697458e6fcdb4db5",
-  "customer_id": "63b6f63b697458e6fcdb4db3",
-  "menu_ids": ["63b6f969b7b6269193c57f49", "63b6f972b7b6269193c57f4a"],
+  "order_id": "63b82e2b9aea17d4a97e9971",
+  "store_id": "63b82b009aea17d4a97e996d",
+  "customer_id": "63b82a949aea17d4a97e996b",
+  "menu_ids":[],
   "ordered_addr":{
     "street":"테스트거리수정집입니다.",
     "detail":"왼쪽으로바꾸겠습니다.",
@@ -36,9 +36,9 @@ PUT {{host}}{{v1}}/orders/order/store
 Content-Type: application/json
 
 {
-  "order_id": "63b70bb66f4b7c5d037bf7cc",
-  "store_id": "63b6f65d697458e6fcdb4db5",
-  "user_id": "63b6f644697458e6fcdb4db4",
+  "order_id": "63b82e7d9aea17d4a97e9972",
+  "store_id": "63b82b009aea17d4a97e996d",
+  "user_id": "63b82a9a9aea17d4a97e996c",
   "status": "배달중"
 }
 ###

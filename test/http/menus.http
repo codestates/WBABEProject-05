@@ -7,25 +7,25 @@ POST {{host}}{{v1}}/stores/store/menus/menu
 Content-Type: application/json
 
 {
-  "user_id" : "63b7149b69e6b4a461ad9c56",
-  "store_id":"63b714aa69e6b4a461ad9c57",
-  "name": "가게3의 메뉴3",
+  "user_id" : "63b82a9a9aea17d4a97e996c",
+  "store_id":"63b82b009aea17d4a97e996d",
+  "name": "가게3의 메뉴2",
   "limit_count": "non",
   "possible": true,
   "price": 3900,
   "origin": "국내산",
   "description":"맛있어짱!"
 }
-### =>  63b6f955b7b6269193c57f48 , 63b6f969b7b6269193c57f49 , 63b6f972b7b6269193c57f4a
+### =>  63b82b3a9aea17d4a97e996e , 63b82b3f9aea17d4a97e996f , 63b82b459aea17d4a97e9970
 
 
 ###
-PUT {{host}}{{v1}}/stores/store/menus/menu?menu-id=63b6f955b7b6269193c57f48
+PUT {{host}}{{v1}}/stores/store/menus/menu?menu-id=63b82b459aea17d4a97e9970
 Content-Type: application/json
 
 {
-  "user_id" : "63b6f644697458e6fcdb4db4",
-  "store_id":"63b6f65d697458e6fcdb4db5",
+  "user_id" : "63b82a9a9aea17d4a97e996c",
+  "store_id":"63b82b009aea17d4a97e996d",
   "name": "가게1의 메뉴1 수정2",
   "limit_count": "10",
   "possible": true,
@@ -35,6 +35,6 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{host}}{{v1}}/stores/store/menus/menu?user-id=63b718f6df31b995028a1f95&menu-id=63b71a8f9867c36ef6b7d518&store-id=63b719a8df31b995028a1f97
+DELETE {{host}}{{v1}}/stores/store/menus/menu?user-id=63b82a9a9aea17d4a97e996c&menu-id=63b82b3a9aea17d4a97e996e&store-id=63b82b009aea17d4a97e996d
 
 ###
