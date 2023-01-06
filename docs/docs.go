@@ -870,7 +870,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "사용자 정보를 수정 할 수 있다.",
+                "description": "사용자 정보를 수정 할 수 있다. role 값 : customer,store",
                 "consumes": [
                     "application/json"
                 ],
