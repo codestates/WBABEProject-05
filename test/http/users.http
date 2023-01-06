@@ -1,4 +1,4 @@
-### -> user 생성 - customer => TODO 유저 타입 제한 필요
+###
 POST {{host}}{{v1}}/users/user
 Content-Type: application/json
 
@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 ### => 63b82a949aea17d4a97e996b
 
-### -> user 생성 - store => TODO 유저 타입 제한 필요
+###
 POST {{host}}{{v1}}/users/user
 Content-Type: application/json
 
