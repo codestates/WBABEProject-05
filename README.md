@@ -215,8 +215,7 @@ GET    /app/v1/reviews/customer
 - 처음에 Document 지향으로 최대한 해보려고 하였으나, MongoDB의 Document 데이터를 가공해서 가져오기가 쉽지않았다. 떄문에 RDBMS 방식처럼 _id 를 활용하였다. 
 - 참고 : [리모델링](https://github.com/codestates/WBABEProject-05/issues/23)
 - 남은것 :   
-[validation](https://github.com/codestates/WBABEProject-05/issues/26)     
-[인증인가](https://github.com/codestates/WBABEProject-05/issues/27)
+~~[validation](https://github.com/codestates/WBABEProject-05/issues/26)~~
 
 
 #### 좋았던점
@@ -233,66 +232,83 @@ GET    /app/v1/reviews/customer
 ### Swagger 전체
 - http://localhost:8080/swagger/index.html#/
 
-![전체1](./readme_images/swagger/usecase/1주문기록_전체.png)
+- feat.추가적인 리팩토링을 하면서 아래 이미지와 실제는 아주 살짝 차이가 있을 수 있습니다. 자세한건 위 링크를 통해 스웨거로 확인해주세요.
 
-![전체1](./readme_images/swagger/usecase/2메뉴리뷰_전체.png)
+![전체1](./readme_images/swagger/usecase/01주문기록전체.png)
 
-![전체1](./readme_images/swagger/usecase/3가게_전체.png)
+![전체1](./readme_images/swagger/usecase/02메뉴기록전체.png)
 
-![전체1](./readme_images/swagger/usecase/4사용자정보_및_App_전체.png)
+![전체1](./readme_images/swagger/usecase/03가게전체.png)
+
+![전체1](./readme_images/swagger/usecase/04사용자정보전체.png)
 
 
 ## UseCase 로 보는 Swagger 
 
 - 추가적으로 아래 이미지들을 보면 페이지관련 query string 은 편의상 빈값으로 요청을 보냈는데, 서버에서 빈 값으로 요청이 오면 첫페이지 5개씩 최신순으로 기본값 처리한다.
 
-![전체1](./readme_images/swagger/usecase/5사용자가입_요청.png)
+![전체1](./readme_images/swagger/usecase/05사용자등록_유저.png)
 
-![전체1](./readme_images/swagger/usecase/6사용자가입_응답.png)
+![전체1](./readme_images/swagger/usecase/06사용자등록_유저응답.png)
 
-![전체1](./readme_images/swagger/usecase/7사용자정보_요청.png)
+![전체1](./readme_images/swagger/usecase/07사용자등록_가게.png)
 
-![전체1](./readme_images/swagger/usecase/8사용자정보_응답.png)
+![전체1](./readme_images/swagger/usecase/08사용자등록_가게_응답.png)
 
-![전체1](./readme_images/swagger/usecase/9가게생성_요청.png)
+![전체1](./readme_images/swagger/usecase/09가게등록.png)
 
-![전체1](./readme_images/swagger/usecase/10가게생성_응답.png)
+![전체1](./readme_images/swagger/usecase/10가게등록_응답.png)
 
-![전체1](./readme_images/swagger/usecase/11가게메뉴등록_요청.png)
+![전체1](./readme_images/swagger/usecase/11메뉴등록.png)
 
-![전체1](./readme_images/swagger/usecase/12가게메뉴등록_응답.png)
+![전체1](./readme_images/swagger/usecase/12메뉴등록_응답.png)
 
-![전체1](./readme_images/swagger/usecase/13특정가게메뉴들_요청.png)
+![전체1](./readme_images/swagger/usecase/13가게수정.png)
 
-![전체1](./readme_images/swagger/usecase/14특정가게메뉴들_응답.png)
+![전체1](./readme_images/swagger/usecase/14가게수정_응답.png)
 
-![전체1](./readme_images/swagger/usecase/15특정가게메뉴추천및정보수정_요청.png)
+![전체1](./readme_images/swagger/usecase/15가게보기.png)
 
-![전체1](./readme_images/swagger/usecase/16특정가게메뉴추천및정보수정_응답.png)
+![전체1](./readme_images/swagger/usecase/16가게보기_응답.png)
 
-![전체1](./readme_images/swagger/usecase/17특정가게추천메뉴_요청.png)
+![전체1](./readme_images/swagger/usecase/17메뉴검색.png)
 
-![전체1](./readme_images/swagger/usecase/18특정가게추천메뉴_응답.png)
+![전체1](./readme_images/swagger/usecase/17-1메뉴검색_응답.png)
 
-![전체1](./readme_images/swagger/usecase/19메뉴주문_요청.png)
+![전체1](./readme_images/swagger/usecase/18-1주문전가격보기.png)
 
-![전체1](./readme_images/swagger/usecase/20메뉴주문_응답.png)
+![전체1](./readme_images/swagger/usecase/18-2주문전가격보기_응답.png)
 
-![전체1](./readme_images/swagger/usecase/21가게에온주문정보_요청.png)
+![전체1](./readme_images/swagger/usecase/19주문.png)
 
-![전체1](./readme_images/swagger/usecase/22가게에서주문처리_요청.png)
+![전체1](./readme_images/swagger/usecase/20주문_응답.png)
 
-![전체1](./readme_images/swagger/usecase/23가게에서주문처리_응답.png)
+![전체1](./readme_images/swagger/usecase/21최근주문저장확인리스트.png)
 
-![전체1](./readme_images/swagger/usecase/24사용자가주문조회_요청.png)
+![전체1](./readme_images/swagger/usecase/22최근주문저장확인_응답.png)
 
-![전체1](./readme_images/swagger/usecase/25사용자가주문조회_응답.png)
+![전체1](./readme_images/swagger/usecase/23주문조회유저.png)
 
-![전체1](./readme_images/swagger/usecase/26사용자의리뷰작성_요청.png)
+![전체1](./readme_images/swagger/usecase/24주문조회유저_응답.png)
 
-![전체1](./readme_images/swagger/usecase/27사용자의리뷰작성_응답.png)
+![전체1](./readme_images/swagger/usecase/25주문수정유저.png)
 
-![전체1](./readme_images/swagger/usecase/28특정메뉴리뷰보기_요청.png)
+![전체1](./readme_images/swagger/usecase/26주문수정유저_응답.png)
 
-![전체1](./readme_images/swagger/usecase/29특정메뉴리뷰보기_응답.png)
+![전체1](./readme_images/swagger/usecase/27주문수정가게.png)
+
+![전체1](./readme_images/swagger/usecase/28주문수정가게_응답.png)
+
+![전체1](./readme_images/swagger/usecase/29메뉴리뷰작성.png)
+
+![전체1](./readme_images/swagger/usecase/30메뉴리뷰작성_응답.png)
+
+![전체1](./readme_images/swagger/usecase/31메뉴리뷰확인.png)
+
+![전체1](./readme_images/swagger/usecase/32메뉴리뷰확인_응답.png)
+
+![전체1](./readme_images/swagger/usecase/33메뉴또한업데이트.png)
+
+![전체1](./readme_images/swagger/usecase/34메뉴또한업데이트_확인.png)
+
 
