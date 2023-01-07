@@ -94,14 +94,14 @@
 ![프로젝트 구성 최종](./readme_images/최종프로젝트패키지들.png)
 
 - 최종 프로젝트 구성이다.
-- common 패키지는 flag 및 범용적으로 사용하게될 util, enum 등의 사항들을 넣어주었다..
+- common 패키지는 flag 및 범용적으로 사용하게될 util, enum 등의 사항들을 넣어주었다.
 - toml 파일 및 프로젝트 config 관련 사항은 config 폴더를 이용하였다.
 - mvc 패턴을 활용하기에 controller 와 model 패키지를 만들었다.
 - 조금 더 유연한 프로그램을 위해 controller 계층과 model 계층사이에 service 계층을 추가해 주었다.
-- db 폴더는 메뉴삭제시 백업테이터로 삭제된 데이터를 파일로 저장하는 위치로 사용된다.
+- db 폴더는 메뉴삭제시 백업테이터로 삭제된 데이터를 파일로 저장하는 위치로 사용된다.(깃 소스에는 생략)
 - docs 는 스웨거 관련 폴더이다.
 - logger 관련사항은 logger 패키지에 넣어주자.
-- logs 는 앱에서 사용되는 로그들이 기록되는 위치이다.
+- logs 는 앱에서 사용되는 로그들이 기록되는 위치이다.(깃 소스에는 생략)
 - protocol 은 request 또는 response 로 내려줄 data struct 들을 넣었다.
 - router 와 관련된 사항은 router 패키지에서 다룰 것이다.
 - test 는 간단하게 .http 를 활용해 테스트를 해보았기에 .http 파일들을 모아놓은 폴더이다.
