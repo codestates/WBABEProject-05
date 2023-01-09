@@ -152,25 +152,7 @@
     }
     ```
 
-# Docker 를 이용한 MongoDB 설치
-
-- ~~docker-compose-singlersdb.yml 파일을 이용해 mongoDB를 설치하자.~~
-- ~~여기서 우선 mongoDB의 replication 옵션을 이용할 것이다.~~
-- ~~replication 옵션을 이용하는 이유는 트랜젝션을 이용하게될지도 모르기 떄문이다.~~
-- ~~트랜젝션은 mongoDB 를 standalone 상태로 구동하면 실행되지 않는다.~~
-- ~~우선 트랜젝션을 mongoDB 에서는 권장하지 않기에 최대한 트랜젝션을 사용하지 않는 구조로 설계하겠지만 개발은 항상 유연해야하기에 가능성을 열어두는 측면에서 replication 옵션을 사용한다.
-  다음의 명령어들을 실행시키자.~~
-```bash
-$ docker-compose -f docker-compose-singlersdb.yml up -d
-$ docker exec -it mongo-singlers /bin/bash
-$ mongosh 127.0.0.1:27017/
-test> rs.initiate()
-```
-- ~~몽고DB 접속 URI :
-  `mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.6.1`~~
-
-
-## 실행환경의 편의를 위해 replica 를 사용한 MongoDB 가 아닌 standalone 형태의 일반적인 MongoDB로 전환했다.
+## 실행환경의 편의를 위해 replica 를 사용한 MongoDB 가 아닌 standalone 으로 간단한 MongoDB로 전환했다.
 - MongoDB 에 지향점에 맞춰 트랜잭션을 사용하지 않았다.
 - 다음과 같이 docker-compose 파일을 실행하자
 ```bash
@@ -219,16 +201,8 @@ GET    /app/v1/reviews/customer
 
 #### 아쉬운점
 
-- ~~몽고DB로 원하는 데이터를 뽑고 가공하는게 쉽지않다... 생각보다 더 쉽지 않아서 시간이 많이 소요되었다.~~
-- ~~entity 설계만 끝나면 전체적인 도메인 구성과 쿼리는 어렵지 않을것이라 생각했는데..~~
-- ~~정규화와 트랜젝션을 지양한다는 점에서 설계에 고민을 많이하기도 했고, 오히려 고민을 하다보니 더 복잡해진것 같기도하고, 무엇보다 mongo 쿼리가 처음 써보는거다보니 상당히 쉽지 않다.~~
-- ~~익숙하지 않아 오래걸리다보니, 확장성이 뛰어난 몽고DB 이니까 처음엔 그냥 RDBMS 와 비슷한 구조로 가져가고 필요하다면 그냥 트랜잭션을 사용했어야 했나 싶다.~~
-- ~~jwt, 단위 test, 프로젝트에 대한 이미지 작업, 기술 정리 등 적용하고 싶은게 많았지만.. 조금 아쉽다..~~
-- 어찌저찌 기능 구현을 다 해냈다. 물론 아직 validation 처리를 해야하고, 추가적으로 하고싶은것들이 남았지만 일단 필요한 API 는 다 만들었다.
 - 처음에 Document 지향으로 최대한 해보려고 하였으나, MongoDB의 Document 데이터를 가공해서 가져오기가 쉽지않았다. 떄문에 RDBMS 방식처럼 _id 를 활용하였다. 
 - 참고 : [리모델링](https://github.com/codestates/WBABEProject-05/issues/23)
-- 남은것 :   
-~~[validation](https://github.com/codestates/WBABEProject-05/issues/26)~~
 
 
 #### 좋았던점
