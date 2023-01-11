@@ -1,11 +1,11 @@
 package router
 
 import (
-	"github.com/codestates/WBABEProject-05/contorller/info"
-	order2 "github.com/codestates/WBABEProject-05/contorller/order"
-	"github.com/codestates/WBABEProject-05/contorller/review"
-	store2 "github.com/codestates/WBABEProject-05/contorller/store"
-	user2 "github.com/codestates/WBABEProject-05/contorller/user"
+	"github.com/codestates/WBABEProject-05/controller/info"
+	order2 "github.com/codestates/WBABEProject-05/controller/order"
+	"github.com/codestates/WBABEProject-05/controller/review"
+	store2 "github.com/codestates/WBABEProject-05/controller/store"
+	user2 "github.com/codestates/WBABEProject-05/controller/user"
 	"github.com/gin-gonic/gin"
 )
 

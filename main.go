@@ -5,7 +5,7 @@ import (
 	"github.com/codestates/WBABEProject-05/common/enum"
 	"github.com/codestates/WBABEProject-05/common/flag"
 	"github.com/codestates/WBABEProject-05/config"
-	gin "github.com/codestates/WBABEProject-05/contorller"
+	gin "github.com/codestates/WBABEProject-05/controller"
 	zap "github.com/codestates/WBABEProject-05/logger"
 	mongo "github.com/codestates/WBABEProject-05/model"
 	"github.com/codestates/WBABEProject-05/router"
